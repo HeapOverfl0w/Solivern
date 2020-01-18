@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="./style.css">
+        <title>Solivern!</title>
+    </head>
+    <body>
+        <canvas id="scene"></canvas>
+        <div style="display:none;">
+            <img id="background" width="512" height="288" src="./resources/background.png"/>
+        </div>
+    </body>
+</html>
+<script src="./model.js"></script>
+<script src="./main.js"></script>
+<script>
+    window.onload = function() {
+        cvs = document.getElementById("scene");
+        ctx = cvs.getContext("2d");
+    }
+</script>
