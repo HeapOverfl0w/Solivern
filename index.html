@@ -8,14 +8,58 @@
         <canvas id="scene"></canvas>
         <div style="display:none;">
             <img id="background" width="512" height="288" src="./resources/background.png"/>
+            <img id="smallcard" src="./resources/smallcard.png"/>
+            <img id="largecard" src="./resources/largecard.png"/>
+            <img id="resources" src="./resources/resources.png"/>
         </div>
     </body>
 </html>
+
 <script src="./model.js"></script>
+<script src="./db.js"></script>
 <script src="./main.js"></script>
 <script>
+    var game;
+    var cvs = document.getElementById("scene");
+
     window.onload = function() {
-        cvs = document.getElementById("scene");
+        cvs.width = TILESX * TILEWIDTH;
+        cvs.height = TILESY * TILEHEIGHT;
+        cvs.style.width = window.innerWidth + "px";
+        cvs.style.height = window.innerHeight + "px";
         ctx = cvs.getContext("2d");
-    }
+        let ratio = calculateRatio(ctx);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        game = new Game(ctx);
+        game.Initialize();
+    };
+
+    var calculateRatio = function(ctx)
+    {
+        dpr = window.devicePixelRatio || 1,
+        bsr = ctx.webkitBackingStorePixelRatio ||
+              ctx.mozBackingStorePixelRatio ||
+              ctx.msBackingStorePixelRatio ||
+              ctx.oBackingStorePixelRatio ||
+              ctx.backingStorePixelRatio || 1;
+
+        return dpr / bsr;
+    };
+
+    window.onresize = function() {
+        cvs.style.width = window.innerWidth + "px";
+        cvs.style.height = window.innerHeight + "px";
+    };
+
+    cvs.addEventListener('mousemove', function(event){
+        game.HandleMouseOver(event.clientX / cvs.clientWidth * cvs.width, event.clientY / cvs.clientHeight * cvs.height);
+    });
+
+    cvs.addEventListener('mouseup', function(event){
+        game.HandleMouseClick(event.clientX / cvs.clientWidth * cvs.width, event.clientY / cvs.clientHeight * cvs.height);
+    });
+
+    document.addEventListener('keydown', function(event) {
+        game.HandleKeyboardInput(event.keyCode);
+    });
 </script>
