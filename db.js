@@ -1,5 +1,5 @@
 var OBJECTSPRITES = {
-    "test" : new Vector2D(0,0)
+    "counter" : new Vector2D(0,0)
 }
 
 var BUFFCURSESPRITES = {
@@ -12,7 +12,10 @@ var RSCCARDSPRITES = {
 }
 
 var CHARCARDSPRITES = {
-    "testChar" : new Vector2D(0, 4)
+    "bat" : new Vector2D(0, 4),
+    "rat" : new Vector2D(1, 4),
+    "goblin" : new Vector2D(2, 4),
+    "skeleton" : new Vector2D(3, 4)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -97,8 +100,8 @@ class Database
 
     LoadObjectCards()
     {
-        this.objectCards.push(new ObjectCard(OBJECTSPRITES["test"].x, OBJECTSPRITES["test"].y,
-                                            OBJECTSPRITES["test"].x, OBJECTSPRITES["test"].y, 1, 2, true, -1,
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y,
+                                            OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y, 1, 1, false, -1,
                                             new ResourceUpkeep(this.gold, 0)));
     }
 
@@ -117,13 +120,22 @@ class Database
     LoadResourceCards()
     {
         this.rscCards.push(new ResourceCard(RSCCARDSPRITES["testRsc"].x, RSCCARDSPRITES["testRsc"].y,
-                                            RSCCARDSPRITES["testRsc"].x, RSCCARDSPRITES["testRsc"].y, this.beer, this.gold, 10, 5));
+                                            RSCCARDSPRITES["testRsc"].x, RSCCARDSPRITES["testRsc"].y, this.food, this.gold, 10, 5));
     }
 
     LoadCharacterCards()
     {
-        this.charCards.push(new CharacterCard(CHARCARDSPRITES["testChar"].x, CHARCARDSPRITES["testChar"].y,
-                                              CHARCARDSPRITES["testChar"].x, CHARCARDSPRITES["testChar"].y, 2, 0, 
-                                              [ new ResourceUpkeep(this.gold, 5), new ResourceUpkeep(this.beer, -2)], "TestChar"));
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y,
+                                              CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y, 3, 0, 
+                                              [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -2) ], "Dire Bat"));
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y,
+                                              CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y, 3, 0, 
+                                              [ new ResourceUpkeep(this.gold, -1), new ResourceUpkeep(this.beer, 2) ], "Dire Rat"));
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y,
+                                              CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y, 1, 0, 
+                                              [ new ResourceUpkeep(this.gold, 2), new ResourceUpkeep(this.beer, -3) ], "Goblin")); 
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y,
+                                              CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y, 4, 0, 
+                                              [ new ResourceUpkeep(this.gold, -2), new ResourceUpkeep(this.beer, 3) ], "Skeleton"));                                   
     }
 }

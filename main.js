@@ -7,12 +7,14 @@ class Game
     this.endTurnButton = new Button(ctx.canvas.width - 100, 20, 50, 16, "End Turn", 5, 12, BUTTONCOLOR);
 
     this.goldResource = new Resource(0,0,"Gold");
+    this.goldResource.count = 10;
     this.beerResource = new Resource(RESOURCEWIDTH, 0, "Beer");
     this.foodResource = new Resource(RESOURCEWIDTH * 2, 0, "Food");
     this.resourceCollection = new ResourceCollection([this.goldResource, this.beerResource, this.foodResource]);
 
     this.db = new Database(this.resourceCollection);
     this.gameMessage = "";
+    this.gameMessageTimeout = undefined;
     this.ctx = ctx;
     this.ctx.font = TEXTFONT;
     this.ctx.imageSmoothingEnabled = false;
@@ -124,7 +126,8 @@ class Game
 
   SetTimeoutBeginGameMessage()
   {
-    setTimeout(this.ResetGameMessage, 5000, this);
+    clearTimeout(this.gameMessageTimeout)
+    this.gameMessageTimeout = setTimeout(this.ResetGameMessage, 5000, this);
   }
 
   ResetGameMessage(game)

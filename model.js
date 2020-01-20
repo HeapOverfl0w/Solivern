@@ -142,7 +142,7 @@ class Card
     DrawLargeCardOnBoard(locX, locY, ctx)
     {
       ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-        LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH/4, locY - LARGECARDHEIGHT/4, 
+        LARGECARDWIDTH, LARGECARDHEIGHT, locX - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), 
         LARGECARDWIDTH, LARGECARDHEIGHT);
     }
 
@@ -153,12 +153,12 @@ class Card
       if (locX + LARGECARDWIDTH >= TILESX * TILEWIDTH)
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - LARGECARDWIDTH/4, locY - LARGECARDHEIGHT/4, LARGECARDWIDTH, LARGECARDHEIGHT);
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), LARGECARDWIDTH, LARGECARDHEIGHT);
       }
       else
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - LARGECARDWIDTH/4, locY - LARGECARDHEIGHT/4, LARGECARDWIDTH, LARGECARDHEIGHT);
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), LARGECARDWIDTH, LARGECARDHEIGHT);
       }
     }
 }
@@ -317,8 +317,8 @@ class ObjectCard extends Card
       {
           let startX = this.locX - this.satisfactionRadius;
           let startY = this.locY - this.satisfactionRadius;
-          let endX = startX + this.satisfactionRadius * 2 + 1;
-          let endY = startY + this.satisfactionRadius * 2 + 1;
+          let endX = startX + this.satisfactionRadius * 2;
+          let endY = startY + this.satisfactionRadius * 2;
           if (this.passable && locX == this.locX && locY == this.locY)
             return true;
           else if (!this.passble && locX == this.locX && locY == this.locY)
@@ -570,7 +570,7 @@ class Board
       {
         let currentSatisfactionLevel = 0;
         //can't be here if another guy is here
-        if (this.characterMap[x][y] == undefined)
+        if (this.characterMap[x][y] == undefined && (this.objectMap[x][y] == undefined || this.objectMap[x][y].passable))
         {
           for (let objectx = 0; objectx < TILESX; objectx++)
           {
