@@ -4,7 +4,7 @@ class Game
   {
     this.hand = new Hand();
     this.board = new Board();
-    this.endTurnButton = new Button(ctx.canvas.clientWidth - 100, 20, 50, 20, "End Turn", BUTTONCOLOR);
+    this.endTurnButton = new Button(ctx.canvas.width - 100, 20, 50, 16, "End Turn", 5, 12, BUTTONCOLOR);
 
     this.goldResource = new Resource(0,0,"Gold");
     this.beerResource = new Resource(RESOURCEWIDTH, 0, "Beer");
@@ -41,13 +41,16 @@ class Game
 
     //draw message
     this.ctx.fillStyle = TEXTCOLOR;
-    this.ctx.fillText(this.gameMessage, 0, 0);
+    for(let m = 0; m < this.gameMessages.length; m++)
+    {
+      this.ctx.fillText(this.gameMessages[m], 0, m * 12 + 12);
+    }
   }
 
   Update()
   {
     this.hand.Update(this.turn, this.db);
-    this.SetGameMessage(this.board.Update());
+    this.SetGameMessages(this.board.Update(this.turn, this.db));
     this.Draw();
     this.turn++;
   }
@@ -68,16 +71,16 @@ class Game
   {
     if (this.hand.selectedCardIndex != -1)
     {
-      this.SetGameMessage(this.board.PlaceObject(this.hand.GetSelectedCard(), 
-        this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy)));
+      let message = this.board.PlaceObject(this.hand.GetSelectedCard(), 
+      this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
+      this.SetGameMessage(message);
     
         //TODO: I don't like this check here, but this will work for right now
-        if (this.gameMessage == "Purchased.")
+        if (message == "Purchased.")
         {
             this.hand.RemoveSelectedCard();
         }
 
-      this.hand.selectedCardIndex = -1;
       this.Draw();
     }
     else if (this.endTurnButton.IsInside(pointx, pointy))
@@ -90,6 +93,11 @@ class Game
 
       if (message != "")
       {
+        //TODO: again, don't like using the string comparison here
+        if (message == "Purchased.")
+        {
+          this.hand.RemoveSelectedCard();
+        }
         this.SetGameMessage(message);
         this.Draw();
       }
@@ -104,8 +112,14 @@ class Game
 
   SetGameMessage(message)
   {
-      this.gameMessage = message;
+      this.gameMessages = [message];
       this.SetTimeoutBeginGameMessage();
+  }
+
+  SetGameMessages(messages)
+  {
+    this.gameMessages = messages;
+    this.SetTimeoutBeginGameMessage();
   }
 
   SetTimeoutBeginGameMessage()
@@ -115,7 +129,7 @@ class Game
 
   ResetGameMessage(game)
   {
-    game.gameMessage = "";
+    game.gameMessages = [];
     game.Draw();
   }
 

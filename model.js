@@ -11,9 +11,9 @@ var TILEWIDTH = 16;
 var TILEHEIGHT = 16;
 var LARGECARDWIDTH = 32;
 var LARGECARDHEIGHT = 38;
-var RESOURCEWIDTH = 8;
-var RESOURCEHEIGHT = 8;
-var RESOURCETEXTOFFSET = 8;
+var RESOURCEWIDTH = 12;
+var RESOURCEHEIGHT = 12;
+var RESOURCETEXTOFFSET = 24;
 
 var CARDTYPE_BUFF = 0;
 var CARDTYPE_CURSE = 1;
@@ -25,8 +25,8 @@ var CARDTYPE_CHARACTER = 5;
 var HANDSIZE = 7;
 
 var TEXTCOLOR = "#000000";
-var BUTTONCOLOR = "#39BF5E";
-var TEXTFONT = "8px Arial";
+var BUTTONCOLOR = "rgb(254,193,7)";
+var TEXTFONT = "10px Arial";
 
 var SMALLCARDSPRITESHEET = document.getElementById("smallcard");
 var LARGECARDSPRITESHEET = document.getElementById("largecard");
@@ -48,7 +48,7 @@ class Resource
         ctx.drawImage(RESOURCESPRITESHEET, this.resourceSpriteX, this.resourceSpriteY, 
             RESOURCEWIDTH, RESOURCEHEIGHT, locX, locY, RESOURCEWIDTH, RESOURCEHEIGHT);
         ctx.fillStyle = TEXTCOLOR;
-        ctx.fillText(this.count, locX + RESOURCETEXTOFFSET, locY);
+        ctx.fillText(this.count + "", locX + RESOURCETEXTOFFSET, locY + 12);
     }
 }
 
@@ -111,7 +111,7 @@ class ResourceUpkeep
 
     HaveEnough()
     {
-      return this.resource.count - this.amount >= 0;
+      return this.resource.count + this.amount >= 0;
     }
 }
 
@@ -135,8 +135,15 @@ class Card
 
     DrawLargeCard(locX, locY, ctx)
     {
-        ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
+      ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
             LARGECARDWIDTH, LARGECARDHEIGHT, locX, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
+    }
+
+    DrawLargeCardOnBoard(locX, locY, ctx)
+    {
+      ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
+        LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH/4, locY - LARGECARDHEIGHT/4, 
+        LARGECARDWIDTH, LARGECARDHEIGHT);
     }
 
     DrawLargeCardWithOffset(locX, locY, ctx)
@@ -146,12 +153,12 @@ class Card
       if (locX + LARGECARDWIDTH >= TILESX * TILEWIDTH)
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - LARGECARDWIDTH/4, locY - LARGECARDHEIGHT/4, LARGECARDWIDTH, LARGECARDHEIGHT);
       }
       else
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - LARGECARDWIDTH/4, locY - LARGECARDHEIGHT/4, LARGECARDWIDTH, LARGECARDHEIGHT);
       }
     }
 }
@@ -171,6 +178,12 @@ class BuffCard extends Card
     {
         this.resource.count += this.amount;
     }
+
+    Clone()
+    {
+      return new BuffCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
+                          this.largeCardSpriteLocY / LARGECARDHEIGHT,this.resource, this.amount);
+    }
 }
 
 class CurseCard extends Card
@@ -188,6 +201,12 @@ class CurseCard extends Card
     {
         this.resource.count -= this.amount;
     }
+
+    Clone()
+    {
+      return new CurseCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
+                          this.largeCardSpriteLocY / LARGECARDHEIGHT, this.resource, this.amount);
+    }
 }
 
 class ResourceCard extends Card
@@ -196,7 +215,7 @@ class ResourceCard extends Card
         rscUp, rscDown, amountUp, amountDown)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
-        this.cardType = CARDTYPE_BUFF;
+        this.cardType = CARDTYPE_RESOURCE;
         this.resourceUp = rscUp;
         this.resourceDown = rscDown;
         this.amountUp = amountUp;
@@ -205,7 +224,7 @@ class ResourceCard extends Card
 
     Activate()
     {
-        if (CanActivate())
+        if (this.CanActivate())
         {
             this.resourceDown.count -= this.amountDown;
             this.resourceUp.count += this.amountUp;
@@ -214,7 +233,7 @@ class ResourceCard extends Card
 
     CanActivate()
     {
-        return (this.resourceDown.count - amountDown) >= 0;
+        return (this.resourceDown.count - this.amountDown) >= 0;
     }
 
     PayFor()
@@ -222,10 +241,16 @@ class ResourceCard extends Card
       if (this.CanActivate())
       {
         this.Activate();
-        return "Purchased resources!"
+        return "Purchased."
       }
       else
         return "Insufficient funds."
+    }
+
+    Clone()
+    {
+      return new ResourceCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
+                              this.largeCardSpriteLocY / LARGECARDHEIGHT,this.resourceUp, this.resourceDown, this.amountUp, this.amountDown);
     }
 }
 
@@ -256,19 +281,15 @@ class ObjectCard extends Card
 
     Update()
     {
-      expiration--;
-      return expiration > 0;
+      this.expiration--;
+      return this.expiration > 0;
     }
 
     IsCardInside(card)
     {
         if (this.locX == undefined || this.locY == undefined)
         {
-            let startX = this.locX - this.satisfactionRadius * TILEWIDTH;
-            let startY = this.locY - this.satisfactionRadius * TILEHEIGHT;
-            let endX = startX + this.satisfactionRadius * 2 * TILEWIDTH;
-            let endY = startY + this.satisfactionRadius * 2 * TILEHEIGHT;
-            return (card.locX > startX && card.locY > startY && card.locX < endX && card.locY < endY);
+            return (this.IsLocationInside(card.locX, card.locY));
         }
         else
             return false;
@@ -277,41 +298,57 @@ class ObjectCard extends Card
     DrawObjectPlacement(locX, locY, ctx)
     {
       this.DrawSmallCard(locX * TILEWIDTH, locY * TILEHEIGHT, ctx);
+      this.DrawSatisfactionRange(locX, locY, ctx);
+    }
+
+    DrawSatisfactionRange(locX, locY, ctx)
+    {
       let startX = locX * TILEWIDTH - this.satisfactionRadius * TILEWIDTH;
       let startY = locY * TILEHEIGHT - this.satisfactionRadius * TILEHEIGHT;
       ctx.beginPath();
       ctx.strokeStyle = "green";
-      ctx.rect(startX, startY, this.satisfactionRadius * 2 * TILEWIDTH, this.satisfactionRadius * 2 * TILEHEIGHT);
+      ctx.rect(startX, startY, this.satisfactionRadius * 2 * TILEWIDTH + TILEWIDTH, this.satisfactionRadius * 2 * TILEHEIGHT + TILEHEIGHT);
       ctx.stroke();
     }
 
-    IsLocationInsdie(locX, locY)
+    IsLocationInside(locX, locY)
     {
-      if (this.locX == undefined || this.locY == undefined)
+      if (this.locX != undefined && this.locY != undefined)
       {
-          let startX = this.locX - this.satisfactionRadius * TILEWIDTH;
-          let startY = this.locY - this.satisfactionRadius * TILEHEIGHT;
-          let endX = startX + this.satisfactionRadius * 2 * TILEWIDTH;
-          let endY = startY + this.satisfactionRadius * 2 * TILEHEIGHT;
-          return (locX > startX && locY > startY && locX < endX && locY < endY);
+          let startX = this.locX - this.satisfactionRadius;
+          let startY = this.locY - this.satisfactionRadius;
+          let endX = startX + this.satisfactionRadius * 2 + 1;
+          let endY = startY + this.satisfactionRadius * 2 + 1;
+          if (this.passable && locX == this.locX && locY == this.locY)
+            return true;
+          else if (!this.passble && locX == this.locX && locY == this.locY)
+            return false;
+          return (locX >= startX && locY >= startY && locX <= endX && locY <= endY);
       }
       else
           return false;
+    }
+
+    Clone()
+    {
+      return new ObjectCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
+                            this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionBuff, this.satisfactionRadius, this.passable,
+                            this.expiration, this.rscCost);
     }
 }
 
 class CharacterCard extends Card
 {
     constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-        satisfactionRequirement, satisfactionThreshold, locX, locY, rscUpkeeps, name)
+        satisfactionRequirement, satisfactionThreshold, rscUpkeeps, name)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_CHARACTER;
         this.satisfactionRequirement = satisfactionRequirement;
         this.satisfactionLevel = 0;
         this.satisfactionThreshold = satisfactionThreshold;
-        this.locX = locX;
-        this.locY = locY;
+        this.locX = 0;
+        this.locY = 0;
         this.resourceUpkeeps = rscUpkeeps;
         this.firstAppearance = true;
         this.name = name;
@@ -327,9 +364,7 @@ class CharacterCard extends Card
             unpaidUpkeep = !this.resourceUpkeeps[i].Update();
         }
         if (unpaidUpkeep)
-            this.satisfactionLevel -= 3;
-        else
-            this.satisfactionLevel += 1;
+            this.satisfactionLevel -= 10;
 
         //determine satisfaction buffs from objects
         //TODO: Determine most efficient way to calculate radius buffs.
@@ -341,6 +376,10 @@ class CharacterCard extends Card
                   this.satisfactionLevel += objectMap[x][y].satisfactionBuff;                  
             }
         }
+
+        //random chance to just leave
+        if (Math.random() > 0.95)
+          this.satisfactionLevel = -1;
     }
 
     IsSatisfied()
@@ -356,8 +395,15 @@ class CharacterCard extends Card
 
     DrawShiftedSmallCard(locX, locY, ctx)
     {
-      ctx.drawImage(SMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY - 3, 
-        TILEWIDTH, TILEHEIGHT - 3, locX, locY - 3, TILEWIDTH, TILEHEIGHT - 3);
+      ctx.drawImage(SMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
+        TILEWIDTH, TILEHEIGHT - 3, locX, locY + 3, TILEWIDTH, TILEHEIGHT - 3);
+    }
+
+    Clone()
+    {
+      return new CharacterCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
+                               this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionRequirement, this.satisfactionThreshold, 
+                               this.resourceUpkeeps, this.name);
     }
 }
 
@@ -378,9 +424,9 @@ class Board
     this.focusedVector = undefined;
   }
 
-  Update()
+  Update(turnCount, db)
   {
-    let returnMessage = "";
+    let returnMessages = [];
 
     for (let x = 0; x < TILESX; x++)
     {
@@ -394,45 +440,81 @@ class Board
         //Determine if characters need to be removed
         if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].IsSatisfied() && !this.characterMap[x][y].firstAppearance)
         {
-          returnMessage += this.characterMap[x][y].name + " was unsatisfied and left.\n";
+          returnMessages.push(this.characterMap[x][y].name + " was unsatisfied and left.\n");
           this.characterMap[x][y] = undefined;
+        }
+        else if (this.characterMap[x][y] != undefined && this.characterMap[x][y].firstAppearance)
+        {
+          this.characterMap[x][y].firstAppearance = false;
         }
       }
     }
 
-    return returnMessage;
+    //let the user get their bearings and buy some objects on turn 1
+    //this will allow them to have two different hands of cards before
+    //patrons arrive
+    if (turnCount > 1)
+    {
+      let newCharCards = db.GetRandomCharacterCards(turnCount);
+
+      for (let c = 0; c < newCharCards.length; c++)
+      {
+        let bestLocation = undefined;
+        //5% chance to just go random
+        if (Math.random() > 0.95)
+        {
+          let randx = Math.floor(Math.random() * TILESX);
+          randx = randx == TILESX ? TILESX - 1 : randx;
+          let randy = Math.floor(Math.random() * TILESY);
+          randy = randy == TILESY ? TILESY - 1 : randy;
+          bestLocation = new Vector2D(randx, randy);
+        }
+        else
+          bestLocation = this.DetermineMostSatisfactoryLocation();
+        newCharCards[c].locX = bestLocation.x;
+        newCharCards[c].locY = bestLocation.y;
+        this.characterMap[bestLocation.x][bestLocation.y] = newCharCards[c];
+        returnMessages.push(newCharCards[c].name + " has joined the merriment.\n");
+      }
+    }
+
+    return returnMessages;
   }
 
   Draw(ctx)
   {
     ctx.drawImage(BACKGROUNDIMAGE, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
+
     for (let x = 0; x < TILESX; x++)
     {
       for (let y = 0; y < TILESY; y++)
       {
         if (this.objectMap[x][y] != undefined)
         {
-          if (this.focusedVector != undefined && this.focusedVector.x == x && this.focusedVector.y == y)
-          {
-            this.objectMap[x][y].DrawLargeCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
-            if (this.characterMap[x][y] != undefined)
-              this.characterMap[x][y].DrawLargeCardWithOffset(x * TILEWIDTH, y * TILEHEIGHT, ctx);
-          }
-          else
-          {
-            this.objectMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
-            if (this.characterMap[x][y] != undefined)
-              this.characterMap[x][y].DrawShiftedSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
-          }
+          this.objectMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+          if (this.characterMap[x][y] != undefined)
+            this.characterMap[x][y].DrawShiftedSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
         }
         else if (this.characterMap[x][y] != undefined)
         {
-          if (this.focusedVector != undefined && this.focusedVector.x == x && this.focusedVector.y == y)
-            this.characterMap[x][y].DrawLargeCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
-          else
-            this.characterMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+          this.characterMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
         }
       }
+    }
+
+    if (this.focusedVector != undefined)
+    {
+      let x = this.focusedVector.x;
+      let y = this.focusedVector.y;
+      if (this.objectMap[x][y] != undefined)
+      {
+        this.objectMap[x][y].DrawLargeCardOnBoard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+        this.objectMap[x][y].DrawSatisfactionRange(x, y, ctx);
+        if (this.characterMap[x][y] != undefined)
+        this.characterMap[x][y].DrawLargeCardWithOffset(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+      }
+      else if (this.characterMap[x][y] != undefined)
+        this.characterMap[x][y].DrawLargeCardOnBoard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
     }
   }
 
@@ -449,6 +531,8 @@ class Board
       else
       {
         this.objectMap[tilex][tiley] = objectCard;
+        objectCard.locX = tilex;
+        objectCard.locY = tiley;
         return "Purchased.";
       }
     }
@@ -468,11 +552,57 @@ class Board
       this.focusedVector = new Vector2D(tilex, tiley);
       return true;
     }
-    else
+    else if (this.focusedVector != undefined)
     {
-      this.focusedCard = undefined;
-      return false;
+      this.focusedVector = undefined;
+      return true;
     }
+    return false;
+  }
+
+  DetermineMostSatisfactoryLocation()
+  {
+    let highestSatisfactionLevel = 0;
+    let highestSatisfactionLocation = new Vector2D(0,0);
+    for (let x = 0; x < TILESX; x++)
+    {
+      for (let y = 0; y < TILESY; y++)
+      {
+        let currentSatisfactionLevel = 0;
+        //can't be here if another guy is here
+        if (this.characterMap[x][y] == undefined)
+        {
+          for (let objectx = 0; objectx < TILESX; objectx++)
+          {
+            for (let objecty = 0; objecty < TILESY; objecty++)
+            {
+              if (this.objectMap[objectx][objecty] != undefined && this.objectMap[objectx][objecty].IsLocationInside(x, y))
+              {
+                currentSatisfactionLevel += this.objectMap[objectx][objecty].satisfactionBuff;
+              }
+            }
+          }
+        }
+        if (currentSatisfactionLevel > highestSatisfactionLevel)
+        {
+          highestSatisfactionLevel = currentSatisfactionLevel;
+          highestSatisfactionLocation = new Vector2D(x, y);
+        } 
+      }
+            
+    }
+    //this is in case there's no satisfaction buffs on the board or we couldn't find 
+    //a great place to stand/sit because all the satisfaction spaces are taken up
+    if (highestSatisfactionLocation.x == 0 && highestSatisfactionLocation.y == 0)
+    {
+      let randx = Math.floor(Math.random() * TILESX);
+      randx = randx == TILESX ? TILESX - 1 : randx;
+      let randy = Math.floor(Math.random() * TILESY);
+      randy = randy == TILESY ? TILESY - 1 : randy;
+      highestSatisfactionLocation = new Vector2D(randx, randy);
+    }
+
+    return highestSatisfactionLocation;
   }
 }
 
@@ -523,7 +653,7 @@ class Hand
 
     for (let i = 0; i < this.cards.length; i++)
     {
-      if (this.selectedCardIndex == -1 || this.selectedCardIndex == i && this.cards[i] != undefined)
+      if (this.selectedCardIndex == -1 || this.selectedCardIndex == i)
         this.cards[i].DrawLargeCard(i * widthSeparation + this.EDGE_OFFSET, heightFromBottom - this.EDGE_OFFSET, ctx);
     }
   }
@@ -550,7 +680,11 @@ class Hand
       {
         if (this.cards[i].cardType == CARDTYPE_RESOURCE)
         {
-          return this.cards[i].PayFor();
+          let message = this.cards[i].PayFor();
+          if (message == "Purchased.")
+            this.selectedCardIndex = i;
+          
+          return message;
         }
         else if (this.cards[i].cardType == CARDTYPE_OBJECT)
         {
@@ -574,7 +708,8 @@ class Hand
   {
     if (this.selectedCardIndex != -1)
     {
-      this.cards.splice(this.selectedCardIndex);
+      this.cards.splice(this.selectedCardIndex, 1);
+      this.selectedCardIndex = -1;
     }
   }
 
@@ -598,7 +733,7 @@ class Vector2D
 
 class Button
 {
-  constructor(x, y, width, height, text, color)
+  constructor(x, y, width, height, text, textOffsetX, textOffsetY, color)
   {
     this.x = x;
     this.y = y;
@@ -607,6 +742,8 @@ class Button
     this.text = text;
     this.visible = true;
     this.color = color;
+    this.textOffsetX = textOffsetX;
+    this.textOffsetY = textOffsetY;
   }
 
   Draw(ctx)
@@ -616,7 +753,7 @@ class Button
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.width, this.height);
       ctx.fillStyle = TEXTCOLOR;
-      ctx.fillText(this.text, this.x, this.y, this.width);
+      ctx.fillText(this.text, this.x + this.textOffsetX, this.y + this.textOffsetY, this.width);
     }
   }
 
