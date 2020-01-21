@@ -2,9 +2,11 @@ class Game
 {
   constructor(ctx)
   {
+    this.audio = new AudioHandler();
     this.hand = new Hand();
     this.board = new Board();
-    this.endTurnButton = new Button(ctx.canvas.width - 100, 20, 50, 16, "End Turn", 5, 12, BUTTONCOLOR);
+    this.quests = new Quests();
+    this.endTurnButton = new Button(ctx.canvas.width / 2 - 25, 5, 50, 16, "End Turn", 5, 12, BUTTONCOLOR);
 
     this.goldResource = new Resource(0,0,"Gold");
     this.goldResource.count = 10;
@@ -13,7 +15,7 @@ class Game
     this.resourceCollection = new ResourceCollection([this.goldResource, this.beerResource, this.foodResource]);
 
     this.db = new Database(this.resourceCollection);
-    this.gameMessage = "";
+    this.gameMessages = [];
     this.gameMessageTimeout = undefined;
     this.ctx = ctx;
     this.ctx.font = TEXTFONT;
@@ -36,22 +38,31 @@ class Game
   Draw()
   {
     this.board.Draw(this.ctx);
-    this.hand.Draw(this.ctx);
+
+    if (this.quests.selectedCardIndex == -1)
+      this.hand.Draw(this.ctx);
+
+    if (this.hand.selectedCardIndex == -1)
+      this.quests.Draw(this.ctx);
 
     this.resourceCollection.Draw(this.ctx);
     this.endTurnButton.Draw(this.ctx);
 
     //draw message
     this.ctx.fillStyle = TEXTCOLOR;
+    let yindex = 0;
     for(let m = 0; m < this.gameMessages.length; m++)
     {
-      this.ctx.fillText(this.gameMessages[m], 0, m * 12 + 12);
+      if (this.gameMessages[m] != undefined && this.gameMessages[m] != "")
+        this.ctx.fillText(this.gameMessages[m], 0, ++yindex * 12);
     }
   }
 
   Update()
   {
+    this.gameMessages = [];
     this.hand.Update(this.turn, this.db);
+    this.SetGameMessages(this.quests.Update(this.turn, this.db, this.board));
     this.SetGameMessages(this.board.Update(this.turn, this.db));
     this.Draw();
     this.turn++;
@@ -62,7 +73,7 @@ class Game
     let tilex = this.TranslatePointCoordinatesToTile(true, pointx);
     let tiley = this.TranslatePointCoordinatesToTile(false, pointy);
 
-    if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley))
+    if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || this.quests.HandleMouseOver(pointx, pointy, this.ctx))
     {
         this.Draw();
         this.hand.DrawObjectPlacement(tilex, tiley, ctx);
@@ -84,10 +95,21 @@ class Game
         }
 
       this.Draw();
+      this.audio.PlayActivate();
+    }
+    else if (this.quests.selectedCardIndex != -1)
+    {
+      let message = this.board.SelectForQuest(this.quests.GetSelectedCard(),
+      this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
+      this.SetGameMessage(message);
+      this.quests.CancelCardPlacement();
+      this.Draw();
+      this.audio.PlayActivate();
     }
     else if (this.endTurnButton.IsInside(pointx, pointy))
     {
         this.Update();
+        this.audio.PlayActivate();
     }
     else
     {
@@ -99,9 +121,21 @@ class Game
         if (message == "Purchased.")
         {
           this.hand.RemoveSelectedCard();
+          this.audio.PlayActivate();
         }
         this.SetGameMessage(message);
         this.Draw();
+      }
+      else //same logic for quests
+      {
+        message = this.quests.ClickedOnCard(pointx, pointy, this.ctx);
+
+        if (message != "")
+        {
+          this.SetGameMessage(message);
+          this.Draw();
+          this.audio.PlayActivate();
+        }
       }
     }
   }
@@ -109,25 +143,29 @@ class Game
   HandleKeyboardInput(keyCode)
   {
     if (keyCode == 27)
+    {
         this.hand.CancelCardPlacement();
+        this.quests.CancelCardPlacement();
+        this.audio.PlayActivate();
+    }
   }
 
   SetGameMessage(message)
   {
-      this.gameMessages = [message];
+      this.gameMessages = this.gameMessages.concat([message]);
       this.SetTimeoutBeginGameMessage();
   }
 
   SetGameMessages(messages)
   {
-    this.gameMessages = messages;
+    this.gameMessages = this.gameMessages.concat(messages);
     this.SetTimeoutBeginGameMessage();
   }
 
   SetTimeoutBeginGameMessage()
   {
     clearTimeout(this.gameMessageTimeout)
-    this.gameMessageTimeout = setTimeout(this.ResetGameMessage, 5000, this);
+    this.gameMessageTimeout = setTimeout(this.ResetGameMessage, 3000, this);
   }
 
   ResetGameMessage(game)

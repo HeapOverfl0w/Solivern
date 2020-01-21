@@ -21,6 +21,11 @@ var CARDTYPE_OBJECT = 2;
 var CARDTYPE_RESOURCE = 3;
 var CARDTYPE_NONE = 4;
 var CARDTYPE_CHARACTER = 5;
+var CARDTYPE_QUEST = 6;
+
+var STATTYPE_INT = 0;
+var STATTYPE_STR = 1;
+var STATTYPE_DEX = 2;
 
 var HANDSIZE = 7;
 
@@ -115,6 +120,48 @@ class ResourceUpkeep
     }
 }
 
+class CharacterStats
+{
+  constructor(int, str, dex)
+  {
+    this.baseint = int;
+    this.basestr = str;
+    this.basedex = dex;
+    this.int = int;
+    this.str = str;
+    this.dex = dex;
+    this.level = 1;
+    this.STATWIDTH = 38;
+    this.STATSEPARATION = 9;
+  }
+
+  LevelUp()
+  {
+    this.level++;
+    this.int += Math.ceil(this.baseint * 0.3);
+    this.str += Math.ceil(this.basestr * 0.3);
+    this.dex += Math.ceil(this.basedex * 0.3);
+  }
+
+  Draw(locX, locY, ctx)
+  {
+    let x = locX - this.STATWIDTH;
+    let y = locY;
+    ctx.fillStyle = BUTTONCOLOR;
+    ctx.fillRect(x, y, this.STATWIDTH, LARGECARDHEIGHT);
+    ctx.fillStyle = TEXTCOLOR;
+    ctx.fillText("LVL " + this.level, x, y+=this.STATSEPARATION);
+    ctx.fillText("INT " + this.int, x, y+=this.STATSEPARATION);
+    ctx.fillText("STR " + this.str, x, y+=this.STATSEPARATION);
+    ctx.fillText("DEX " + this.dex, x, y+=this.STATSEPARATION);
+  }
+
+  Clone()
+  {
+    return new CharacterStats(this.int, this.str, this.dex);
+  }
+}
+
 
 class Card
 {
@@ -144,23 +191,124 @@ class Card
       ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
         LARGECARDWIDTH, LARGECARDHEIGHT, locX - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), 
         LARGECARDWIDTH, LARGECARDHEIGHT);
+
+      if (this.cardType == CARDTYPE_CHARACTER)
+        this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT / 4, ctx);
     }
 
     DrawLargeCardWithOffset(locX, locY, ctx)
     {
       //first check if we're at the edge of the game, if so draw it on the left instead
       //of normally drawing it on the right
-      if (locX + LARGECARDWIDTH >= TILESX * TILEWIDTH)
+      if ((locX + LARGECARDWIDTH*2) >= TILESX * TILEWIDTH)
+      {
+        ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
+        if (this.cardType == CARDTYPE_CHARACTER)
+          this.stats.Draw(locX - LARGECARDWIDTH, locY, ctx);
+      }
+      else
+      {
+        ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
+          if (this.cardType == CARDTYPE_CHARACTER)
+            this.stats.Draw(locX, locY, ctx);
+      }
+    }
+
+    DrawLargeCardOnBoardWithOffset(locX, locY, ctx)
+    {
+      //first check if we're at the edge of the game, if so draw it on the left instead
+      //of normally drawing it on the right
+      if ((locX + LARGECARDWIDTH*2) >= TILESX * TILEWIDTH)
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
           LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), LARGECARDWIDTH, LARGECARDHEIGHT);
+        if (this.cardType == CARDTYPE_CHARACTER)
+          this.stats.Draw(locX - LARGECARDWIDTH - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT / 4, ctx);
       }
       else
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
           LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), LARGECARDWIDTH, LARGECARDHEIGHT);
+          if (this.cardType == CARDTYPE_CHARACTER)
+            this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT / 4, ctx);
       }
     }
+}
+
+class QuestCard extends Card
+{
+  constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
+      minRange, maxRange, statRequirement, turnLength, rscUpkeeps)
+  {
+    super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
+    this.minRange = minRange;
+    this.maxRange = maxRange;
+    this.statRequirement = statRequirement;
+    this.assignedPatron = undefined;
+    this.turnLength = turnLength;
+    this.cardType = CARDTYPE_QUEST;
+    this.rscUpkeeps = rscUpkeeps;
+    //this.name = name;
+    this.currentTurn = 0;
+  }
+
+  Update()
+  {
+    if (this.assignedPatron != undefined)
+    {
+      this.currentTurn++;
+      if (this.currentTurn == this.turnLength)
+      {
+        let statPower = 0;
+        switch (this.statRequirement)
+        {
+          case STATTYPE_INT:
+            statPower = this.assignedPatron.stats.int;
+            break;
+          case STATTYPE_STR:
+            statPower = this.assignedPatron.stats.str;
+            break;
+          case STATTYPE_DEX:
+            statPower = this.assignedPatron.stats.dex;
+            break;
+        }
+        let rangeModifier = Math.random() * (this.maxRange - this.minRange);
+
+        if (statPower >= (this.maxRange - rangeModifier))
+        {
+          for (let i = 0; i < this.rscUpkeeps.length; i++)
+          {
+            this.rscUpkeeps[i].Update();
+          }
+          this.assignedPatron.stats.LevelUp();
+          return this.assignedPatron.name + " completed a quest and grew stronger.";
+        }
+        else
+        {
+          let message = this.assignedPatron.name + " died attempting to complete a quest."
+          this.assignedPatron = undefined;
+          return message;
+        }
+      }
+    }
+    return "";
+  }
+
+  DrawQuestAndPatron(locX, locY, ctx)
+  {
+    this.DrawLargeCard(locX, locY, ctx);
+    if (this.assignedPatron != undefined)
+      this.assignedPatron.DrawLargeCardWithOffset(locX, locY, ctx);
+  }
+
+  Clone()
+  {
+    return new QuestCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, 
+                        this.largeCardSpriteLocX / LARGECARDWIDTH, this.largeCardSpriteLocY / LARGECARDHEIGHT,
+                        this.minRange, this.maxRange, this.statRequirement, this.turnLength, this.rscUpkeeps);
+  }
 }
 
 class BuffCard extends Card
@@ -340,7 +488,7 @@ class ObjectCard extends Card
 class CharacterCard extends Card
 {
     constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-        satisfactionRequirement, satisfactionThreshold, rscUpkeeps, name)
+        satisfactionRequirement, satisfactionThreshold, rscUpkeeps, name, stats)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_CHARACTER;
@@ -352,6 +500,7 @@ class CharacterCard extends Card
         this.resourceUpkeeps = rscUpkeeps;
         this.firstAppearance = true;
         this.name = name;
+        this.stats = stats;
     }
 
     Update(objectMap)
@@ -396,14 +545,14 @@ class CharacterCard extends Card
     DrawShiftedSmallCard(locX, locY, ctx)
     {
       ctx.drawImage(SMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
-        TILEWIDTH, TILEHEIGHT - 3, locX, locY + 3, TILEWIDTH, TILEHEIGHT - 3);
+        TILEWIDTH, TILEHEIGHT - 2, locX, locY + 2, TILEWIDTH, TILEHEIGHT - 2);
     }
 
     Clone()
     {
       return new CharacterCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
                                this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionRequirement, this.satisfactionThreshold, 
-                               this.resourceUpkeeps, this.name);
+                               this.resourceUpkeeps, this.name, this.stats.Clone());
     }
 }
 
@@ -511,7 +660,7 @@ class Board
         this.objectMap[x][y].DrawLargeCardOnBoard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
         this.objectMap[x][y].DrawSatisfactionRange(x, y, ctx);
         if (this.characterMap[x][y] != undefined)
-        this.characterMap[x][y].DrawLargeCardWithOffset(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+        this.characterMap[x][y].DrawLargeCardOnBoardWithOffset(x * TILEWIDTH, y * TILEHEIGHT, ctx);
       }
       else if (this.characterMap[x][y] != undefined)
         this.characterMap[x][y].DrawLargeCardOnBoard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
@@ -538,6 +687,20 @@ class Board
     }
     else
       return "Insufficient " + objectCard.rscCost.resource.name + ".";
+  }
+
+  SelectForQuest(questCard, tilex, tiley)
+  {
+    if (this.characterMap[tilex][tiley] != undefined)
+    {
+      questCard.assignedPatron = this.characterMap[tilex][tiley];
+      this.characterMap[tilex][tiley] = undefined;
+      return questCard.assignedPatron.name + " assigned to quest.";
+    }
+    else
+    {
+      return "No patron at location.";
+    }
   }
 
   HandleMouseOver(tilex, tiley)
@@ -603,6 +766,12 @@ class Board
     }
 
     return highestSatisfactionLocation;
+  }
+
+  PlaceCharacterBackOnBoard(character)
+  {
+    let newLocation = this.DetermineMostSatisfactoryLocation();
+    this.characterMap[newLocation.x][newLocation.y] = character;
   }
 }
 
@@ -719,6 +888,140 @@ class Hand
       return undefined;
     else
       return this.cards[this.selectedCardIndex];
+  }
+}
+
+class Quests
+{
+  constructor()
+  {
+    this.cards = [];
+    this.selectedCardIndex = -1;
+    this.focusedCard = -1;
+    this.EDGE_OFFSET = 5;
+    this.GAPFROMTOP = 10;
+  }
+
+  Update(turn, db, board)
+  {
+    let updateResults = []
+    let handLength = this.cards.length;
+    for(let i = handLength - 1; i >= 0; i--)
+    {
+      let updateResult = this.cards[i].Update();
+      if (updateResult != "")
+      {
+        updateResults.push(updateResult);
+        //patron survived, let's put him back on board
+        if (this.cards[i].assignedPatron != undefined)
+        {
+          board.PlaceCharacterBackOnBoard(this.cards[i].assignedPatron);
+        }
+        this.cards.splice(i, 1);
+      }
+    }
+
+    if (this.cards.length < 5)
+    {
+      //maybe get a new quest or two
+      let newQuestCards = db.GetRandomQuestCards(turn);
+      for (let i = 0; i < newQuestCards.length; i++)
+      {
+        if (this.cards.length < 5)
+          this.cards.push(newQuestCards[i]);
+      }
+    }
+  }
+
+  ClickedOnCard(pointx, pointy, ctx)
+  {
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let heightSeparation = height / this.cards.length;
+    let widthFromSide = width - LARGECARDWIDTH;
+    let cardx = widthFromSide + this.EDGE_OFFSET;
+    for (let i = 0; i < this.cards.length; i++)
+    {
+      let cardy = i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP;
+      
+      if (cardx <= pointx && cardx + LARGECARDWIDTH >= pointx &&
+          cardy <= pointy && cardy + LARGECARDHEIGHT >= pointy)
+      {
+        if (this.cards[i].cardType == CARDTYPE_QUEST && this.cards[i].assignedPatron == undefined)
+        {
+          this.selectedCardIndex = i;
+          return "Select patron for quest...";
+        }
+          
+        return "";
+      }
+    }    
+
+    return "";
+  }
+
+  HandleMouseOver(pointx, pointy, ctx)
+  {
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let heightSeparation = height / this.cards.length;
+    let widthFromSide = width - LARGECARDWIDTH;
+    let cardx = widthFromSide - this.EDGE_OFFSET;
+    for (let i = 0; i < this.cards.length; i++)
+    {
+      let cardy = i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP;
+      
+      if (cardx <= pointx && cardx + LARGECARDWIDTH >= pointx &&
+          cardy <= pointy && cardy + LARGECARDHEIGHT >= pointy)
+      {
+        if (this.cards[i].cardType == CARDTYPE_QUEST)
+        {
+          this.focusedCard = i;
+          return true;
+        }
+      }
+    }
+    if (this.focusedCard != -1)  
+    {
+      this.focusedCard = -1;  
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  Draw(ctx)
+  {
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let heightSeparation = height / this.cards.length;
+    let widthFromSide = width - LARGECARDWIDTH;
+
+    for (let i = 0; i < this.cards.length; i++)
+    {
+      if (this.selectedCardIndex == -1 || this.selectedCardIndex == i)
+      {
+        if (this.focusedCard == i)
+          this.cards[i].DrawQuestAndPatron(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
+        else
+          this.cards[i].DrawLargeCard(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
+      }        
+    }
+  }
+
+  GetSelectedCard()
+  {
+    if (this.selectedCardIndex != -1)
+      return this.cards[this.selectedCardIndex];
+    else
+      return undefined;
+  }
+
+  CancelCardPlacement()
+  {
+    this.selectedCardIndex = -1;
   }
 }
 

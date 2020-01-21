@@ -1,5 +1,6 @@
 var OBJECTSPRITES = {
-    "counter" : new Vector2D(0,0)
+    "counter" : new Vector2D(0, 0),
+    "chair" : new Vector2D(1, 0)
 }
 
 var BUFFCURSESPRITES = {
@@ -18,6 +19,10 @@ var CHARCARDSPRITES = {
     "skeleton" : new Vector2D(3, 4)
 }
 
+var QUESTCARDSPRITES = {
+    "testQuest" : new Vector2D(0, 6)
+}
+
 var RSCTYPECHANCE = 0.5;
 var OBJECTTYPECHANCE = RSCTYPECHANCE + 0.3;
 var BUFFTYPECHANCE = OBJECTTYPECHANCE + 0.15;
@@ -26,6 +31,9 @@ var TYPECHANCEMOD = 0.002;
 var NOCHARCHANCE = 0.1;
 var ONECHARCHANCE = NOCHARCHANCE + 0.7;
 var TWOCHARCHANCE = ONECHARCHANCE + 0.15;
+
+var NOQUESTCHANCE = 0.6;
+var ONEQUESTCHANCE = NOQUESTCHANCE + 0.3;
 
 class Database
 {
@@ -42,6 +50,7 @@ class Database
         this.curseCards = [];
         this.rscCards = [];
         this.charCards = [];
+        this.questCards = [];
     }
 
     GetRandomCharacterCards(turn)
@@ -58,6 +67,17 @@ class Database
             return [this.GetRandomCard(this.charCards), 
                 this.GetRandomCard(this.charCards), 
                 this.GetRandomCard(this.charCards)];
+    }
+
+    GetRandomQuestCards(turn)
+    {
+        let cardCount = Math.random();
+        if (cardCount < NOQUESTCHANCE)
+            return [];
+        if (cardCount < ONEQUESTCHANCE)
+            return [this.GetRandomCard(this.questCards)];
+        else
+            return [this.GetRandomCard(this.questCards), this.GetRandomCard(this.questCards)];
     }
 
     GetRandomHandCard(turn)
@@ -96,13 +116,17 @@ class Database
         this.LoadCurseCards();
         this.LoadResourceCards();
         this.LoadCharacterCards();
+        this.LoadQuestCards();
     }
 
     LoadObjectCards()
     {
         this.objectCards.push(new ObjectCard(OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y,
-                                            OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y, 1, 1, false, -1,
-                                            new ResourceUpkeep(this.gold, 0)));
+                                            OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y, 2, 1, false, -1,
+                                            new ResourceUpkeep(this.gold, -3)));
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y,
+                                            OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y, 3, 0, true, -1,
+                                            new ResourceUpkeep(this.gold, -5)));
     }
 
     LoadBuffCards()
@@ -127,15 +151,26 @@ class Database
     {
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y,
                                               CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y, 3, 0, 
-                                              [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -2) ], "Dire Bat"));
+                                              [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -2) ], "Dire Bat",
+                                              new CharacterStats(1,1,1)));
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y,
                                               CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y, 3, 0, 
-                                              [ new ResourceUpkeep(this.gold, -1), new ResourceUpkeep(this.beer, 2) ], "Dire Rat"));
+                                              [ new ResourceUpkeep(this.gold, -1), new ResourceUpkeep(this.beer, 2) ], "Dire Rat",
+                                              new CharacterStats(1,1,1)));
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y,
                                               CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y, 1, 0, 
-                                              [ new ResourceUpkeep(this.gold, 2), new ResourceUpkeep(this.beer, -3) ], "Goblin")); 
+                                              [ new ResourceUpkeep(this.gold, 2), new ResourceUpkeep(this.beer, -3) ], "Goblin",
+                                              new CharacterStats(1,2,1))); 
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y,
                                               CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y, 4, 0, 
-                                              [ new ResourceUpkeep(this.gold, -2), new ResourceUpkeep(this.beer, 3) ], "Skeleton"));                                   
+                                              [ new ResourceUpkeep(this.gold, -2), new ResourceUpkeep(this.beer, 3) ], "Skeleton",
+                                              new CharacterStats(1,2,2)));                                   
+    }
+
+    LoadQuestCards()
+    {
+        this.questCards.push(new QuestCard(QUESTCARDSPRITES["testQuest"].x, QUESTCARDSPRITES["testQuest"].y,
+                                           QUESTCARDSPRITES["testQuest"].x, QUESTCARDSPRITES["testQuest"].y,
+                                           1, 3, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)]));
     }
 }
