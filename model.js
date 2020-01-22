@@ -7,6 +7,13 @@ var DEFAULTLARGECARDY = 0;
 var DEFAULTRESOURCEX = 0;
 var DEFAULTRESOURCEY = 0;
 
+var CARDUSEBORDERX = 0;
+var CARDUSEBORDERY = 0;
+var CARDUSEWIDTH = 37;
+var CARDUSEHEIGHT = 43;
+var FIGHTX = 48;
+var FIGHTY = 0;
+
 var TILEWIDTH = 16;
 var TILEHEIGHT = 16;
 var LARGECARDWIDTH = 32;
@@ -37,6 +44,7 @@ var SMALLCARDSPRITESHEET = document.getElementById("smallcard");
 var LARGECARDSPRITESHEET = document.getElementById("largecard");
 var RESOURCESPRITESHEET = document.getElementById("resources");
 var BACKGROUNDIMAGE = document.getElementById("background");
+var EXTRASSPRITESHEET = document.getElementById("extras");
 
 class Resource
 {
@@ -156,6 +164,11 @@ class CharacterStats
     ctx.fillText("DEX " + this.dex, x, y+=this.STATSEPARATION);
   }
 
+  GetCombinedStats()
+  {
+    return this.int + this.str + this.dex;
+  }
+
   Clone()
   {
     return new CharacterStats(this.int, this.str, this.dex);
@@ -251,7 +264,7 @@ class QuestCard extends Card
     this.cardType = CARDTYPE_QUEST;
     this.rscUpkeeps = rscUpkeeps;
     //this.name = name;
-    this.currentTurn = 0;
+    this.currentTurn = 1;
   }
 
   Update()
@@ -348,6 +361,8 @@ class CurseCard extends Card
     Update()
     {
         this.resource.count -= this.amount;
+        if (this.resource.count < 0)
+          this.resource.count = 0;
     }
 
     Clone()
@@ -599,6 +614,8 @@ class Board
       }
     }
 
+    returnMessages = returnMessages.concat(this.UpdateAndDrawBarFights(ctx));
+
     //let the user get their bearings and buy some objects on turn 1
     //this will allow them to have two different hands of cards before
     //patrons arrive
@@ -628,6 +645,68 @@ class Board
     }
 
     return returnMessages;
+  }
+
+  UpdateAndDrawBarFights(ctx)
+  {
+    let battleMessages = [];
+    for (let x = 0; x < TILESX; x++)
+    {
+      for (let y = 0; y < TILESY; y++)
+      {
+        if (this.characterMap[x][y] != undefined)
+        {
+          for (let modx = -1; modx < 2; modx++)
+          {
+            for (let mody = -1; mody < 2; mody++)
+            {
+              let adjacentx = x + modx;
+              let adjacenty = y + mody;
+              if ((x != adjacentx || y != adjacenty) && 0 <= adjacentx && adjacentx < TILESX &&
+                  0 <= adjacenty && adjacenty < TILESY && 
+                  this.characterMap[adjacentx][adjacenty] != undefined && Math.random() < .2) //20% chance for a bar fight
+              {
+                ctx.drawImage(EXTRASSPRITESHEET, FIGHTX, FIGHTY, TILEWIDTH, TILEHEIGHT, 
+                  x * TILEWIDTH, y * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
+                ctx.drawImage(EXTRASSPRITESHEET, FIGHTX, FIGHTY, TILEWIDTH, TILEHEIGHT, 
+                  adjacentx * TILEWIDTH, adjacenty * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
+                let battleDecision = Math.random();
+                if (battleDecision < 0.05)
+                {
+                  battleMessages.push(this.characterMap[x][y].name + " won a fight against " + this.characterMap[adjacentx][adjacenty].name);
+                  this.characterMap[x][y].stats.LevelUp();
+                  this.characterMap[adjacentx][adjacenty] = undefined;
+                }
+                else if (battleDecision < 0.1)
+                {
+                  battleMessages.push(this.characterMap[adjacentx][adjacenty].name + " won a fight against " + this.characterMap[x][y].name);
+                  this.characterMap[adjacentx][adjacenty].stats.LevelUp();
+                  this.characterMap[x][y] = undefined;
+                }
+                else
+                {
+                  let adjacentFullStats = this.characterMap[adjacentx][adjacenty].stats.GetCombinedStats();
+                  let fullStats = this.characterMap[x][y].stats.GetCombinedStats();
+                  if (adjacentFullStats > fullStats)
+                  {
+                    battleMessages.push(this.characterMap[adjacentx][adjacenty].name + " won a fight against " + this.characterMap[x][y].name);
+                    this.characterMap[adjacentx][adjacenty].stats.LevelUp();
+                    this.characterMap[x][y] = undefined;
+                  }
+                  else
+                  {
+                    battleMessages.push(this.characterMap[x][y].name + " won a fight against " + this.characterMap[adjacentx][adjacenty].name);
+                    this.characterMap[x][y].stats.LevelUp();
+                    this.characterMap[adjacentx][adjacenty] = undefined;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return battleMessages;
   }
 
   Draw(ctx)
@@ -784,7 +863,7 @@ class Hand
     this.EDGE_OFFSET = 5;
   }
 
-  Update(turnCount, db)
+  Update(turnCount, db, ctx)
   {
     let handLength = this.cards.length;
     //run buffs/curses and then remove all cards from the hand
@@ -795,8 +874,9 @@ class Hand
       {
         this.cards[i].Update();
       }
-      this.cards.splice(i, 1);
     }
+
+    this.DrawBetweenTurnsOverlay(ctx);
 
     this.GenerateNewHand(turnCount, db);
   }
@@ -824,6 +904,26 @@ class Hand
     {
       if (this.selectedCardIndex == -1 || this.selectedCardIndex == i)
         this.cards[i].DrawLargeCard(i * widthSeparation + this.EDGE_OFFSET, heightFromBottom - this.EDGE_OFFSET, ctx);
+    }
+  }
+
+  DrawBetweenTurnsOverlay(ctx)
+  {
+    //loop through buff and curse cards and draw the border around them
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let widthSeparation = width / this.cards.length;
+    let heightFromBottom = height - CARDUSEHEIGHT - 3;
+
+    for (let i = 0; i < this.cards.length; i++)
+    {
+      if (this.cards[i].cardType == CARDTYPE_BUFF || 
+          this.cards[i].cardType == CARDTYPE_CURSE)
+      {
+        ctx.drawImage(EXTRASSPRITESHEET, CARDUSEBORDERX, CARDUSEBORDERY, CARDUSEWIDTH, CARDUSEHEIGHT, 
+          i * widthSeparation + this.EDGE_OFFSET - ((CARDUSEWIDTH - LARGECARDWIDTH) / 2), heightFromBottom,
+          CARDUSEWIDTH, CARDUSEHEIGHT);
+      }
     }
   }
 
@@ -902,8 +1002,10 @@ class Quests
     this.GAPFROMTOP = 10;
   }
 
-  Update(turn, db, board)
+  Update(turn, db, board, ctx)
   {
+    this.DrawBetweenTurnsOverlay(ctx);
+
     let updateResults = []
     let handLength = this.cards.length;
     for(let i = handLength - 1; i >= 0; i--)
@@ -939,7 +1041,7 @@ class Quests
     let height = ctx.canvas.height;
     let heightSeparation = height / this.cards.length;
     let widthFromSide = width - LARGECARDWIDTH;
-    let cardx = widthFromSide + this.EDGE_OFFSET;
+    let cardx = widthFromSide - this.EDGE_OFFSET;
     for (let i = 0; i < this.cards.length; i++)
     {
       let cardy = i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP;
@@ -1008,6 +1110,25 @@ class Quests
         else
           this.cards[i].DrawLargeCard(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
       }        
+    }
+  }
+
+  DrawBetweenTurnsOverlay(ctx)
+  {
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let heightSeparation = height / this.cards.length;
+    let widthFromSide = width - LARGECARDWIDTH;
+
+    for (let i = 0; i < this.cards.length; i++)
+    {
+      this.cards[i].DrawQuestAndPatron(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
+      if (this.cards[i].assignedPatron != undefined)
+      {
+        ctx.fillStyle = TEXTCOLOR;
+        ctx.fillText("TURN" + this.cards[i].currentTurn, widthFromSide - this.EDGE_OFFSET, 
+        i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT + 9);
+      }      
     }
   }
 

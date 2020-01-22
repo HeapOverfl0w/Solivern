@@ -21,6 +21,8 @@ class Game
     this.ctx.font = TEXTFONT;
     this.ctx.imageSmoothingEnabled = false;
 
+    this.endTurnTimeout = undefined;
+
     this.turn = 0;
   }
 
@@ -60,81 +62,106 @@ class Game
 
   Update()
   {
-    this.gameMessages = [];
-    this.hand.Update(this.turn, this.db);
-    this.SetGameMessages(this.quests.Update(this.turn, this.db, this.board));
-    this.SetGameMessages(this.board.Update(this.turn, this.db));
+    this.gameMessages = ["Calculating Next Turn..."];
+    this.endTurnButton.visible = false;
     this.Draw();
-    this.turn++;
+    this.hand.Update(this.turn, this.db, this.ctx);
+    this.SetGameMessages(this.quests.Update(this.turn, this.db, this.board, this.ctx));
+    this.SetGameMessages(this.board.Update(this.turn, this.db));
+    if (this.turn == 0)
+    {
+      this.endTurnButton.visible = true;
+      this.Draw();
+      this.turn++;
+    }
+    else
+    {
+      this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 2500, this);
+    }
+  }
+
+  EndTurnTimeout(game)
+  {
+    game.endTurnButton.visible = true;
+    game.Draw();
+    game.turn++;
+    game.endTurnTimeout = undefined;
+    game.SetTimeoutBeginGameMessage();
   }
 
   HandleMouseOver(pointx, pointy)
   {
-    let tilex = this.TranslatePointCoordinatesToTile(true, pointx);
-    let tiley = this.TranslatePointCoordinatesToTile(false, pointy);
-
-    if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || this.quests.HandleMouseOver(pointx, pointy, this.ctx))
+    if (this.endTurnTimeout == undefined)
     {
-        this.Draw();
-        this.hand.DrawObjectPlacement(tilex, tiley, ctx);
+      let tilex = this.TranslatePointCoordinatesToTile(true, pointx);
+      let tiley = this.TranslatePointCoordinatesToTile(false, pointy);
+
+      if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || this.quests.HandleMouseOver(pointx, pointy, this.ctx))
+      {
+          this.Draw();
+          this.hand.DrawObjectPlacement(tilex, tiley, ctx);
+      }
     }
   }
 
   HandleMouseClick(pointx, pointy)
   {
-    if (this.hand.selectedCardIndex != -1)
+    if (this.endTurnTimeout == undefined)
     {
-      let message = this.board.PlaceObject(this.hand.GetSelectedCard(), 
-      this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
-      this.SetGameMessage(message);
-    
-        //TODO: I don't like this check here, but this will work for right now
-        if (message == "Purchased.")
-        {
-            this.hand.RemoveSelectedCard();
-        }
-
-      this.Draw();
-      this.audio.PlayActivate();
-    }
-    else if (this.quests.selectedCardIndex != -1)
-    {
-      let message = this.board.SelectForQuest(this.quests.GetSelectedCard(),
-      this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
-      this.SetGameMessage(message);
-      this.quests.CancelCardPlacement();
-      this.Draw();
-      this.audio.PlayActivate();
-    }
-    else if (this.endTurnButton.IsInside(pointx, pointy))
-    {
-        this.Update();
-        this.audio.PlayActivate();
-    }
-    else
-    {
-      let message = this.hand.ClickedOnCard(pointx, pointy, this.ctx);
-
-      if (message != "")
+      if (this.hand.selectedCardIndex != -1)
       {
-        //TODO: again, don't like using the string comparison here
-        if (message == "Purchased.")
-        {
-          this.hand.RemoveSelectedCard();
-          this.audio.PlayActivate();
-        }
+        let message = this.board.PlaceObject(this.hand.GetSelectedCard(), 
+        this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
         this.SetGameMessage(message);
+      
+          //TODO: I don't like this check here, but this will work for right now
+          if (message == "Purchased.")
+          {
+              this.hand.RemoveSelectedCard();
+          }
+
         this.Draw();
+        this.audio.PlayActivate();
       }
-      else //same logic for quests
+      else if (this.quests.selectedCardIndex != -1)
       {
-        message = this.quests.ClickedOnCard(pointx, pointy, this.ctx);
+        let message = this.board.SelectForQuest(this.quests.GetSelectedCard(),
+        this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
+        this.SetGameMessage(message);
+        this.quests.CancelCardPlacement();
+        this.Draw();
+        this.audio.PlayActivate();
+      }
+      else if (this.endTurnButton.IsInside(pointx, pointy))
+      {
+          this.Update();
+          this.audio.PlayActivate();
+      }
+      else
+      {
+        let message = this.hand.ClickedOnCard(pointx, pointy, this.ctx);
 
         if (message != "")
         {
+          //TODO: again, don't like using the string comparison here
+          if (message == "Purchased.")
+          {
+            this.hand.RemoveSelectedCard();
+            this.audio.PlayActivate();
+          }
           this.SetGameMessage(message);
           this.Draw();
-          this.audio.PlayActivate();
+        }
+        else //same logic for quests
+        {
+          message = this.quests.ClickedOnCard(pointx, pointy, this.ctx);
+
+          if (message != "")
+          {
+            this.SetGameMessage(message);
+            this.Draw();
+            this.audio.PlayActivate();
+          }
         }
       }
     }
@@ -142,7 +169,7 @@ class Game
 
   HandleKeyboardInput(keyCode)
   {
-    if (keyCode == 27)
+    if (keyCode == 27 && this.endTurnTimeout == undefined)
     {
         this.hand.CancelCardPlacement();
         this.quests.CancelCardPlacement();
@@ -153,13 +180,15 @@ class Game
   SetGameMessage(message)
   {
       this.gameMessages = this.gameMessages.concat([message]);
-      this.SetTimeoutBeginGameMessage();
+      if (this.endTurnTimeout == undefined)
+        this.SetTimeoutBeginGameMessage();
   }
 
   SetGameMessages(messages)
   {
     this.gameMessages = this.gameMessages.concat(messages);
-    this.SetTimeoutBeginGameMessage();
+    if (this.endTurnTimeout == undefined)
+      this.SetTimeoutBeginGameMessage();
   }
 
   SetTimeoutBeginGameMessage()

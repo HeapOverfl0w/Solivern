@@ -171,6 +171,6 @@ class Database
     {
         this.questCards.push(new QuestCard(QUESTCARDSPRITES["testQuest"].x, QUESTCARDSPRITES["testQuest"].y,
                                            QUESTCARDSPRITES["testQuest"].x, QUESTCARDSPRITES["testQuest"].y,
-                                           1, 3, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)]));
+                                           1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)]));
     }
 }
