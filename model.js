@@ -1057,6 +1057,7 @@ class Quests
           this.cards.push(newQuestCards[i]);
       }
     }
+    return updateResults;
   }
 
   ClickedOnCard(pointx, pointy, ctx)
