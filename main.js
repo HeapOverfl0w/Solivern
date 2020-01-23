@@ -6,7 +6,8 @@ class Game
     this.hand = new Hand();
     this.board = new Board();
     this.quests = new Quests();
-    this.endTurnButton = new Button(ctx.canvas.width / 2 - 25, 5, 50, 16, "End Turn", 5, 12, BUTTONCOLOR);
+    this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 5, 39, 16, 48, 32);
+    this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 5, 16, 16, 48, 16);
 
     this.goldResource = new Resource(0,0,"Gold");
     this.goldResource.count = 10;
@@ -22,6 +23,7 @@ class Game
     this.ctx.imageSmoothingEnabled = false;
 
     this.endTurnTimeout = undefined;
+    this.destructionMode = false;
 
     this.turn = 0;
   }
@@ -49,6 +51,7 @@ class Game
 
     this.resourceCollection.Draw(this.ctx);
     this.endTurnButton.Draw(this.ctx);
+    this.destroyButton.Draw(this.ctx);
 
     //draw message
     this.ctx.fillStyle = TEXTCOLOR;
@@ -56,7 +59,12 @@ class Game
     for(let m = 0; m < this.gameMessages.length; m++)
     {
       if (this.gameMessages[m] != undefined && this.gameMessages[m] != "")
+      {
+        this.ctx.fillStyle = BUTTONCOLOR;
+        this.ctx.fillRect(0, yindex * 12, this.gameMessages[m].length * 5, 16);
+        this.ctx.fillStyle = TEXTCOLOR;
         this.ctx.fillText(this.gameMessages[m], 0, ++yindex * 12);
+      }
     }
   }
 
@@ -64,6 +72,7 @@ class Game
   {
     this.gameMessages = ["Calculating Next Turn..."];
     this.endTurnButton.visible = false;
+    this.destroyButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
     this.SetGameMessages(this.quests.Update(this.turn, this.db, this.board, this.ctx));
@@ -71,18 +80,20 @@ class Game
     if (this.turn == 0)
     {
       this.endTurnButton.visible = true;
+      this.destroyButton.visible = true;
       this.Draw();
       this.turn++;
     }
     else
     {
-      this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 2500, this);
+      this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 3000, this);
     }
   }
 
   EndTurnTimeout(game)
   {
     game.endTurnButton.visible = true;
+    game.destroyButton.visible = true;
     game.Draw();
     game.turn++;
     game.endTurnTimeout = undefined;
@@ -108,7 +119,13 @@ class Game
   {
     if (this.endTurnTimeout == undefined)
     {
-      if (this.hand.selectedCardIndex != -1)
+      if (this.destructionMode)
+      {
+        let returnMessage = this.board.SellObjectAt(this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
+        this.SetGameMessage(returnMessage);
+        this.Draw();
+      }
+      else if (this.hand.selectedCardIndex != -1)
       {
         let message = this.board.PlaceObject(this.hand.GetSelectedCard(), 
         this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
@@ -136,6 +153,12 @@ class Game
       {
           this.Update();
           this.audio.PlayActivate();
+      }
+      else if (this.destroyButton.IsInside(pointx, pointy))
+      {
+        this.gameMessages = ["Sell mode started - hit ESC to cancel."];
+        this.Draw();
+        this.destructionMode = true;
       }
       else
       {
@@ -171,9 +194,11 @@ class Game
   {
     if (keyCode == 27 && this.endTurnTimeout == undefined)
     {
-        this.hand.CancelCardPlacement();
-        this.quests.CancelCardPlacement();
-        this.audio.PlayActivate();
+      this.destructionMode = false;
+      this.hand.CancelCardPlacement();
+      this.quests.CancelCardPlacement();
+      this.audio.PlayActivate();
+      this.Draw();
     }
   }
 

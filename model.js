@@ -30,14 +30,16 @@ var CARDTYPE_NONE = 4;
 var CARDTYPE_CHARACTER = 5;
 var CARDTYPE_QUEST = 6;
 
+var BOARDBORDER = 3;
+
 var STATTYPE_INT = 0;
 var STATTYPE_STR = 1;
 var STATTYPE_DEX = 2;
 
 var HANDSIZE = 7;
 
-var TEXTCOLOR = "#000000";
-var BUTTONCOLOR = "rgb(254,193,7)";
+var TEXTCOLOR = "#FFFFFF";
+var BUTTONCOLOR = "#000000";
 var TEXTFONT = "10px Arial";
 
 var SMALLCARDSPRITESHEET = document.getElementById("smallcard");
@@ -58,10 +60,12 @@ class Resource
 
     Draw(locX, locY, ctx)
     {
+        ctx.fillStyle = BUTTONCOLOR;
+        ctx.fillRect(locX, locY, RESOURCEWIDTH + RESOURCETEXTOFFSET + 12, 14);
         ctx.drawImage(RESOURCESPRITESHEET, this.resourceSpriteX, this.resourceSpriteY, 
             RESOURCEWIDTH, RESOURCEHEIGHT, locX, locY, RESOURCEWIDTH, RESOURCEHEIGHT);
         ctx.fillStyle = TEXTCOLOR;
-        ctx.fillText(this.count + "", locX + RESOURCETEXTOFFSET, locY + 12);
+        ctx.fillText(this.count + "", locX + RESOURCETEXTOFFSET, locY + 11);
     }
 }
 
@@ -592,9 +596,9 @@ class Board
   {
     let returnMessages = [];
 
-    for (let x = 0; x < TILESX; x++)
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
-      for (let y = 0; y < TILESY; y++)
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
         if (this.objectMap[x][y] != undefined)
           this.objectMap[x][y].Update();
@@ -650,9 +654,9 @@ class Board
   UpdateAndDrawBarFights(ctx)
   {
     let battleMessages = [];
-    for (let x = 0; x < TILESX; x++)
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
-      for (let y = 0; y < TILESY; y++)
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
         if (this.characterMap[x][y] != undefined)
         {
@@ -713,9 +717,9 @@ class Board
   {
     ctx.drawImage(BACKGROUNDIMAGE, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
 
-    for (let x = 0; x < TILESX; x++)
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
-      for (let y = 0; y < TILESY; y++)
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
         if (this.objectMap[x][y] != undefined)
         {
@@ -748,24 +752,44 @@ class Board
 
   PlaceObject(objectCard, tilex, tiley)
   {
-    let placed = objectCard.PayFor();
-    if (placed)
+    //check if something already exists
+    if (this.objectMap[tilex][tiley] != undefined)
+      return "Object already at location.";
+    else if (!objectCard.passable && this.characterMap[tilex][tiley] != undefined)
+      return "Cannot place impassable object where patron resides.";
+    else if (tilex < BOARDBORDER || tilex > TILESX - BOARDBORDER || 
+      tiley < BOARDBORDER || tiley > TILESX - BOARDBORDER)
+      return "Cannot place outside of tavern.";
+    else
     {
-      //check if something already exists
-      if (this.objectMap[tilex][tiley] != undefined)
-        return "Object already at location.";
-      else if (!objectCard.passable && this.characterMap[tilex][tiley] != undefined)
-        return "Cannot place unusable object where patron resides.";
-      else
+      let placed = objectCard.PayFor();
+      if (placed)
       {
         this.objectMap[tilex][tiley] = objectCard;
         objectCard.locX = tilex;
         objectCard.locY = tiley;
         return "Purchased.";
       }
+      else
+        return "Insufficient " + objectCard.rscCost.resource.name + ".";
     }
-    else
-      return "Insufficient " + objectCard.rscCost.resource.name + ".";
+    
+  }
+
+  SellObjectAt(tilex, tiley)
+  {
+    let returnMessage = "No object at location.";
+    if (this.objectMap[tilex][tiley] != undefined)
+    {
+      if (this.objectMap[tilex][tiley].rscUpkeep.amount < 0)
+        this.objectMap[tilex][tiley].rscUpkeep -= this.objectMap[tilex][tiley].rscUpkeep.amount;
+      else
+        this.objectMap[tilex][tiley].rscUpkeep += this.objectMap[tilex][tiley].rscUpkeep.amount;
+
+      returnMessage =  "Sold " + this.objectMap[tilex][tiley];
+      this.objectMap[tilex][tiley] = undefined;
+    }
+    return returnMessage;
   }
 
   SelectForQuest(questCard, tilex, tiley)
@@ -806,17 +830,17 @@ class Board
   {
     let highestSatisfactionLevel = 0;
     let highestSatisfactionLocation = new Vector2D(0,0);
-    for (let x = 0; x < TILESX; x++)
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
-      for (let y = 0; y < TILESY; y++)
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
         let currentSatisfactionLevel = 0;
         //can't be here if another guy is here
         if (this.characterMap[x][y] == undefined && (this.objectMap[x][y] == undefined || this.objectMap[x][y].passable))
         {
-          for (let objectx = 0; objectx < TILESX; objectx++)
+          for (let objectx = BOARDBORDER; objectx < TILESX - BOARDBORDER; objectx++)
           {
-            for (let objecty = 0; objecty < TILESY; objecty++)
+            for (let objecty = BOARDBORDER; objecty < TILESY - BOARDBORDER; objecty++)
             {
               if (this.objectMap[objectx][objecty] != undefined && this.objectMap[objectx][objecty].IsLocationInside(x, y))
               {
@@ -837,9 +861,9 @@ class Board
     //a great place to stand/sit because all the satisfaction spaces are taken up
     if (highestSatisfactionLocation.x == 0 && highestSatisfactionLocation.y == 0)
     {
-      let randx = Math.floor(Math.random() * TILESX);
+      let randx = BOARDBORDER + Math.floor(Math.random() * (TILESX - BOARDBORDER));
       randx = randx == TILESX ? TILESX - 1 : randx;
-      let randy = Math.floor(Math.random() * TILESY);
+      let randy = BOARDBORDER + Math.floor(Math.random() * (TILESY - BOARDBORDER));
       randy = randy == TILESY ? TILESY - 1 : randy;
       highestSatisfactionLocation = new Vector2D(randx, randy);
     }
@@ -921,7 +945,7 @@ class Hand
           this.cards[i].cardType == CARDTYPE_CURSE)
       {
         ctx.drawImage(EXTRASSPRITESHEET, CARDUSEBORDERX, CARDUSEBORDERY, CARDUSEWIDTH, CARDUSEHEIGHT, 
-          i * widthSeparation + this.EDGE_OFFSET - ((CARDUSEWIDTH - LARGECARDWIDTH) / 2), heightFromBottom,
+          i * widthSeparation + this.EDGE_OFFSET - Math.floor((CARDUSEWIDTH - LARGECARDWIDTH) / 2) - 1, heightFromBottom,
           CARDUSEWIDTH, CARDUSEHEIGHT);
       }
     }
@@ -1125,6 +1149,8 @@ class Quests
       this.cards[i].DrawQuestAndPatron(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
       if (this.cards[i].assignedPatron != undefined)
       {
+        ctx.fillStyle = BUTTONCOLOR;
+        ctx.fillRect(widthFromSide - this.EDGE_OFFSET - 2, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT, LARGECARDWIDTH + 6, 13);
         ctx.fillStyle = TEXTCOLOR;
         ctx.fillText("TURN" + this.cards[i].currentTurn, widthFromSide - this.EDGE_OFFSET, 
         i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT + 9);
@@ -1174,15 +1200,47 @@ class Button
   {
     if (this.visible)
     {
-      ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
-      ctx.fillStyle = TEXTCOLOR;
-      ctx.fillText(this.text, this.x + this.textOffsetX, this.y + this.textOffsetY, this.width);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = TEXTCOLOR;
+        ctx.fillText(this.text, this.x + this.textOffsetX, this.y + this.textOffsetY, this.width);
     }
   }
 
   IsInside(pointx, pointy)
   {
+    if (!this.visible)
+      return false;
+
+    return (this.x <= pointx && (this.x + this.width) >= pointx &&
+        this.y <= pointy && (this.y + this.height) >= pointy);
+  }
+}
+
+class ImageButton
+{
+  constructor(x, y, width, height, spritesheetx, spritesheety)
+  {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.spritesheetx = spritesheetx;
+    this.spritesheety = spritesheety;
+    this.visible = true;
+  }
+
+  Draw(ctx)
+  {
+    if (this.visible)
+      ctx.drawImage(EXTRASSPRITESHEET, this.spritesheetx, this.spritesheety, this.width, this.height, this.x, this.y, this.width, this.height);
+  }
+
+  IsInside(pointx, pointy)
+  {
+    if (!this.visible)
+      return false;
+
     return (this.x <= pointx && (this.x + this.width) >= pointx &&
         this.y <= pointy && (this.y + this.height) >= pointy);
   }
