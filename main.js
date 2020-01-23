@@ -75,8 +75,8 @@ class Game
     this.destroyButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
-    this.SetGameMessages(this.quests.Update(this.turn, this.db, this.board, this.ctx));
-    this.SetGameMessages(this.board.Update(this.turn, this.db));
+    let questMessages = this.quests.Update(this.turn, this.db, this.board, this.ctx);
+    let boardMessages = this.board.Update(this.turn, this.db);
     if (this.turn == 0)
     {
       this.endTurnButton.visible = true;
@@ -88,6 +88,8 @@ class Game
     {
       this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 3000, this);
     }
+    
+    this.SetGameMessages(questMessages.concat(boardMessages));
   }
 
   EndTurnTimeout(game)
