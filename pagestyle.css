@@ -1,0 +1,82 @@
+html
+{
+    font: size 12;
+}
+
+nav{
+    display:flex;
+    flex-wrap:wrap;
+    width: 100%;
+    }
+    
+  nav a {
+    text-decoration: none;
+    display:block;
+    padding: 15px 25px;
+    text-align: center;
+    background-color: rgb(7, 39, 23);
+    color:#ffffff;
+    margin:0;
+    font-family:sans-serif;
+    }
+
+    nav p {
+        text-decoration: none;
+        display:block;
+        padding: 15px 25px;
+        text-align: center;
+        background-color: rgb(7, 39, 23);
+        color:#ffffff;
+        margin:0;
+        font-family:sans-serif;
+        }
+  
+  .play {
+    text-decoration: none;
+    display:block;
+    padding: 15px 25px;
+    text-align: center;
+    background-color: rgb(39, 9, 7);
+    color:#ffffff;
+    margin:0;
+    font-family:sans-serif;
+  }
+    
+  nav a:hover {
+    background-color: #000000;
+    color:#ffffff;
+    }
+
+    body {
+        background-image: url(./resources/background.png);
+        background-color: #555;
+        background-size: cover;
+      }
+      
+      .content {
+        width: 550px;
+        margin: auto;
+        background: rgb(177, 175, 175);
+        padding: 10px;
+        min-height:700px;
+        max-height:900px;
+        overflow-y: auto;
+      }
+
+      .beerimg {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100;
+        margin-bottom: auto;
+        width: 100px;
+        height: 100px;
+      }
+
+      .cardimg {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 64px;
+        height: 76px;
+      }
