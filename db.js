@@ -150,19 +150,19 @@ class Database
     LoadCharacterCards()
     {
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y,
-                                              CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y, 3, 0, 
+                                              CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -2) ], "Dire Bat",
                                               new CharacterStats(1,1,1)));
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y,
-                                              CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y, 3, 0, 
+                                              CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, -1), new ResourceUpkeep(this.beer, 2) ], "Dire Rat",
                                               new CharacterStats(1,1,1)));
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y,
-                                              CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y, 1, 0, 
+                                              CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y, 1, 
                                               [ new ResourceUpkeep(this.gold, 2), new ResourceUpkeep(this.beer, -3) ], "Goblin",
                                               new CharacterStats(1,2,1))); 
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y,
-                                              CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y, 4, 0, 
+                                              CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y, 4, 
                                               [ new ResourceUpkeep(this.gold, -2), new ResourceUpkeep(this.beer, 3) ], "Skeleton",
                                               new CharacterStats(1,2,2)));                                   
     }

@@ -507,11 +507,10 @@ class ObjectCard extends Card
 class CharacterCard extends Card
 {
     constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-        satisfactionRequirement, satisfactionThreshold, rscUpkeeps, name, stats)
+                satisfactionThreshold, rscUpkeeps, name, stats)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_CHARACTER;
-        this.satisfactionRequirement = satisfactionRequirement;
         this.satisfactionLevel = 0;
         this.satisfactionThreshold = satisfactionThreshold;
         this.locX = 0;
@@ -570,7 +569,7 @@ class CharacterCard extends Card
     Clone()
     {
       return new CharacterCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
-                               this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionRequirement, this.satisfactionThreshold, 
+                               this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionThreshold, 
                                this.resourceUpkeeps, this.name, this.stats.Clone());
     }
 }
@@ -996,7 +995,7 @@ class Hand
         else if (this.cards[i].cardType == CARDTYPE_OBJECT)
         {
           this.selectedCardIndex = i;
-          return "Place card...";
+          return "Place Card - ";
         }
           
         return "";
