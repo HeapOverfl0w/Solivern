@@ -671,7 +671,7 @@ class Board
     {
       for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
-        if (this.characterMap[x][y] != undefined)
+        if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].firstAppearance)
         {
           for (let modx = -1; modx < 2; modx++)
           {
@@ -681,7 +681,8 @@ class Board
               let adjacenty = y + mody;
               if ((x != adjacentx || y != adjacenty) && 0 <= adjacentx && adjacentx < TILESX &&
                   0 <= adjacenty && adjacenty < TILESY && 
-                  this.characterMap[adjacentx][adjacenty] != undefined && Math.random() < .1) //10% chance for a bar fight
+                  this.characterMap[adjacentx][adjacenty] != undefined && !this.characterMap[adjacentx][adjacenty].firstAppearance &&
+                  Math.random() < .1) //10% chance for a bar fight
               {
                 ctx.drawImage(EXTRASSPRITESHEET, FIGHTX, FIGHTY, TILEWIDTH, TILEHEIGHT, 
                   x * TILEWIDTH, y * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
