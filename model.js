@@ -995,7 +995,7 @@ class Hand
         else if (this.cards[i].cardType == CARDTYPE_OBJECT)
         {
           this.selectedCardIndex = i;
-          return "Place Card - ";
+          return "Place Card - ESC to Cancel";
         }
           
         return "";
@@ -1101,7 +1101,7 @@ class Quests
         if (this.cards[i].cardType == CARDTYPE_QUEST && this.cards[i].assignedPatron == undefined)
         {
           this.selectedCardIndex = i;
-          return "Select patron for quest...";
+          return "Select patron for quest - ESC to Cancel";
         }
           
         return "";
