@@ -9,7 +9,8 @@ var BUFFCURSESPRITES = {
 }
 
 var RSCCARDSPRITES = {
-    "testRsc" : new Vector2D(0, 3)
+    "chicken" : new Vector2D(0, 3),
+    "keg" : new Vector2D(1,3)
 }
 
 var CHARCARDSPRITES = {
@@ -143,8 +144,10 @@ class Database
 
     LoadResourceCards()
     {
-        this.rscCards.push(new ResourceCard(RSCCARDSPRITES["testRsc"].x, RSCCARDSPRITES["testRsc"].y,
-                                            RSCCARDSPRITES["testRsc"].x, RSCCARDSPRITES["testRsc"].y, this.food, this.gold, 10, 5));
+        this.rscCards.push(new ResourceCard(RSCCARDSPRITES["chicken"].x, RSCCARDSPRITES["chicken"].y,
+                                            RSCCARDSPRITES["chicken"].x, RSCCARDSPRITES["chicken"].y, this.food, this.gold, 10, 5));
+        this.rscCards.push(new ResourceCard(RSCCARDSPRITES["keg"].x, RSCCARDSPRITES["keg"].y,
+                                            RSCCARDSPRITES["keg"].x, RSCCARDSPRITES["keg"].y, this.beer, this.gold, 10, 5));
     }
 
     LoadCharacterCards()

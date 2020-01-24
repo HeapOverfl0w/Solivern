@@ -24,6 +24,7 @@ class Game
 
     this.endTurnTimeout = undefined;
     this.destructionMode = false;
+    this.gameOver = false;
 
     this.turn = 0;
   }
@@ -43,6 +44,9 @@ class Game
   {
     this.board.Draw(this.ctx);
 
+    if (this.gameOver)
+      return;
+      
     if (this.quests.selectedCardIndex == -1)
       this.hand.Draw(this.ctx);
 
@@ -93,6 +97,8 @@ class Game
     {
       //end game
       this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER." ];
+      this.gameOver = true;
+      this.Draw();
     }
     
     this.SetGameMessages(questMessages.concat(boardMessages));
@@ -125,7 +131,7 @@ class Game
 
   HandleMouseClick(pointx, pointy)
   {
-    if (this.endTurnTimeout == undefined)
+    if (this.endTurnTimeout == undefined && !this.gameOver)
     {
       if (this.destructionMode)
       {

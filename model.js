@@ -456,10 +456,10 @@ class ObjectCard extends Card
     {
         if (this.locX == undefined || this.locY == undefined)
         {
-            return (this.IsLocationInside(card.locX, card.locY));
+            return false;
         }
         else
-            return false;
+            return (this.IsLocationInside(card.locX, card.locY));
     }
 
     DrawObjectPlacement(locX, locY, ctx)
