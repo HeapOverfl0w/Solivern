@@ -268,7 +268,7 @@ class QuestCard extends Card
     this.cardType = CARDTYPE_QUEST;
     this.rscUpkeeps = rscUpkeeps;
     //this.name = name;
-    this.currentTurn = 1;
+    this.currentTurn = 0;
   }
 
   Update()
@@ -623,7 +623,7 @@ class Board
     //let the user get their bearings and buy some objects on turn 1
     //this will allow them to have two different hands of cards before
     //patrons arrive
-    if (turnCount > 1)
+    if ((turnCount > 10 && this.PatronsExist()) || (turnCount > 1 && turnCount < 10))
     {
       let newCharCards = db.GetRandomCharacterCards(turnCount);
 
@@ -633,9 +633,9 @@ class Board
         //5% chance to just go random
         if (Math.random() > 0.95)
         {
-          let randx = Math.floor(Math.random() * TILESX);
+          let randx = Math.floor(Math.random() * (TILESX - BOARDBORDER*2)) + BOARDBORDER;
           randx = randx == TILESX ? TILESX - 1 : randx;
-          let randy = Math.floor(Math.random() * TILESY);
+          let randy = Math.floor(Math.random() * (TILESY - BOARDBORDER*2)) + BOARDBORDER;
           randy = randy == TILESY ? TILESY - 1 : randy;
           bestLocation = new Vector2D(randx, randy);
         }
@@ -649,6 +649,19 @@ class Board
     }
 
     return returnMessages;
+  }
+
+  PatronsExist()
+  {
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+    {
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+      {
+        if (this.characterMap[x][y] != undefined)
+          return true;
+      }
+    }
+    return false;
   }
 
   UpdateAndDrawBarFights(ctx)
@@ -668,7 +681,7 @@ class Board
               let adjacenty = y + mody;
               if ((x != adjacentx || y != adjacenty) && 0 <= adjacentx && adjacentx < TILESX &&
                   0 <= adjacenty && adjacenty < TILESY && 
-                  this.characterMap[adjacentx][adjacenty] != undefined && Math.random() < .2) //20% chance for a bar fight
+                  this.characterMap[adjacentx][adjacenty] != undefined && Math.random() < .1) //10% chance for a bar fight
               {
                 ctx.drawImage(EXTRASSPRITESHEET, FIGHTX, FIGHTY, TILEWIDTH, TILEHEIGHT, 
                   x * TILEWIDTH, y * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
@@ -781,12 +794,9 @@ class Board
     let returnMessage = "No object at location.";
     if (this.objectMap[tilex][tiley] != undefined)
     {
-      if (this.objectMap[tilex][tiley].rscUpkeep.amount < 0)
-        this.objectMap[tilex][tiley].rscUpkeep -= this.objectMap[tilex][tiley].rscUpkeep.amount;
-      else
-        this.objectMap[tilex][tiley].rscUpkeep += this.objectMap[tilex][tiley].rscUpkeep.amount;
+      this.objectMap[tilex][tiley].rscCost.resource.count += Math.abs(Math.floor(this.objectMap[tilex][tiley].rscCost.amount / 2));
 
-      returnMessage =  "Sold " + this.objectMap[tilex][tiley];
+      returnMessage =  "Sold";
       this.objectMap[tilex][tiley] = undefined;
     }
     return returnMessage;
@@ -861,9 +871,9 @@ class Board
     //a great place to stand/sit because all the satisfaction spaces are taken up
     if (highestSatisfactionLocation.x == 0 && highestSatisfactionLocation.y == 0)
     {
-      let randx = BOARDBORDER + Math.floor(Math.random() * (TILESX - BOARDBORDER));
+      let randx = BOARDBORDER + Math.floor(Math.random() * (TILESX - BOARDBORDER*2));
       randx = randx == TILESX ? TILESX - 1 : randx;
-      let randy = BOARDBORDER + Math.floor(Math.random() * (TILESY - BOARDBORDER));
+      let randy = BOARDBORDER + Math.floor(Math.random() * (TILESY - BOARDBORDER*2));
       randy = randy == TILESY ? TILESY - 1 : randy;
       highestSatisfactionLocation = new Vector2D(randx, randy);
     }
@@ -874,8 +884,11 @@ class Board
   PlaceCharacterBackOnBoard(character)
   {
     let newLocation = this.DetermineMostSatisfactoryLocation();
+    character.firstAppearance = true;
     this.characterMap[newLocation.x][newLocation.y] = character;
   }
+
+  ArePatrons
 }
 
 class Hand
@@ -1060,6 +1073,17 @@ class Quests
     return updateResults;
   }
 
+  AreAnyPatronsOnQuests()
+  {
+    for(let q = 0; q < this.cards.length; q++)
+    {
+      if (q.assignedPatron != undefined)
+        return true;
+    }
+    
+    return false;
+  }
+
   ClickedOnCard(pointx, pointy, ctx)
   {
     let width = ctx.canvas.width;
@@ -1153,7 +1177,7 @@ class Quests
         ctx.fillStyle = BUTTONCOLOR;
         ctx.fillRect(widthFromSide - this.EDGE_OFFSET - 2, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT, LARGECARDWIDTH + 6, 13);
         ctx.fillStyle = TEXTCOLOR;
-        ctx.fillText("TURN" + this.cards[i].currentTurn, widthFromSide - this.EDGE_OFFSET, 
+        ctx.fillText("TURN" + (this.cards[i].currentTurn + 1), widthFromSide - this.EDGE_OFFSET, 
         i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT + 9);
       }      
     }

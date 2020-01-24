@@ -70,7 +70,7 @@ class Game
 
   Update()
   {
-    this.gameMessages = ["Calculating Next Turn..."];
+    this.gameMessages = [ "Calculating Next Turn..." ];
     this.endTurnButton.visible = false;
     this.destroyButton.visible = false;
     this.Draw();
@@ -87,6 +87,12 @@ class Game
     else
     {
       this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 3000, this);
+    }
+
+    if (this.turn > 10 && !this.board.PatronsExist())
+    {
+      //end game
+      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER." ];
     }
     
     this.SetGameMessages(questMessages.concat(boardMessages));
@@ -126,6 +132,7 @@ class Game
         let returnMessage = this.board.SellObjectAt(this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
         this.SetGameMessage(returnMessage);
         this.Draw();
+        this.audio.PlayActivate();
       }
       else if (this.hand.selectedCardIndex != -1)
       {
@@ -161,6 +168,7 @@ class Game
         this.gameMessages = ["Sell mode started - hit ESC to cancel."];
         this.Draw();
         this.destructionMode = true;
+        this.audio.PlayActivate();
       }
       else
       {
