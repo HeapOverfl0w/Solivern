@@ -59,7 +59,7 @@ nav{
         background: rgb(177, 175, 175);
         padding: 10px;
         min-height:700px;
-        max-height:900px;
+        max-height:95%;
         overflow-y: auto;
       }
 
