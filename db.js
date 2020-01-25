@@ -5,7 +5,11 @@ var OBJECTSPRITES = {
 
 var BUFFCURSESPRITES = {
     "testBuff" : new Vector2D(0, 1),
-    "testCurse" : new Vector2D(0, 2)
+    "testBuff1" : new Vector2D(1, 1),
+    "testBuff2" : new Vector2D(2,1),
+    "testCurse" : new Vector2D(0, 2),
+    "testCurse1" : new Vector2D(1, 2),
+    "testCurse2" : new Vector2D(2, 2)
 }
 
 var RSCCARDSPRITES = {
@@ -17,7 +21,10 @@ var CHARCARDSPRITES = {
     "bat" : new Vector2D(0, 4),
     "rat" : new Vector2D(1, 4),
     "goblin" : new Vector2D(2, 4),
-    "skeleton" : new Vector2D(3, 4)
+    "skeleton" : new Vector2D(3, 4),
+    "ghost" : new Vector2D(4,4),
+    "wolf" : new Vector2D(5,4),
+    "goblinmage" : new Vector2D(6,4)
 }
 
 var QUESTCARDSPRITES = {
@@ -133,13 +140,21 @@ class Database
     LoadBuffCards()
     {
         this.buffCards.push(new BuffCard(BUFFCURSESPRITES["testBuff"].x, BUFFCURSESPRITES["testBuff"].y,
-                                             BUFFCURSESPRITES["testBuff"].x, BUFFCURSESPRITES["testBuff"].y, this.gold, 5));
+                                         BUFFCURSESPRITES["testBuff"].x, BUFFCURSESPRITES["testBuff"].y, this.gold, 5));
+        this.buffCards.push(new BuffCard(BUFFCURSESPRITES["testBuff1"].x, BUFFCURSESPRITES["testBuff1"].y,
+                                         BUFFCURSESPRITES["testBuff1"].x, BUFFCURSESPRITES["testBuff1"].y, this.food, 5));
+        this.buffCards.push(new BuffCard(BUFFCURSESPRITES["testBuff2"].x, BUFFCURSESPRITES["testBuff2"].y,
+                                         BUFFCURSESPRITES["testBuff2"].x, BUFFCURSESPRITES["testBuff2"].y, this.beer, 5));
     }
 
     LoadCurseCards()
     {
         this.curseCards.push(new CurseCard(BUFFCURSESPRITES["testCurse"].x, BUFFCURSESPRITES["testCurse"].y,
                                            BUFFCURSESPRITES["testCurse"].x, BUFFCURSESPRITES["testCurse"].y, this.gold, 5));
+        this.curseCards.push(new BuffCard(BUFFCURSESPRITES["testCurse1"].x, BUFFCURSESPRITES["testCurse1"].y,
+                                           BUFFCURSESPRITES["testCurse1"].x, BUFFCURSESPRITES["testCurse1"].y, this.food, 5));
+        this.curseCards.push(new BuffCard(BUFFCURSESPRITES["testCurse2"].x, BUFFCURSESPRITES["testCurse2"].y,
+                                           BUFFCURSESPRITES["testCurse2"].x, BUFFCURSESPRITES["testCurse2"].y, this.beer, 5));
     }
 
     LoadResourceCards()
@@ -167,7 +182,19 @@ class Database
         this.charCards.push(new CharacterCard(CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y,
                                               CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y, 4, 
                                               [ new ResourceUpkeep(this.gold, -2), new ResourceUpkeep(this.beer, 3) ], "Skeleton",
-                                              new CharacterStats(1,2,2)));                                   
+                                              new CharacterStats(1,2,2)));
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["ghost"].x, CHARCARDSPRITES["ghost"].y,
+                                              CHARCARDSPRITES["ghost"].x, CHARCARDSPRITES["ghost"].y, 5, 
+                                              [ new ResourceUpkeep(this.gold, 3), new ResourceUpkeep(this.beer, -3) ], "Ghost",
+                                              new CharacterStats(2,1,3)));
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["wolf"].x, CHARCARDSPRITES["wolf"].y,
+                                              CHARCARDSPRITES["wolf"].x, CHARCARDSPRITES["wolf"].y, 5, 
+                                              [ new ResourceUpkeep(this.gold, 3), new ResourceUpkeep(this.food, -3) ], "Dire Wolf",
+                                              new CharacterStats(1,3,2)));
+        this.charCards.push(new CharacterCard(CHARCARDSPRITES["goblinmage"].x, CHARCARDSPRITES["goblinmage"].y,
+                                              CHARCARDSPRITES["goblinmage"].x, CHARCARDSPRITES["goblinmage"].y, 5, 
+                                              [ new ResourceUpkeep(this.gold, 4), new ResourceUpkeep(this.beer, -4) ], "Goblin Mage",
+                                              new CharacterStats(3,1,2)));                                   
     }
 
     LoadQuestCards()
