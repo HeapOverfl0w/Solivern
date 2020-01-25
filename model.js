@@ -887,8 +887,6 @@ class Board
     character.firstAppearance = true;
     this.characterMap[newLocation.x][newLocation.y] = character;
   }
-
-  ArePatrons
 }
 
 class Hand
