@@ -1,6 +1,7 @@
 var OBJECTSPRITES = {
     "counter" : new Vector2D(0, 0),
-    "chair" : new Vector2D(1, 0)
+    "chair" : new Vector2D(1, 0),
+    "candle" : new Vector2D(2, 0)
 }
 
 var BUFFCURSESPRITES = {
@@ -28,13 +29,15 @@ var CHARCARDSPRITES = {
 }
 
 var QUESTCARDSPRITES = {
-    "testQuest" : new Vector2D(0, 6)
+    "sweep" : new Vector2D(0, 6),
+    "cave" : new Vector2D(1,6),
+    "book" : new Vector2D(2,6)
 }
 
 var RSCTYPECHANCE = 0.5;
 var OBJECTTYPECHANCE = RSCTYPECHANCE + 0.3;
 var BUFFTYPECHANCE = OBJECTTYPECHANCE + 0.15;
-var TYPECHANCEMOD = 0.002;
+var TYPECHANCEMOD = 0.005;
 
 var NOCHARCHANCE = 0.1;
 var ONECHARCHANCE = NOCHARCHANCE + 0.7;
@@ -91,7 +94,7 @@ class Database
     GetRandomHandCard(turn)
     {
         //first use a different type chance based on turn:
-        let turnModifier = (turn > 200 ? 200 : turn) * TYPECHANCEMOD;
+        let turnModifier = (turn > 100 ? 100 : turn) * TYPECHANCEMOD;
         let rscTypeChance = RSCTYPECHANCE - turnModifier/3;
         let objectTypeChance = OBJECTTYPECHANCE - turnModifier/3;
         let buffTypeChance = BUFFTYPECHANCE - turnModifier/3;
@@ -135,6 +138,9 @@ class Database
         this.objectCards.push(new ObjectCard(OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y,
                                             OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y, 3, 0, true, -1,
                                             new ResourceUpkeep(this.gold, -5)));
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y,
+                                            OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y, 1, 3, false, -1,
+                                            new ResourceUpkeep(this.gold, -6)));
     }
 
     LoadBuffCards()
@@ -199,8 +205,14 @@ class Database
 
     LoadQuestCards()
     {
-        this.questCards.push(new QuestCard(QUESTCARDSPRITES["testQuest"].x, QUESTCARDSPRITES["testQuest"].y,
-                                           QUESTCARDSPRITES["testQuest"].x, QUESTCARDSPRITES["testQuest"].y,
+        this.questCards.push(new QuestCard(QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
+                                           QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
                                            1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)]));
+        this.questCards.push(new QuestCard(QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
+                                           QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
+                                           3, 5, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 10)]));
+        this.questCards.push(new QuestCard(QUESTCARDSPRITES["book"].x, QUESTCARDSPRITES["book"].y,
+                                           QUESTCARDSPRITES["book"].x, QUESTCARDSPRITES["book"].y,
+                                           3, 5, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 10)]));
     }
 }
