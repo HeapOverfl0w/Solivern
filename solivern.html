@@ -32,8 +32,8 @@
         cvs.style.width = window.innerWidth + "px";
         cvs.style.height = window.innerHeight + "px";
         ctx = cvs.getContext("2d");
-        let ratio = calculateRatio(ctx);
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        //let ratio = calculateRatio(ctx);
+        //ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
         game = new Game(ctx);
         game.Initialize();
     };
