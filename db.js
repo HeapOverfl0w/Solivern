@@ -1,7 +1,11 @@
 var OBJECTSPRITES = {
     "counter" : new Vector2D(0, 0),
     "chair" : new Vector2D(1, 0),
-    "candle" : new Vector2D(2, 0)
+    "candle" : new Vector2D(2, 0),
+    "flowerpot" : new Vector2D(3,0),
+    "weaponrack" : new Vector2D(4,0),
+    "firepit" : new Vector2D(5,0),
+    "lazboy" : new Vector2D(6,0)
 }
 
 var BUFFCURSESPRITES = {
@@ -141,6 +145,18 @@ class Database
         this.objectCards.push(new ObjectCard(OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y,
                                             OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y, 1, 3, false, -1,
                                             new ResourceUpkeep(this.gold, -6)));
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y,
+                                            OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y, 1, 2, false, -1,
+                                            new ResourceUpkeep(this.gold, -4)));
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y,
+                                            OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y, 2, 3, false, -1,
+                                            new ResourceUpkeep(this.gold, -10)));
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y,
+                                            OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y, 1, 5, false, -1,
+                                            new ResourceUpkeep(this.gold, -10)));
+        this.objectCards.push(new ObjectCard(OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y,
+                                            OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y, 5, 0, false, -1,
+                                            new ResourceUpkeep(this.gold, -8)));
     }
 
     LoadBuffCards()
