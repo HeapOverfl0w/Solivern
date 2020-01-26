@@ -98,7 +98,7 @@ class Game
     if (this.turn > 10 && !this.board.PatronsExist())
     {
       //end game
-      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER." ];
+      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER.", "Lasted Turns : " + this.turn ];
       this.gameOver = true;
       this.Draw();
     }
