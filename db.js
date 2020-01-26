@@ -173,9 +173,9 @@ class Database
     {
         this.curseCards.push(new CurseCard(BUFFCURSESPRITES["testCurse"].x, BUFFCURSESPRITES["testCurse"].y,
                                            BUFFCURSESPRITES["testCurse"].x, BUFFCURSESPRITES["testCurse"].y, this.gold, 5));
-        this.curseCards.push(new BuffCard(BUFFCURSESPRITES["testCurse1"].x, BUFFCURSESPRITES["testCurse1"].y,
+        this.curseCards.push(new CurseCard(BUFFCURSESPRITES["testCurse1"].x, BUFFCURSESPRITES["testCurse1"].y,
                                            BUFFCURSESPRITES["testCurse1"].x, BUFFCURSESPRITES["testCurse1"].y, this.food, 5));
-        this.curseCards.push(new BuffCard(BUFFCURSESPRITES["testCurse2"].x, BUFFCURSESPRITES["testCurse2"].y,
+        this.curseCards.push(new CurseCard(BUFFCURSESPRITES["testCurse2"].x, BUFFCURSESPRITES["testCurse2"].y,
                                            BUFFCURSESPRITES["testCurse2"].x, BUFFCURSESPRITES["testCurse2"].y, this.beer, 5));
     }
 
