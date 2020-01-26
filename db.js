@@ -155,7 +155,7 @@ class Database
                                             OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y, 1, 5, false, -1,
                                             new ResourceUpkeep(this.gold, -10)));
         this.objectCards.push(new ObjectCard(OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y,
-                                            OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y, 5, 0, false, -1,
+                                            OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y, 5, 0, true, -1,
                                             new ResourceUpkeep(this.gold, -8)));
     }
 
