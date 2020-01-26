@@ -75,6 +75,8 @@ class Game
   Update()
   {
     this.gameMessages = [ "Calculating Next Turn..." ];
+    if (this.gameMessageTimeout != undefined)
+      clearTimeout(this.gameMessageTimeout);
     this.endTurnButton.visible = false;
     this.destroyButton.visible = false;
     this.Draw();
