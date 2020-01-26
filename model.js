@@ -42,6 +42,8 @@ var TEXTCOLOR = "#FFFFFF";
 var BUTTONCOLOR = "#000000";
 var TEXTFONT = "10px Arial";
 
+var RANDOMLEAVESATISFACTION = -99999;
+
 var SMALLCARDSPRITESHEET = document.getElementById("smallcard");
 var LARGECARDSPRITESHEET = document.getElementById("largecard");
 var RESOURCESPRITESHEET = document.getElementById("resources");
@@ -546,7 +548,7 @@ class CharacterCard extends Card
 
         //random chance to just leave
         if (Math.random() > 0.95)
-          this.satisfactionLevel = -1;
+          this.satisfactionLevel = RANDOMLEAVESATISFACTION;
     }
 
     IsSatisfied()
@@ -607,7 +609,10 @@ class Board
         //Determine if characters need to be removed
         if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].IsSatisfied() && !this.characterMap[x][y].firstAppearance)
         {
-          returnMessages.push(this.characterMap[x][y].name + " was unsatisfied and left.\n");
+          if (this.characterMap[x][y].satisfactionLevel == RANDOMLEAVESATISFACTION)
+            returnMessages.push(this.characterMap[x][y].name + " had other things to do and left.");
+          else
+            returnMessages.push(this.characterMap[x][y].name + " was unsatisfied and left.");
           this.characterMap[x][y] = undefined;
         }
         else if (this.characterMap[x][y] != undefined && this.characterMap[x][y].firstAppearance)
@@ -632,18 +637,32 @@ class Board
         //5% chance to just go random
         if (Math.random() > 0.95)
         {
-          let randx = Math.floor(Math.random() * (TILESX - BOARDBORDER*2)) + BOARDBORDER;
-          randx = randx == TILESX ? TILESX - 1 : randx;
-          let randy = Math.floor(Math.random() * (TILESY - BOARDBORDER*2)) + BOARDBORDER;
-          randy = randy == TILESY ? TILESY - 1 : randy;
-          bestLocation = new Vector2D(randx, randy);
+          let tryCount = 0;
+          let randx;
+          let randy;
+          do
+          {
+            randx = Math.floor(Math.random() * (TILESX - BOARDBORDER*2)) + BOARDBORDER;
+            randx = randx == TILESX ? TILESX - 1 : randx;
+            randy = Math.floor(Math.random() * (TILESY - BOARDBORDER*2)) + BOARDBORDER;
+            randy = randy == TILESY ? TILESY - 1 : randy;
+            tryCount++;
+          }
+          while ((!this.IsLocationBlankOrPassable(randx, randy)) && tryCount < 10)
+          
+          if (tryCount < 10)
+            bestLocation = new Vector2D(randx, randy);
         }
         else
           bestLocation = this.DetermineMostSatisfactoryLocation();
-        newCharCards[c].locX = bestLocation.x;
-        newCharCards[c].locY = bestLocation.y;
-        this.characterMap[bestLocation.x][bestLocation.y] = newCharCards[c];
-        returnMessages.push(newCharCards[c].name + " has joined the merriment.\n");
+        
+        if (bestLocation != undefined)
+        {
+          newCharCards[c].locX = bestLocation.x;
+          newCharCards[c].locY = bestLocation.y;
+          this.characterMap[bestLocation.x][bestLocation.y] = newCharCards[c];
+          returnMessages.push(newCharCards[c].name + " has joined the merriment.\n");
+        }
       }
     }
 
@@ -839,7 +858,7 @@ class Board
   DetermineMostSatisfactoryLocation()
   {
     let highestSatisfactionLevel = 0;
-    let highestSatisfactionLocation = new Vector2D(0,0);
+    let highestSatisfactionLocation = undefined;
     for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
       for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
@@ -869,16 +888,31 @@ class Board
     }
     //this is in case there's no satisfaction buffs on the board or we couldn't find 
     //a great place to stand/sit because all the satisfaction spaces are taken up
-    if (highestSatisfactionLocation.x == 0 && highestSatisfactionLocation.y == 0)
+    if (highestSatisfactionLocation == undefined)
     {
-      let randx = BOARDBORDER + Math.floor(Math.random() * (TILESX - BOARDBORDER*2));
-      randx = randx == TILESX ? TILESX - 1 : randx;
-      let randy = BOARDBORDER + Math.floor(Math.random() * (TILESY - BOARDBORDER*2));
-      randy = randy == TILESY ? TILESY - 1 : randy;
-      highestSatisfactionLocation = new Vector2D(randx, randy);
+      let tryCount = 0;
+      let randx;
+      let randy;
+      do
+      {
+        randx = Math.floor(Math.random() * (TILESX - BOARDBORDER*2)) + BOARDBORDER;
+        randx = randx == TILESX ? TILESX - 1 : randx;
+        randy = Math.floor(Math.random() * (TILESY - BOARDBORDER*2)) + BOARDBORDER;
+        randy = randy == TILESY ? TILESY - 1 : randy;
+        tryCount++;
+      }
+      while ((!this.IsLocationBlankOrPassable(randx, randy)) && tryCount < 10)
+      
+      if (tryCount < 10)
+        highestSatisfactionLocation = new Vector2D(randx, randy);
     }
 
     return highestSatisfactionLocation;
+  }
+
+  IsLocationBlankOrPassable(x, y)
+  {
+    return (this.objectMap[x][y] == undefined || this.objectMap[x][y].passable) && this.characterMap[x][y] == undefined;
   }
 
   PlaceCharacterBackOnBoard(character)

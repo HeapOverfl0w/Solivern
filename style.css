@@ -5,4 +5,7 @@ html, body {
     image-rendering: -webkit-crisp-edges;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    text-rendering: crisp-edges;
+    cursor: url("./resources/cursor.png"), auto;
+    cursor: url("./resources/cursor.png"), pointer;
   }

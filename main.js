@@ -6,7 +6,7 @@ class Game
     this.hand = new Hand();
     this.board = new Board();
     this.quests = new Quests();
-    this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 5, 39, 16, 48, 32);
+    this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 5, 45, 16, 48, 32);
     this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 5, 16, 16, 48, 16);
 
     this.goldResource = new Resource(0,0,"Gold");
