@@ -237,7 +237,7 @@ class Game
   SetTimeoutBeginGameMessage()
   {
     clearTimeout(this.gameMessageTimeout)
-    this.gameMessageTimeout = setTimeout(this.ResetGameMessage, 5000, this);
+    this.gameMessageTimeout = setTimeout(this.ResetGameMessage, this.gameMessages.length < 4 ? 5000 : this.gameMessages.length * 1500, this);
   }
 
   ResetGameMessage(game)
