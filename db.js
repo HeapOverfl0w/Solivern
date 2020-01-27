@@ -23,12 +23,12 @@ var BUFFCURSESPRITES = {
     "beerCurseUnc" : new Vector2D(5, 2)
 }
 
-var rscCardsCommonPRITES = {
+var RSCCARDSPRITES = {
     "chicken" : new Vector2D(0, 3),
     "keg" : new Vector2D(1,3)
 }
 
-var charCardsCommonPRITES = {
+var CHARCARDSPRITES = {
     "bat" : new Vector2D(0, 4),
     "rat" : new Vector2D(1, 4),
     "goblin" : new Vector2D(2, 4),
@@ -37,10 +37,13 @@ var charCardsCommonPRITES = {
     "wolf" : new Vector2D(5,4),
     "goblinmage" : new Vector2D(6,4),
     "peasantmale" : new Vector2D(7,4),
-    "peasantfemale" : new Vector2D(8,4)
+    "peasantfemale" : new Vector2D(8,4),
+    "skeletonwarrior" : new Vector2D(0,5),
+    "skeletonmage" : new Vector2D(1,5),
+    "humanwarrior" : new Vector2D(2,5)
 }
 
-var questCardsCommonPRITES = {
+var QUESTCARDSPRITES = {
     "sweep" : new Vector2D(0, 6),
     "cave" : new Vector2D(1,6),
     "book" : new Vector2D(2,6),
@@ -341,65 +344,78 @@ class Database
 
     LoadResourceCards()
     {
-        this.rscCardsCommon.push(new ResourceCard(rscCardsCommonPRITES["chicken"].x, rscCardsCommonPRITES["chicken"].y,
-                                            rscCardsCommonPRITES["chicken"].x, rscCardsCommonPRITES["chicken"].y, this.food, this.gold, 10, 5));
-        this.rscCardsCommon.push(new ResourceCard(rscCardsCommonPRITES["keg"].x, rscCardsCommonPRITES["keg"].y,
-                                            rscCardsCommonPRITES["keg"].x, rscCardsCommonPRITES["keg"].y, this.beer, this.gold, 10, 5));
+        this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["chicken"].x, RSCCARDSPRITES["chicken"].y,
+                                            RSCCARDSPRITES["chicken"].x, RSCCARDSPRITES["chicken"].y, this.food, this.gold, 10, 5));
+        this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["keg"].x, RSCCARDSPRITES["keg"].y,
+                                            RSCCARDSPRITES["keg"].x, RSCCARDSPRITES["keg"].y, this.beer, this.gold, 10, 5));
     }
 
     LoadCharacterCards()
     {
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["bat"].x, charCardsCommonPRITES["bat"].y,
-                                              charCardsCommonPRITES["bat"].x, charCardsCommonPRITES["bat"].y, 1, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y,
+                                              CHARCARDSPRITES["bat"].x, CHARCARDSPRITES["bat"].y, 1, 
                                               [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -2) ], "Dire Bat",
                                               new CharacterStats(1,1,1)));
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["rat"].x, charCardsCommonPRITES["rat"].y,
-                                              charCardsCommonPRITES["rat"].x, charCardsCommonPRITES["rat"].y, 3, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y,
+                                              CHARCARDSPRITES["rat"].x, CHARCARDSPRITES["rat"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, -1), new ResourceUpkeep(this.beer, 2) ], "Dire Rat",
                                               new CharacterStats(1,1,1)));
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["goblin"].x, charCardsCommonPRITES["goblin"].y,
-                                              charCardsCommonPRITES["goblin"].x, charCardsCommonPRITES["goblin"].y, 1, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y,
+                                              CHARCARDSPRITES["goblin"].x, CHARCARDSPRITES["goblin"].y, 1, 
                                               [ new ResourceUpkeep(this.gold, 2), new ResourceUpkeep(this.beer, -3) ], "Goblin",
                                               new CharacterStats(1,2,1))); 
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["skeleton"].x, charCardsCommonPRITES["skeleton"].y,
-                                              charCardsCommonPRITES["skeleton"].x, charCardsCommonPRITES["skeleton"].y, 4, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y,
+                                              CHARCARDSPRITES["skeleton"].x, CHARCARDSPRITES["skeleton"].y, 4, 
                                               [ new ResourceUpkeep(this.gold, -2), new ResourceUpkeep(this.beer, 3) ], "Skeleton",
                                               new CharacterStats(1,2,2)));
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["ghost"].x, charCardsCommonPRITES["ghost"].y,
-                                              charCardsCommonPRITES["ghost"].x, charCardsCommonPRITES["ghost"].y, 5, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["ghost"].x, CHARCARDSPRITES["ghost"].y,
+                                              CHARCARDSPRITES["ghost"].x, CHARCARDSPRITES["ghost"].y, 5, 
                                               [ new ResourceUpkeep(this.gold, 3), new ResourceUpkeep(this.beer, -3) ], "Ghost",
                                               new CharacterStats(2,1,3)));
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["wolf"].x, charCardsCommonPRITES["wolf"].y,
-                                              charCardsCommonPRITES["wolf"].x, charCardsCommonPRITES["wolf"].y, 5, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["wolf"].x, CHARCARDSPRITES["wolf"].y,
+                                              CHARCARDSPRITES["wolf"].x, CHARCARDSPRITES["wolf"].y, 5, 
                                               [ new ResourceUpkeep(this.gold, 3), new ResourceUpkeep(this.food, -3) ], "Dire Wolf",
                                               new CharacterStats(1,3,2)));
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["goblinmage"].x, charCardsCommonPRITES["goblinmage"].y,
-                                              charCardsCommonPRITES["goblinmage"].x, charCardsCommonPRITES["goblinmage"].y, 5, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["goblinmage"].x, CHARCARDSPRITES["goblinmage"].y,
+                                              CHARCARDSPRITES["goblinmage"].x, CHARCARDSPRITES["goblinmage"].y, 5, 
                                               [ new ResourceUpkeep(this.gold, 4), new ResourceUpkeep(this.beer, -4) ], "Goblin Mage",
                                               new CharacterStats(3,1,2)));  
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["peasantmale"].x, charCardsCommonPRITES["peasantmale"].y,
-                                              charCardsCommonPRITES["peasantmale"].x, charCardsCommonPRITES["peasantmale"].y, 3, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["peasantmale"].x, CHARCARDSPRITES["peasantmale"].y,
+                                              CHARCARDSPRITES["peasantmale"].x, CHARCARDSPRITES["peasantmale"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -1) ], "Human Peasant",
                                               new CharacterStats(2,2,1)));    
-        this.charCardsCommon.push(new CharacterCard(charCardsCommonPRITES["peasantfemale"].x, charCardsCommonPRITES["peasantfemale"].y,
-                                              charCardsCommonPRITES["peasantfemale"].x, charCardsCommonPRITES["peasantfemale"].y, 3, 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["peasantfemale"].x, CHARCARDSPRITES["peasantfemale"].y,
+                                              CHARCARDSPRITES["peasantfemale"].x, CHARCARDSPRITES["peasantfemale"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -1) ], "Human Peasant",
-                                              new CharacterStats(2,1,2)));                              
+                                              new CharacterStats(2,1,2)));       
+                                              
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
+                                              CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
+                                              [ new ResourceUpkeep(this.gold, -8), new ResourceUpkeep(this.beer, 7) ], "Skeleton Warrior",
+                                              new CharacterStats(2,4,3)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonmage"].x, CHARCARDSPRITES["skeletonmage"].y,
+                                              CHARCARDSPRITES["skeletonmage"].x, CHARCARDSPRITES["skeletonmage"].y, 9, 
+                                              [ new ResourceUpkeep(this.gold, -8), new ResourceUpkeep(this.food, 7) ], "Skeleton Mage",
+                                              new CharacterStats(4,2,3)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["humanwarrior"].x, CHARCARDSPRITES["humanwarrior"].y,
+                                              CHARCARDSPRITES["humanwarrior"].x, CHARCARDSPRITES["humanwarrior"].y, 10, 
+                                              [ new ResourceUpkeep(this.gold, 8), new ResourceUpkeep(this.food, -6) ], "Human Warrior",
+                                              new CharacterStats(3,4,2)));                                          
     }
 
     LoadquestCardsCommon()
     {
-        this.questCardsCommon.push(new QuestCard(questCardsCommonPRITES["sweep"].x, questCardsCommonPRITES["sweep"].y,
-                                           questCardsCommonPRITES["sweep"].x, questCardsCommonPRITES["sweep"].y,
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
+                                           QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
                                            1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)]));
-        this.questCardsCommon.push(new QuestCard(questCardsCommonPRITES["cave"].x, questCardsCommonPRITES["cave"].y,
-                                           questCardsCommonPRITES["cave"].x, questCardsCommonPRITES["cave"].y,
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
+                                            QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
                                            3, 5, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 10)]));
-        this.questCardsCommon.push(new QuestCard(questCardsCommonPRITES["book"].x, questCardsCommonPRITES["book"].y,
-                                           questCardsCommonPRITES["book"].x, questCardsCommonPRITES["book"].y,
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["book"].x, QUESTCARDSPRITES["book"].y,
+                                            QUESTCARDSPRITES["book"].x, QUESTCARDSPRITES["book"].y,
                                            3, 5, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 10)]));
-        this.questCardsCommon.push(new QuestCard(questCardsCommonPRITES["darts"].x, questCardsCommonPRITES["darts"].y,
-                                           questCardsCommonPRITES["darts"].x, questCardsCommonPRITES["darts"].y,
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["darts"].x, QUESTCARDSPRITES["darts"].y,
+                                            QUESTCARDSPRITES["darts"].x, QUESTCARDSPRITES["darts"].y,
                                            1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 10)]));
     }
 }
