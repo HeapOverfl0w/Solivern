@@ -25,7 +25,11 @@ var BUFFCURSESPRITES = {
 
 var RSCCARDSPRITES = {
     "chicken" : new Vector2D(0, 3),
-    "keg" : new Vector2D(1,3)
+    "keg" : new Vector2D(1,3),
+    "chickenmed" : new Vector2D(2,3),
+    "kegmed" : new Vector2D(3,3),
+    "chickensmall" : new Vector2D(4,3),
+    "kegsmall" : new Vector2D(5,3)
 }
 
 var CHARCARDSPRITES = {
@@ -47,7 +51,8 @@ var QUESTCARDSPRITES = {
     "sweep" : new Vector2D(0, 6),
     "cave" : new Vector2D(1,6),
     "book" : new Vector2D(2,6),
-    "darts" : new Vector2D(3,6)
+    "darts" : new Vector2D(3,6),
+    "trainingdummy" : new Vector2D(4,6)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -348,6 +353,14 @@ class Database
                                             RSCCARDSPRITES["chicken"].x, RSCCARDSPRITES["chicken"].y, this.food, this.gold, 10, 5));
         this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["keg"].x, RSCCARDSPRITES["keg"].y,
                                             RSCCARDSPRITES["keg"].x, RSCCARDSPRITES["keg"].y, this.beer, this.gold, 10, 5));
+        this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["chickenmed"].x, RSCCARDSPRITES["chickenmed"].y,
+                                            RSCCARDSPRITES["chickenmed"].x, RSCCARDSPRITES["chickenmed"].y, this.food, this.gold, 7, 5));
+        this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["kegmed"].x, RSCCARDSPRITES["kegmed"].y,
+                                            RSCCARDSPRITES["kegmed"].x, RSCCARDSPRITES["kegmed"].y, this.beer, this.gold, 7, 5));
+        this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["chickensmall"].x, RSCCARDSPRITES["chickensmall"].y,
+                                            RSCCARDSPRITES["chickensmall"].x, RSCCARDSPRITES["chickensmall"].y, this.food, this.gold, 5, 4));
+        this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y,
+                                            RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y, this.beer, this.gold, 5, 4));
     }
 
     LoadCharacterCards()
@@ -407,15 +420,18 @@ class Database
     {
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
                                            QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
-                                           1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)]));
+                                           1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)], "Clean the Cellar"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
                                             QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
-                                           3, 5, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 10)]));
+                                           3, 5, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 10)], "Delve in a Cave"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["book"].x, QUESTCARDSPRITES["book"].y,
                                             QUESTCARDSPRITES["book"].x, QUESTCARDSPRITES["book"].y,
-                                           3, 5, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 10)]));
+                                           3, 5, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 10)], "Write a Book"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["darts"].x, QUESTCARDSPRITES["darts"].y,
                                             QUESTCARDSPRITES["darts"].x, QUESTCARDSPRITES["darts"].y,
-                                           1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 10)]));
+                                           1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 10)], "Play Darts"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["trainingdummy"].x, QUESTCARDSPRITES["trainingdummy"].y,
+                                           QUESTCARDSPRITES["trainingdummy"].x, QUESTCARDSPRITES["trainingdummy"].y,
+                                          1, 1, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 5)], "Basic Training"));
     }
 }

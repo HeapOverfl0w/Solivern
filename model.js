@@ -259,7 +259,7 @@ class Card
 class QuestCard extends Card
 {
   constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-      minRange, maxRange, statRequirement, turnLength, rscUpkeeps)
+      minRange, maxRange, statRequirement, turnLength, rscUpkeeps, name)
   {
     super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
     this.minRange = minRange;
@@ -269,7 +269,7 @@ class QuestCard extends Card
     this.turnLength = turnLength;
     this.cardType = CARDTYPE_QUEST;
     this.rscUpkeeps = rscUpkeeps;
-    //this.name = name;
+    this.name = name;
     this.currentTurn = 0;
   }
 
@@ -293,6 +293,11 @@ class QuestCard extends Card
             statPower = this.assignedPatron.stats.dex;
             break;
         }
+
+        //give them some chance for success if they're at the min range
+        if (statPower == this.minRange)
+          statPower += 0.3;
+
         let rangeModifier = Math.random() * (this.maxRange - this.minRange);
 
         if (statPower >= (this.maxRange - rangeModifier))
@@ -302,11 +307,11 @@ class QuestCard extends Card
             this.rscUpkeeps[i].Update();
           }
           this.assignedPatron.stats.LevelUp();
-          return this.assignedPatron.name + " completed a quest and grew stronger.";
+          return this.assignedPatron.name + " completed " + this.name + " and grew stronger.";
         }
         else
         {
-          let message = this.assignedPatron.name + " died attempting to complete a quest."
+          let message = this.assignedPatron.name + " died attempting to " + this.name + ".";
           this.assignedPatron = undefined;
           return message;
         }
@@ -326,7 +331,7 @@ class QuestCard extends Card
   {
     return new QuestCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, 
                         this.largeCardSpriteLocX / LARGECARDWIDTH, this.largeCardSpriteLocY / LARGECARDHEIGHT,
-                        this.minRange, this.maxRange, this.statRequirement, this.turnLength, this.rscUpkeeps);
+                        this.minRange, this.maxRange, this.statRequirement, this.turnLength, this.rscUpkeeps, this.name);
   }
 }
 
@@ -533,7 +538,7 @@ class CharacterCard extends Card
             unpaidUpkeep = !this.resourceUpkeeps[i].Update();
         }
         if (unpaidUpkeep)
-            this.satisfactionLevel -= 10;
+            this.satisfactionLevel -= 100;
 
         //determine satisfaction buffs from objects
         //TODO: Determine most efficient way to calculate radius buffs.
@@ -780,8 +785,8 @@ class Board
       let y = this.focusedVector.y;
       if (this.objectMap[x][y] != undefined)
       {
-        this.objectMap[x][y].DrawLargeCardOnBoard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
         this.objectMap[x][y].DrawSatisfactionRange(x, y, ctx);
+        this.objectMap[x][y].DrawLargeCardOnBoard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
         if (this.characterMap[x][y] != undefined)
         this.characterMap[x][y].DrawLargeCardOnBoardWithOffset(x * TILEWIDTH, y * TILEHEIGHT, ctx);
       }
