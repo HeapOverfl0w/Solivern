@@ -208,11 +208,11 @@ class Card
     DrawLargeCardOnBoard(locX, locY, ctx)
     {
       ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-        LARGECARDWIDTH, LARGECARDHEIGHT, locX - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), 
+        LARGECARDWIDTH, LARGECARDHEIGHT, locX - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), 
         LARGECARDWIDTH, LARGECARDHEIGHT);
 
       if (this.cardType == CARDTYPE_CHARACTER)
-        this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT / 4, ctx);
+        this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
     }
 
     DrawLargeCardWithOffset(locX, locY, ctx)
@@ -242,16 +242,16 @@ class Card
       if ((locX + LARGECARDWIDTH*2) >= TILESX * TILEWIDTH)
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), LARGECARDWIDTH, LARGECARDHEIGHT);
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), LARGECARDWIDTH, LARGECARDHEIGHT);
         if (this.cardType == CARDTYPE_CHARACTER)
-          this.stats.Draw(locX - LARGECARDWIDTH - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT / 4, ctx);
+          this.stats.Draw(locX - LARGECARDWIDTH - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
       }
       else
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
-          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT/4), LARGECARDWIDTH, LARGECARDHEIGHT);
+          LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), LARGECARDWIDTH, LARGECARDHEIGHT);
           if (this.cardType == CARDTYPE_CHARACTER)
-            this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT / 4, ctx);
+            this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
       }
     }
 }
@@ -736,6 +736,7 @@ class Board
                     this.characterMap[adjacentx][adjacenty] = undefined;
                   }
                 }
+                break;
               }
             }
           }
@@ -745,7 +746,7 @@ class Board
     return battleMessages;
   }
 
-  Draw(ctx)
+  Draw(ctx, placingObject)
   {
     ctx.drawImage(BACKGROUNDIMAGE, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
 
@@ -755,7 +756,10 @@ class Board
       {
         if (this.objectMap[x][y] != undefined)
         {
-          this.objectMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+          if (placingObject)
+            this.objectMap[x][y].DrawObjectPlacement(x, y, ctx);
+          else
+            this.objectMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
           if (this.characterMap[x][y] != undefined)
             this.characterMap[x][y].DrawShiftedSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
         }

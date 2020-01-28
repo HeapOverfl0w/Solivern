@@ -42,7 +42,7 @@ class Game
 
   Draw()
   {
-    this.board.Draw(this.ctx);
+    this.board.Draw(this.ctx, this.hand.selectedCardIndex != -1);
 
     if (this.gameOver)
       return;
