@@ -216,7 +216,7 @@ class Game
       this.hand.CancelCardPlacement();
       this.quests.CancelCardPlacement();
       this.audio.PlayActivate();
-      this.Draw();
+      this.ResetGameMessage(this);
     }
   }
 

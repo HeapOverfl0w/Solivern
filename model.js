@@ -691,6 +691,7 @@ class Board
       {
         if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].firstAppearance)
         {
+          let alreadyFought = false;
           for (let modx = -1; modx < 2; modx++)
           {
             for (let mody = -1; mody < 2; mody++)
@@ -736,9 +737,12 @@ class Board
                     this.characterMap[adjacentx][adjacenty] = undefined;
                   }
                 }
+                alreadyFought = true;
                 break;
               }
             }
+            if (alreadyFought)
+              break;
           }
         }
       }
