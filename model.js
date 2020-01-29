@@ -415,10 +415,10 @@ class ResourceCard extends Card
       if (this.CanActivate())
       {
         this.Activate();
-        return "Purchased."
+        return "Purchased"
       }
       else
-        return "Insufficient funds."
+        return "Insufficient Funds"
     }
 
     Clone()
@@ -431,7 +431,7 @@ class ResourceCard extends Card
 class ObjectCard extends Card
 {
     constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-        satisfactionBuff, satisfactionRadius, passable, expiration, rscUpkeep)
+        satisfactionBuff, satisfactionRadius, passable, expiration, rscUpkeep, name)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_OBJECT;
@@ -440,6 +440,7 @@ class ObjectCard extends Card
         this.passable = passable;
         this.expiration = expiration;
         this.rscCost = rscUpkeep;
+        this.name = name;
     }
 
     PayFor()
@@ -507,7 +508,7 @@ class ObjectCard extends Card
     {
       return new ObjectCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
                             this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionBuff, this.satisfactionRadius, this.passable,
-                            this.expiration, this.rscCost);
+                            this.expiration, this.rscCost, this.name);
     }
 }
 
@@ -813,10 +814,10 @@ class Board
         this.objectMap[tilex][tiley] = objectCard;
         objectCard.locX = tilex;
         objectCard.locY = tiley;
-        return "Purchased.";
+        return "Purchased " + objectCard.name;
       }
       else
-        return "Insufficient " + objectCard.rscCost.resource.name + ".";
+        return "Insufficient " + objectCard.rscCost.resource.name + "";
     }
     
   }
@@ -1032,7 +1033,7 @@ class Hand
         if (this.cards[i].cardType == CARDTYPE_RESOURCE)
         {
           let message = this.cards[i].PayFor();
-          if (message == "Purchased.")
+          if (message == "Purchased")
             this.selectedCardIndex = i;
           
           return message;

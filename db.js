@@ -5,7 +5,9 @@ var OBJECTSPRITES = {
     "flowerpot" : new Vector2D(3,0),
     "weaponrack" : new Vector2D(4,0),
     "firepit" : new Vector2D(5,0),
-    "lazboy" : new Vector2D(6,0)
+    "lazboy" : new Vector2D(6,0),
+    "8ball" : new Vector2D(7,0),
+    "stool" : new Vector2D(8,0)
 }
 
 var BUFFCURSESPRITES = {
@@ -42,9 +44,11 @@ var CHARCARDSPRITES = {
     "goblinmage" : new Vector2D(6,4),
     "peasantmale" : new Vector2D(7,4),
     "peasantfemale" : new Vector2D(8,4),
+    "slime" : new Vector2D(9,4),
     "skeletonwarrior" : new Vector2D(0,5),
     "skeletonmage" : new Vector2D(1,5),
-    "humanwarrior" : new Vector2D(2,5)
+    "humanwarrior" : new Vector2D(2,5),
+    "spider" : new Vector2D(3,5)
 }
 
 var QUESTCARDSPRITES = {
@@ -292,25 +296,31 @@ class Database
     {
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y,
                                             OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y, 2, 1, false, -1,
-                                            new ResourceUpkeep(this.gold, -3)));
+                                            new ResourceUpkeep(this.gold, -3), "Counter"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y,
                                             OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y, 3, 0, true, -1,
-                                            new ResourceUpkeep(this.gold, -5)));
+                                            new ResourceUpkeep(this.gold, -5), "Chair"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y,
                                             OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y, 1, 3, false, -1,
-                                            new ResourceUpkeep(this.gold, -6)));
+                                            new ResourceUpkeep(this.gold, -6), "Candle"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y,
                                             OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y, 1, 2, false, -1,
-                                            new ResourceUpkeep(this.gold, -4)));
+                                            new ResourceUpkeep(this.gold, -4), "Flower Pot"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y,
                                             OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y, 2, 3, false, -1,
-                                            new ResourceUpkeep(this.gold, -10)));
+                                            new ResourceUpkeep(this.gold, -10), "Weapon Rack"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y,
                                             OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y, 1, 5, false, -1,
-                                            new ResourceUpkeep(this.gold, -10)));
+                                            new ResourceUpkeep(this.gold, -10), "Fire Pit"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y,
                                             OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y, 5, 0, true, -1,
-                                            new ResourceUpkeep(this.gold, -8)));
+                                            new ResourceUpkeep(this.gold, -8), "Relaxing Chair"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y,
+                                            OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y, 3, 1, true, -1,
+                                            new ResourceUpkeep(this.beer, -15), "The Magic 8 Ball!!"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y,
+                                            OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y, 1, 0, true, -1,
+                                            new ResourceUpkeep(this.gold, -1), "Stool"));
     }
 
     LoadbuffCardsCommon()
@@ -358,9 +368,9 @@ class Database
         this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["kegmed"].x, RSCCARDSPRITES["kegmed"].y,
                                             RSCCARDSPRITES["kegmed"].x, RSCCARDSPRITES["kegmed"].y, this.beer, this.gold, 7, 5));
         this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["chickensmall"].x, RSCCARDSPRITES["chickensmall"].y,
-                                            RSCCARDSPRITES["chickensmall"].x, RSCCARDSPRITES["chickensmall"].y, this.food, this.gold, 5, 4));
+                                            RSCCARDSPRITES["chickensmall"].x, RSCCARDSPRITES["chickensmall"].y, this.food, this.gold, 5, 3));
         this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y,
-                                            RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y, this.beer, this.gold, 5, 4));
+                                            RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y, this.beer, this.gold, 5, 3));
     }
 
     LoadCharacterCards()
@@ -400,7 +410,11 @@ class Database
         this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["peasantfemale"].x, CHARCARDSPRITES["peasantfemale"].y,
                                               CHARCARDSPRITES["peasantfemale"].x, CHARCARDSPRITES["peasantfemale"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.food, -1) ], "Human Peasant",
-                                              new CharacterStats(2,1,2)));       
+                                              new CharacterStats(2,1,2)));      
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["slime"].x, CHARCARDSPRITES["slime"].y,
+                                              CHARCARDSPRITES["slime"].x, CHARCARDSPRITES["slime"].y, 1, 
+                                              [ new ResourceUpkeep(this.beer, -1), new ResourceUpkeep(this.food, -1) ], "Slime",
+                                              new CharacterStats(1,1,1)));   
                                               
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
                                               CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
@@ -413,7 +427,11 @@ class Database
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["humanwarrior"].x, CHARCARDSPRITES["humanwarrior"].y,
                                               CHARCARDSPRITES["humanwarrior"].x, CHARCARDSPRITES["humanwarrior"].y, 10, 
                                               [ new ResourceUpkeep(this.gold, 8), new ResourceUpkeep(this.food, -6) ], "Human Warrior",
-                                              new CharacterStats(3,4,2)));                                          
+                                              new CharacterStats(3,4,2)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["spider"].x, CHARCARDSPRITES["spider"].y,
+                                              CHARCARDSPRITES["spider"].x, CHARCARDSPRITES["spider"].y, 7, 
+                                              [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.food, -9) ], "HugeSpider",
+                                              new CharacterStats(1,4,4)));                                              
     }
 
     LoadquestCardsCommon()

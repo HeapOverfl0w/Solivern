@@ -149,7 +149,7 @@ class Game
         this.SetGameMessage(message);
       
           //TODO: I don't like this check here, but this will work for right now
-          if (message == "Purchased.")
+          if (message.includes("Purchased"))
           {
               this.hand.RemoveSelectedCard();
           }
