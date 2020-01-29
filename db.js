@@ -7,7 +7,9 @@ var OBJECTSPRITES = {
     "firepit" : new Vector2D(5,0),
     "lazboy" : new Vector2D(6,0),
     "8ball" : new Vector2D(7,0),
-    "stool" : new Vector2D(8,0)
+    "stool" : new Vector2D(8,0),
+    "table" : new Vector2D(9,0),
+    "coatrack" : new Vector2D(10,0)
 }
 
 var BUFFCURSESPRITES = {
@@ -56,13 +58,15 @@ var QUESTCARDSPRITES = {
     "cave" : new Vector2D(1,6),
     "book" : new Vector2D(2,6),
     "darts" : new Vector2D(3,6),
-    "trainingdummy" : new Vector2D(4,6)
+    "trainingdummy" : new Vector2D(4,6),
+    "armwrestle" : new Vector2D(5,6),
+    "dressage" : new Vector2D(6,6)
 }
 
 var RSCTYPECHANCE = 0.5;
 var OBJECTTYPECHANCE = RSCTYPECHANCE + 0.3;
 var BUFFTYPECHANCE = OBJECTTYPECHANCE + 0.15;
-var TYPECHANCEMOD = 0.005;
+var TYPECHANCEMOD = 0.007;
 
 var NOCHARCHANCE = 0.1;
 var ONECHARCHANCE = NOCHARCHANCE + 0.5;
@@ -146,7 +150,7 @@ class Database
     GetRandomHandCard(turn)
     {
         //first use a different type chance based on turn:
-        let turnModifier = (turn > 100 ? 100 : turn) * TYPECHANCEMOD;
+        let turnModifier = (turn > 150 ? 150 : turn) * TYPECHANCEMOD;
         let rscTypeChance = RSCTYPECHANCE - turnModifier/3;
         let objectTypeChance = OBJECTTYPECHANCE - turnModifier/3;
         let buffTypeChance = BUFFTYPECHANCE - turnModifier/3;
@@ -321,6 +325,12 @@ class Database
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y,
                                             OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y, 1, 0, true, -1,
                                             new ResourceUpkeep(this.gold, -1), "Stool"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["table"].x, OBJECTSPRITES["table"].y,
+                                            OBJECTSPRITES["table"].x, OBJECTSPRITES["table"].y, 2, 1, false, -1,
+                                            new ResourceUpkeep(this.gold, -3), "Table"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y,
+                                            OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y, 1, 3, false, -1,
+                                            new ResourceUpkeep(this.gold, -5), "Coat Rack"));
     }
 
     LoadbuffCardsCommon()
@@ -450,6 +460,12 @@ class Database
                                            1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 10)], "Play Darts"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["trainingdummy"].x, QUESTCARDSPRITES["trainingdummy"].y,
                                            QUESTCARDSPRITES["trainingdummy"].x, QUESTCARDSPRITES["trainingdummy"].y,
-                                          1, 1, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 5)], "Basic Training"));
+                                          1, 1, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 5)], "Basic Training"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["armwrestle"].x, QUESTCARDSPRITES["armwrestle"].y,
+                                          QUESTCARDSPRITES["armwrestle"].x, QUESTCARDSPRITES["armwrestle"].y,
+                                         4, 7, STATTYPE_STR, 1, [new ResourceUpkeep(this.gold, 8)], "Arm Wrestle"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["dressage"].x, QUESTCARDSPRITES["dressage"].y,
+                                         QUESTCARDSPRITES["dressage"].x, QUESTCARDSPRITES["dressage"].y,
+                                        4, 7, STATTYPE_DEX, 2, [new ResourceUpkeep(this.gold, 10)], "Horse Dressage"));
     }
 }

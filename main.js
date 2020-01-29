@@ -185,7 +185,7 @@ class Game
         if (message != "")
         {
           //TODO: again, don't like using the string comparison here
-          if (message == "Purchased.")
+          if (message == "Purchased")
           {
             this.hand.RemoveSelectedCard();
             this.audio.PlayActivate();
