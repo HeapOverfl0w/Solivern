@@ -441,7 +441,7 @@ class Database
                                               new CharacterStats(3,4,2)));
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["spider"].x, CHARCARDSPRITES["spider"].y,
                                               CHARCARDSPRITES["spider"].x, CHARCARDSPRITES["spider"].y, 7, 
-                                              [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.food, -9) ], "HugeSpider",
+                                              [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.food, -9) ], "Huge Spider",
                                               new CharacterStats(1,4,4)));                                              
     }
 
@@ -470,6 +470,6 @@ class Database
                                         4, 7, STATTYPE_DEX, 2, [new ResourceUpkeep(this.gold, 10)], "Horse Dressage"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["cook"].x, QUESTCARDSPRITES["cook"].y,
                                         QUESTCARDSPRITES["cook"].x, QUESTCARDSPRITES["cook"].y,
-                                       1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 5)], "Cook Stew"));         
+                                       1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.food, 5)], "Cook Stew"));         
     }
 }

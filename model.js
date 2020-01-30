@@ -1282,7 +1282,7 @@ class Quests
       if (this.cards[i].assignedPatron != undefined)
       {
         ctx.fillStyle = BUTTONCOLOR;
-        ctx.fillRect(widthFromSide - this.EDGE_OFFSET - 2, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT, LARGECARDWIDTH + 6, 13);
+        ctx.fillRect(widthFromSide - this.EDGE_OFFSET - 5, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT, LARGECARDWIDTH + 6, 13);
         ctx.fillStyle = TEXTCOLOR;
         ctx.fillText("TURN" + (this.cards[i].currentTurn + 1), widthFromSide - this.EDGE_OFFSET, 
         i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT + 9);
