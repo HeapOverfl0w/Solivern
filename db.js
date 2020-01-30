@@ -60,7 +60,8 @@ var QUESTCARDSPRITES = {
     "darts" : new Vector2D(3,6),
     "trainingdummy" : new Vector2D(4,6),
     "armwrestle" : new Vector2D(5,6),
-    "dressage" : new Vector2D(6,6)
+    "dressage" : new Vector2D(6,6),
+    "cook" : new Vector2D(7,6)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -457,7 +458,7 @@ class Database
                                            3, 5, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 10)], "Write a Book"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["darts"].x, QUESTCARDSPRITES["darts"].y,
                                             QUESTCARDSPRITES["darts"].x, QUESTCARDSPRITES["darts"].y,
-                                           1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 10)], "Play Darts"));
+                                           3, 5, STATTYPE_DEX, 2, [new ResourceUpkeep(this.gold, 10)], "Play Darts"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["trainingdummy"].x, QUESTCARDSPRITES["trainingdummy"].y,
                                            QUESTCARDSPRITES["trainingdummy"].x, QUESTCARDSPRITES["trainingdummy"].y,
                                           1, 1, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 5)], "Basic Training"));
@@ -467,5 +468,8 @@ class Database
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["dressage"].x, QUESTCARDSPRITES["dressage"].y,
                                          QUESTCARDSPRITES["dressage"].x, QUESTCARDSPRITES["dressage"].y,
                                         4, 7, STATTYPE_DEX, 2, [new ResourceUpkeep(this.gold, 10)], "Horse Dressage"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["cook"].x, QUESTCARDSPRITES["cook"].y,
+                                        QUESTCARDSPRITES["cook"].x, QUESTCARDSPRITES["cook"].y,
+                                       1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 5)], "Cook Stew"));         
     }
 }

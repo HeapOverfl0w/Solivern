@@ -40,7 +40,7 @@ var HANDSIZE = 7;
 
 var TEXTCOLOR = "#FFFFFF";
 var BUTTONCOLOR = "#000000";
-var TEXTFONT = "10px Arial";
+var TEXTFONT = "10px MS Gothic";
 
 var RANDOMLEAVESATISFACTION = -99999;
 
@@ -341,7 +341,7 @@ class BuffCard extends Card
         rsc, amount)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
-        this.cardType = CARDTYPE_CURSE;
+        this.cardType = CARDTYPE_BUFF;
         this.resource = rsc;
         this.amount = amount;
     }
@@ -364,7 +364,7 @@ class CurseCard extends Card
         rsc, amount)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
-        this.cardType = CARDTYPE_BUFF;
+        this.cardType = CARDTYPE_CURSE;
         this.resource = rsc;
         this.amount = amount;
     }
@@ -869,6 +869,30 @@ class Board
     return false;
   }
 
+  GetFocusedCardText()
+  {
+    if (this.focusedVector != undefined)
+    {
+      let x = this.focusedVector.x;
+      let y = this.focusedVector.y;
+      let returnValue = "";
+      if (this.objectMap[x][y] != undefined && this.objectMap[x][y].name != undefined)
+      {
+        returnValue += this.objectMap[x][y].name;
+      }
+      if (returnValue.length > 0)
+      {
+        returnValue += " - ";
+      }
+      if (this.characterMap[x][y] != undefined && this.characterMap[x][y].name != undefined)
+      {
+        returnValue += this.characterMap[x][y].name;
+      }
+    }
+    else
+      return "";
+  }
+
   DetermineMostSatisfactoryLocation()
   {
     let highestSatisfactionLevel = 0;
@@ -1051,6 +1075,42 @@ class Hand
     return "";
   }
 
+  GetMouseOverText(pointx, pointy, ctx)
+  {
+    let returnValue = "";
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let widthSeparation = width / this.cards.length;
+    let heightFromBottom = height - LARGECARDHEIGHT;
+    let cardy = heightFromBottom - this.EDGE_OFFSET;
+    for (let i = 0; i < this.cards.length; i++)
+    {
+      let cardx = i * widthSeparation + this.EDGE_OFFSET;
+      
+      if (cardx <= pointx && cardx + LARGECARDWIDTH >= pointx &&
+          cardy <= pointy && cardy + LARGECARDHEIGHT >= pointy)
+      {
+        switch (this.cards[i].cardType)
+        {
+          case CARDTYPE_RESOURCE:
+            returnValue = "Resource";
+            break;
+          case CARDTYPE_BUFF:
+            returnValue = "Buff";
+            break;
+          case CARDTYPE_CURSE:
+            returnValue = "Curse";
+            break;
+          case CARDTYPE_OBJECT:
+            returnValue = this.cards[i].name;
+            break;
+        }
+        break;
+      }
+    }
+    return returnValue;
+  }
+
   CancelCardPlacement()
   {
     this.selectedCardIndex = -1;
@@ -1174,20 +1234,21 @@ class Quests
         if (this.cards[i].cardType == CARDTYPE_QUEST)
         {
           this.focusedCard = i;
-          return true;
+          return this.cards[i].name;
         }
       }
     }
     if (this.focusedCard != -1)  
     {
       this.focusedCard = -1;  
-      return true;
+      return "";
     }
     else
     {
-      return false;
+      return undefined;
     }
   }
+
 
   Draw(ctx)
   {

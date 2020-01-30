@@ -26,6 +26,8 @@ class Game
     this.destructionMode = false;
     this.gameOver = false;
 
+    this.focusedCardText = "";
+
     this.turn = 0;
   }
 
@@ -65,10 +67,20 @@ class Game
       if (this.gameMessages[m] != undefined && this.gameMessages[m] != "")
       {
         this.ctx.fillStyle = BUTTONCOLOR;
-        this.ctx.fillRect(0, yindex * 12, this.gameMessages[m].length * 5, 16);
+        this.ctx.fillRect(0, yindex * 12, (this.gameMessages[m].length < 10 ? 10 : this.gameMessages[m].length) * 5, 16);
         this.ctx.fillStyle = TEXTCOLOR;
         this.ctx.fillText(this.gameMessages[m], 0, ++yindex * 12);
       }
+    }
+
+    //draw mouse over text
+    if (this.focusedCardText != undefined && this.focusedCardText != "")
+    {
+      let textBoxLength = this.focusedCardText.length * 5;
+      this.ctx.fillStyle = BUTTONCOLOR;
+      this.ctx.fillRect(this.ctx.canvas.width/2 - textBoxLength/2, 22, textBoxLength, 14);
+      this.ctx.fillStyle = TEXTCOLOR;
+      this.ctx.fillText(this.focusedCardText, this.ctx.canvas.width/2 - textBoxLength/2, 32);
     }
   }
 
@@ -123,10 +135,17 @@ class Game
       let tilex = this.TranslatePointCoordinatesToTile(true, pointx);
       let tiley = this.TranslatePointCoordinatesToTile(false, pointy);
 
-      if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || this.quests.HandleMouseOver(pointx, pointy, this.ctx))
+      let originalFocusedCardText = this.focusedCardText;
+
+      let questMouseOverText = this.quests.HandleMouseOver(pointx, pointy, this.ctx);
+      this.focusedCardText = questMouseOverText == undefined ? "" : questMouseOverText;
+      if (this.focusedCardText == "")
+        this.focusedCardText = this.hand.GetMouseOverText(pointx, pointy, this.ctx);
+
+      if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || questMouseOverText != undefined || this.focusedCardText != originalFocusedCardText)
       {
-          this.Draw();
-          this.hand.DrawObjectPlacement(tilex, tiley, ctx);
+        this.Draw();
+        this.hand.DrawObjectPlacement(tilex, tiley, ctx);
       }
     }
   }
