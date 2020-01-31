@@ -605,7 +605,7 @@ class CharacterCard extends Card
         }
 
         //random chance to just leave
-        if (Math.random() > 0.96)
+        if (Math.random() > 0.95)
           this.satisfactionLevel = RANDOMLEAVESATISFACTION;
     }
 
