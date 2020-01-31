@@ -20,7 +20,7 @@ var LARGECARDWIDTH = 32;
 var LARGECARDHEIGHT = 38;
 var RESOURCEWIDTH = 12;
 var RESOURCEHEIGHT = 12;
-var RESOURCETEXTOFFSET = 24;
+var RESOURCETEXTOFFSET = 14;
 
 var CARDTYPE_BUFF = 0;
 var CARDTYPE_CURSE = 1;
@@ -63,7 +63,7 @@ class Resource
     Draw(locX, locY, ctx)
     {
         ctx.fillStyle = BUTTONCOLOR;
-        ctx.fillRect(locX, locY, RESOURCEWIDTH + RESOURCETEXTOFFSET + 12, 14);
+        ctx.fillRect(locX, locY, RESOURCEWIDTH + 34, 14);
         ctx.drawImage(RESOURCESPRITESHEET, this.resourceSpriteX, this.resourceSpriteY, 
             RESOURCEWIDTH, RESOURCEHEIGHT, locX, locY, RESOURCEWIDTH, RESOURCEHEIGHT);
         ctx.fillStyle = TEXTCOLOR;
@@ -76,6 +76,10 @@ class ResourceCollection
   constructor(resources)
   {
     this.resources = resources;
+    this.resourceUpkeepCounts = [];
+    this.GOLDRESOURCEUPKEEP = 0;
+    this.BEERRESOURCEUPKEEP = 1;
+    this.FOODRESOURCEUPKEEP = 2;
   }
 
   Get(i)
@@ -94,6 +98,38 @@ class ResourceCollection
     return undefined;
   }
 
+  Update(board)
+  {
+    this.resourceUpkeepCounts = [0,0,0];
+    for (let x = 0; x < TILESX; x++)
+    {
+      for (let y = 0; y < TILESY; y++)
+      {
+        if (board.characterMap[x][y] != undefined)
+        {
+          for (let u = 0; u < board.characterMap[x][y].resourceUpkeeps.length; u++)
+          {
+            let resourceType = -1;
+            if (board.characterMap[x][y].resourceUpkeeps[u].resource.name.toUpperCase() == "GOLD")
+            {
+              resourceType = this.GOLDRESOURCEUPKEEP;
+            }
+            else if (board.characterMap[x][y].resourceUpkeeps[u].resource.name.toUpperCase() == "BEER")
+            {
+              resourceType = this.BEERRESOURCEUPKEEP;
+            }
+            else if (board.characterMap[x][y].resourceUpkeeps[u].resource.name.toUpperCase() == "FOOD")
+            {
+              resourceType = this.FOODRESOURCEUPKEEP;
+            }
+            if (resourceType != -1)
+              this.resourceUpkeepCounts[resourceType] += board.characterMap[x][y].resourceUpkeeps[u].amount;
+          }
+        }
+      }
+    }
+  }
+
   Draw(ctx)
   {
     let TEXT_OFFSET = 24;
@@ -102,6 +138,11 @@ class ResourceCollection
     {
       let x = ctx.canvas.width - (fullRscBarWidth * ( this.resources.length - i));
       this.resources[i].Draw(x, 0, ctx);
+      if (this.resourceUpkeepCounts[i] != undefined)
+      {
+        ctx.fillStyle = this.resourceUpkeepCounts[i] < 0 ? "red" : "green";
+        ctx.fillText(Math.abs(this.resourceUpkeepCounts[i]), x + 32, 11);
+      }
     }
   }
 }

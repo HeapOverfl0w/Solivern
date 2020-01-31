@@ -99,6 +99,7 @@ class Game
     {
       this.endTurnButton.visible = true;
       this.destroyButton.visible = true;
+      this.resourceCollection.Update(this.board);
       this.Draw();
       this.turn++;
     }
@@ -113,7 +114,10 @@ class Game
       this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER.", "Lasted Turns : " + this.turn ];
       this.gameOver = true;
       this.Draw();
+      return;
     }
+
+    this.resourceCollection.Update(this.board);
     
     this.SetGameMessages(questMessages.concat(boardMessages));
   }
@@ -182,6 +186,7 @@ class Game
         this.TranslatePointCoordinatesToTile(true, pointx), this.TranslatePointCoordinatesToTile(false, pointy));
         this.SetGameMessage(message);
         this.quests.CancelCardPlacement();
+        this.resourceCollection.Update(this.board);
         this.Draw();
         this.audio.PlayActivate();
       }
