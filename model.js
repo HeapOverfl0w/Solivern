@@ -145,7 +145,7 @@ class CharacterStats
     this.str = str;
     this.dex = dex;
     this.level = 1;
-    this.STATWIDTH = 38;
+    this.STATWIDTH = 34;
     this.STATSEPARATION = 9;
   }
 
@@ -532,14 +532,25 @@ class CharacterCard extends Card
     Update(objectMap)
     {
         //pay upkeeps
-        let unpaidUpkeep = false;
+        let canPayUpkeep = true;
         this.satisfactionLevel = 0;
         for (let i = 0; i < this.resourceUpkeeps.length; i++)
         {
-            unpaidUpkeep = !this.resourceUpkeeps[i].Update();
+          if (this.resourceUpkeeps[i].amount < 0)
+            canPayUpkeep = this.resourceUpkeeps[i].HaveEnough();
+          if (!canPayUpkeep)
+            break;
         }
-        if (unpaidUpkeep)
-            this.satisfactionLevel -= 100;
+
+        if (!canPayUpkeep)
+          this.satisfactionLevel -= 100;
+        else
+        {
+          for (let i = 0; i < this.resourceUpkeeps.length; i++)
+          {
+            this.resourceUpkeeps[i].Update();
+          }
+        }        
 
         //determine satisfaction buffs from objects
         //TODO: Determine most efficient way to calculate radius buffs.
