@@ -67,7 +67,7 @@ class Game
       if (this.gameMessages[m] != undefined && this.gameMessages[m] != "")
       {
         this.ctx.fillStyle = BUTTONCOLOR;
-        this.ctx.fillRect(0, yindex * 12, this.gameMessages[m].length * 5, 14);
+        this.ctx.fillRect(0, yindex * 12, this.gameMessages[m].length * 5, 12);
         this.ctx.fillStyle = TEXTCOLOR;
         this.ctx.fillText(this.gameMessages[m], 0, yindex++ * 12 - 2 + 11);
       }
