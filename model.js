@@ -605,7 +605,7 @@ class CharacterCard extends Card
         }
 
         //random chance to just leave
-        if (Math.random() > 0.95)
+        if (Math.random() > 0.96)
           this.satisfactionLevel = RANDOMLEAVESATISFACTION;
     }
 
@@ -659,8 +659,8 @@ class Board
     {
       for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
-        if (this.objectMap[x][y] != undefined)
-          this.objectMap[x][y].Update();
+        //if (this.objectMap[x][y] != undefined)
+          //this.objectMap[x][y].Update();
         if (this.characterMap[x][y] != undefined)
           this.characterMap[x][y].Update(this.objectMap);
 

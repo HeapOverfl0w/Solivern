@@ -93,8 +93,8 @@ class Game
     this.destroyButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
-    let questMessages = this.quests.Update(this.turn, this.db, this.board, this.ctx);
     let boardMessages = this.board.Update(this.turn, this.db);
+    let questMessages = this.quests.Update(this.turn, this.db, this.board, this.ctx);
     if (this.turn == 0)
     {
       this.endTurnButton.visible = true;
