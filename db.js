@@ -9,7 +9,8 @@ var OBJECTSPRITES = {
     "8ball" : new Vector2D(7,0),
     "stool" : new Vector2D(8,0),
     "table" : new Vector2D(9,0),
-    "coatrack" : new Vector2D(10,0)
+    "coatrack" : new Vector2D(10,0),
+    "jackalope" : new Vector2D(11,0)
 }
 
 var BUFFCURSESPRITES = {
@@ -48,11 +49,13 @@ var CHARCARDSPRITES = {
     "peasantfemale" : new Vector2D(8,4),
     "slime" : new Vector2D(9,4),
     "iceskeleton" : new Vector2D(10,4),
+    "orcpleb" : new Vector2D(11,4),
     "skeletonwarrior" : new Vector2D(0,5),
     "skeletonmage" : new Vector2D(1,5),
     "humanwarrior" : new Vector2D(2,5),
     "spider" : new Vector2D(3,5),
-    "icebeast" : new Vector2D(4,5)
+    "icebeast" : new Vector2D(4,5),
+    "orcwarrior" : new Vector2D(5,5)
 }
 
 var QUESTCARDSPRITES = {
@@ -334,6 +337,9 @@ class Database
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y,
                                             OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y, 1, 3, false, -1,
                                             new ResourceUpkeep(this.gold, -5), "Coat Rack"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y,
+                                            OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y, 1, 4, false, -1,
+                                            new ResourceUpkeep(this.gold, -7), "Mounted Jackalope Head"));
     }
 
     LoadbuffCardsCommon()
@@ -432,6 +438,10 @@ class Database
                                               CHARCARDSPRITES["iceskeleton"].x, CHARCARDSPRITES["iceskeleton"].y, 4, 
                                               [ new ResourceUpkeep(this.beer, 1), new ResourceUpkeep(this.food, 1), new ResourceUpkeep(this.gold, -2) ], "Ice Skeleton",
                                               new CharacterStats(2,1,2)));  
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["orcpleb"].x, CHARCARDSPRITES["orcpleb"].y,
+                                              CHARCARDSPRITES["orcpleb"].x, CHARCARDSPRITES["orcpleb"].y, 2, 
+                                              [ new ResourceUpkeep(this.beer, -2), new ResourceUpkeep(this.food, -1), new ResourceUpkeep(this.gold, 3) ], "Orc Pleb",
+                                              new CharacterStats(1,4,1))); 
                                               
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
                                               CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
@@ -452,7 +462,11 @@ class Database
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["icebeast"].x, CHARCARDSPRITES["icebeast"].y,
                                               CHARCARDSPRITES["icebeast"].x, CHARCARDSPRITES["icebeast"].y, 8, 
                                               [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.beer, 2), new ResourceUpkeep(this.food, -10) ], "Ice Beast",
-                                              new CharacterStats(3,3,3)));                                            
+                                              new CharacterStats(3,3,3))); 
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["orcwarrior"].x, CHARCARDSPRITES["orcwarrior"].y,
+                                              CHARCARDSPRITES["orcwarrior"].x, CHARCARDSPRITES["orcwarrior"].y, 7, 
+                                              [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.beer, -9)], "Orc Warrior",
+                                              new CharacterStats(1,5,1)));                                            
     }
 
     LoadquestCardsCommon()
