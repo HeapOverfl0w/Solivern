@@ -31,17 +31,17 @@ var BUFFCURSESPRITES = {
 
 var RSCCARDSPRITES = {
     "chicken" : new Vector2D(0, 4),
-    "keg" : new Vector2D(1,3),
+    "keg" : new Vector2D(1,4),
     "chickenmed" : new Vector2D(2,4),
     "kegmed" : new Vector2D(3,4),
     "chickensmall" : new Vector2D(4,4),
     "kegsmall" : new Vector2D(5,4),
-    "chickenUnc" : new Vector2D(0, 4),
-    "kegUnc" : new Vector2D(1,4),
-    "chickenmedUnc" : new Vector2D(2,4),
-    "kegmedUnc" : new Vector2D(3,4),
-    "chickensmallUnc" : new Vector2D(4,4),
-    "kegsmallUnc" : new Vector2D(5,4)
+    "chickenUnc" : new Vector2D(6, 4),
+    "kegUnc" : new Vector2D(7,4),
+    "chickenmedUnc" : new Vector2D(8,4),
+    "kegmedUnc" : new Vector2D(9,4),
+    "chickensmallUnc" : new Vector2D(10,4),
+    "kegsmallUnc" : new Vector2D(11,4)
 }
 
 var CHARCARDSPRITES = {
