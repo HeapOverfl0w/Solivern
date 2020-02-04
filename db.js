@@ -10,63 +10,73 @@ var OBJECTSPRITES = {
     "stool" : new Vector2D(8,0),
     "table" : new Vector2D(9,0),
     "coatrack" : new Vector2D(10,0),
-    "jackalope" : new Vector2D(11,0)
+    "jackalope" : new Vector2D(11,0),
+    "bust" : new Vector2D(0,1)
 }
 
 var BUFFCURSESPRITES = {
-    "goldBuff" : new Vector2D(0, 1),
-    "foodBuff" : new Vector2D(1, 1),
-    "beerBuff" : new Vector2D(2,1),
-    "goldCurse" : new Vector2D(0, 2),
-    "foodCurse" : new Vector2D(1, 2),
-    "beerCurse" : new Vector2D(2, 2),
-    "goldBuffUnc" : new Vector2D(3, 1),
-    "foodBuffUnc" : new Vector2D(4, 1),
-    "beerBuffUnc" : new Vector2D(5,1),
-    "goldCurseUnc" : new Vector2D(3, 2),
-    "foodCurseUnc" : new Vector2D(4, 2),
-    "beerCurseUnc" : new Vector2D(5, 2)
+    "goldBuff" : new Vector2D(0, 2),
+    "foodBuff" : new Vector2D(1, 2),
+    "beerBuff" : new Vector2D(2,2),
+    "goldCurse" : new Vector2D(0, 3),
+    "foodCurse" : new Vector2D(1, 3),
+    "beerCurse" : new Vector2D(2, 3),
+    "goldBuffUnc" : new Vector2D(3, 2),
+    "foodBuffUnc" : new Vector2D(4, 2),
+    "beerBuffUnc" : new Vector2D(5,2),
+    "goldCurseUnc" : new Vector2D(3, 3),
+    "foodCurseUnc" : new Vector2D(4, 3),
+    "beerCurseUnc" : new Vector2D(5, 3)
 }
 
 var RSCCARDSPRITES = {
-    "chicken" : new Vector2D(0, 3),
+    "chicken" : new Vector2D(0, 4),
     "keg" : new Vector2D(1,3),
-    "chickenmed" : new Vector2D(2,3),
-    "kegmed" : new Vector2D(3,3),
-    "chickensmall" : new Vector2D(4,3),
-    "kegsmall" : new Vector2D(5,3)
+    "chickenmed" : new Vector2D(2,4),
+    "kegmed" : new Vector2D(3,4),
+    "chickensmall" : new Vector2D(4,4),
+    "kegsmall" : new Vector2D(5,4),
+    "chickenUnc" : new Vector2D(0, 4),
+    "kegUnc" : new Vector2D(1,4),
+    "chickenmedUnc" : new Vector2D(2,4),
+    "kegmedUnc" : new Vector2D(3,4),
+    "chickensmallUnc" : new Vector2D(4,4),
+    "kegsmallUnc" : new Vector2D(5,4)
 }
 
 var CHARCARDSPRITES = {
-    "bat" : new Vector2D(0, 4),
-    "rat" : new Vector2D(1, 4),
-    "goblin" : new Vector2D(2, 4),
-    "skeleton" : new Vector2D(3, 4),
-    "ghost" : new Vector2D(4,4),
-    "wolf" : new Vector2D(5,4),
-    "goblinmage" : new Vector2D(6,4),
-    "peasantmale" : new Vector2D(7,4),
-    "peasantfemale" : new Vector2D(8,4),
-    "slime" : new Vector2D(9,4),
-    "iceskeleton" : new Vector2D(10,4),
-    "orcpleb" : new Vector2D(11,4),
-    "skeletonwarrior" : new Vector2D(0,5),
-    "skeletonmage" : new Vector2D(1,5),
-    "humanwarrior" : new Vector2D(2,5),
-    "spider" : new Vector2D(3,5),
-    "icebeast" : new Vector2D(4,5),
-    "orcwarrior" : new Vector2D(5,5)
+    "bat" : new Vector2D(0, 5),
+    "rat" : new Vector2D(1, 5),
+    "goblin" : new Vector2D(2, 5),
+    "skeleton" : new Vector2D(3, 5),
+    "ghost" : new Vector2D(4,5),
+    "wolf" : new Vector2D(5,5),
+    "goblinmage" : new Vector2D(6,5),
+    "peasantmale" : new Vector2D(7,5),
+    "peasantfemale" : new Vector2D(8,5),
+    "slime" : new Vector2D(9,5),
+    "iceskeleton" : new Vector2D(10,5),
+    "orcpleb" : new Vector2D(11,5),
+    "lesserwillowisp" : new Vector2D(12,5),
+    "skeletonwarrior" : new Vector2D(0,6),
+    "skeletonmage" : new Vector2D(1,6),
+    "humanwarrior" : new Vector2D(2,6),
+    "spider" : new Vector2D(3,6),
+    "icebeast" : new Vector2D(4,6),
+    "orcwarrior" : new Vector2D(5,6),
+    "greaterwillowisp" : new Vector2D(6,6)
 }
 
 var QUESTCARDSPRITES = {
-    "sweep" : new Vector2D(0, 6),
-    "cave" : new Vector2D(1,6),
-    "book" : new Vector2D(2,6),
-    "darts" : new Vector2D(3,6),
-    "trainingdummy" : new Vector2D(4,6),
-    "armwrestle" : new Vector2D(5,6),
-    "dressage" : new Vector2D(6,6),
-    "cook" : new Vector2D(7,6)
+    "sweep" : new Vector2D(0, 7),
+    "cave" : new Vector2D(1,7),
+    "book" : new Vector2D(2,7),
+    "darts" : new Vector2D(3,7),
+    "trainingdummy" : new Vector2D(4,7),
+    "armwrestle" : new Vector2D(5,7),
+    "dressage" : new Vector2D(6,7),
+    "cook" : new Vector2D(7,7),
+    "brew" : new Vector2D(8,7)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -340,6 +350,10 @@ class Database
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y,
                                             OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y, 1, 4, false, -1,
                                             new ResourceUpkeep(this.gold, -7), "Mounted Jackalope Head"));
+
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
+                                            OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, -1,
+                                            new ResourceUpkeep(this.gold, -15), "Bust of a Great Warrior"));
     }
 
     LoadbuffCardsCommon()
@@ -390,6 +404,19 @@ class Database
                                             RSCCARDSPRITES["chickensmall"].x, RSCCARDSPRITES["chickensmall"].y, this.food, this.gold, 5, 3));
         this.rscCardsCommon.push(new ResourceCard(RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y,
                                             RSCCARDSPRITES["kegsmall"].x, RSCCARDSPRITES["kegsmall"].y, this.beer, this.gold, 5, 3));
+
+        this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["chickenUnc"].x, RSCCARDSPRITES["chickenUnc"].y,
+                                            RSCCARDSPRITES["chickenUnc"].x, RSCCARDSPRITES["chickenUnc"].y, this.food, this.gold, 20, 12));
+        this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["kegUnc"].x, RSCCARDSPRITES["kegUnc"].y,
+                                            RSCCARDSPRITES["kegUnc"].x, RSCCARDSPRITES["kegUnc"].y, this.beer, this.gold, 20, 12));
+        this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["chickenmedUnc"].x, RSCCARDSPRITES["chickenmedUnc"].y,
+                                            RSCCARDSPRITES["chickenmedUnc"].x, RSCCARDSPRITES["chickenmedUnc"].y, this.food, this.gold, 15, 10));
+        this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["kegmedUnc"].x, RSCCARDSPRITES["kegmedUnc"].y,
+                                            RSCCARDSPRITES["kegmedUnc"].x, RSCCARDSPRITES["kegmedUnc"].y, this.beer, this.gold, 15, 10));
+        this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["chickensmallUnc"].x, RSCCARDSPRITES["chickensmallUnc"].y,
+                                            RSCCARDSPRITES["chickensmallUnc"].x, RSCCARDSPRITES["chickensmallUnc"].y, this.food, this.gold, 10, 7));
+        this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["kegsmallUnc"].x, RSCCARDSPRITES["kegsmallUnc"].y,
+                                            RSCCARDSPRITES["kegsmallUnc"].x, RSCCARDSPRITES["kegsmallUnc"].y, this.beer, this.gold, 10, 7));
     }
 
     LoadCharacterCards()
@@ -442,6 +469,10 @@ class Database
                                               CHARCARDSPRITES["orcpleb"].x, CHARCARDSPRITES["orcpleb"].y, 2, 
                                               [ new ResourceUpkeep(this.beer, -2), new ResourceUpkeep(this.food, -1), new ResourceUpkeep(this.gold, 3) ], "Orc Pleb",
                                               new CharacterStats(1,4,1))); 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["lesserwillowisp"].x, CHARCARDSPRITES["lesserwillowisp"].y,
+                                              CHARCARDSPRITES["lesserwillowisp"].x, CHARCARDSPRITES["lesserwillowisp"].y, 5, 
+                                              [ new ResourceUpkeep(this.beer, 1), new ResourceUpkeep(this.food, 1) ], "Lesser Will-O-Wisp",
+                                              new CharacterStats(1,0,0))); 
                                               
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
                                               CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
@@ -466,7 +497,11 @@ class Database
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["orcwarrior"].x, CHARCARDSPRITES["orcwarrior"].y,
                                               CHARCARDSPRITES["orcwarrior"].x, CHARCARDSPRITES["orcwarrior"].y, 7, 
                                               [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.beer, -9)], "Orc Warrior",
-                                              new CharacterStats(1,5,1)));                                            
+                                              new CharacterStats(1,5,1)));   
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["greaterwillowisp"].x, CHARCARDSPRITES["greaterwillowisp"].y,
+                                              CHARCARDSPRITES["greaterwillowisp"].x, CHARCARDSPRITES["greaterwillowisp"].y, 20, 
+                                              [ new ResourceUpkeep(this.beer, 3), new ResourceUpkeep(this.food, 3) ], "Greater Will-O-Wisp",
+                                              new CharacterStats(2,0,0)));                                          
     }
 
     LoadquestCardsCommon()
@@ -494,6 +529,9 @@ class Database
                                         4, 7, STATTYPE_DEX, 2, [new ResourceUpkeep(this.gold, 10)], "Horse Dressage"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["cook"].x, QUESTCARDSPRITES["cook"].y,
                                         QUESTCARDSPRITES["cook"].x, QUESTCARDSPRITES["cook"].y,
-                                       1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.food, 5)], "Cook Stew"));         
+                                       1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.food, 5)], "Cook Stew"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["brew"].x, QUESTCARDSPRITES["brew"].y,
+                                       QUESTCARDSPRITES["brew"].x, QUESTCARDSPRITES["brew"].y,
+                                      1, 2, STATTYPE_INT, 3, [new ResourceUpkeep(this.beer, 5)], "Brew Beer"));           
     }
 }
