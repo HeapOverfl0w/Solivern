@@ -130,10 +130,16 @@ class ResourceCollection
     }
   }
 
-  Draw(ctx)
+  Draw(ctx, turn)
   {
     let TEXT_OFFSET = 24;
     let fullRscBarWidth = RESOURCEWIDTH + RESOURCETEXTOFFSET + TEXT_OFFSET;
+    //draw turn count
+    let turnx = ctx.canvas.width - (fullRscBarWidth * ( this.resources.length + 1));
+    ctx.fillStyle = BUTTONCOLOR;
+    ctx.fillRect(turnx, 0, RESOURCEWIDTH + 34, 14);
+    ctx.fillStyle = TEXTCOLOR;
+    ctx.fillText("TURN  " + turn, turnx, 11);
     for(let i = 0; i < this.resources.length; i++)
     {
       let x = ctx.canvas.width - (fullRscBarWidth * ( this.resources.length - i));

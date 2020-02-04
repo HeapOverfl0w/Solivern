@@ -6,8 +6,8 @@ class Game
     this.hand = new Hand();
     this.board = new Board();
     this.quests = new Quests();
-    this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 5, 45, 16, 48, 32);
-    this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 5, 16, 16, 48, 16);
+    this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 0, 45, 16, 48, 32);
+    this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 0, 16, 16, 48, 16);
 
     this.goldResource = new Resource(0,0,"Gold");
     this.goldResource.count = 10;
@@ -55,7 +55,7 @@ class Game
     if (this.hand.selectedCardIndex == -1)
       this.quests.Draw(this.ctx);
 
-    this.resourceCollection.Draw(this.ctx);
+    this.resourceCollection.Draw(this.ctx, this.turn);
     this.endTurnButton.Draw(this.ctx);
     this.destroyButton.Draw(this.ctx);
 
@@ -126,8 +126,8 @@ class Game
   {
     game.endTurnButton.visible = true;
     game.destroyButton.visible = true;
-    game.Draw();
     game.turn++;
+    game.Draw();
     game.endTurnTimeout = undefined;
     game.SetTimeoutBeginGameMessage();
   }
