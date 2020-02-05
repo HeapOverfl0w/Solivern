@@ -3,11 +3,16 @@ class Game
   constructor(ctx)
   {
     this.audio = new AudioHandler();
+    this.audio.Mute();
     this.hand = new Hand();
     this.board = new Board();
     this.quests = new Quests();
     this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 0, 45, 16, 48, 32);
     this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 0, 16, 16, 48, 16);
+
+    this.audioOnButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 48, 48);
+    this.audioOnButton.visible = false;
+    this.audioOffButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 56, 48)
 
     this.goldResource = new Resource(0,0,"Gold");
     this.goldResource.count = 10;
@@ -72,6 +77,9 @@ class Game
         this.ctx.fillText(this.gameMessages[m], 0, yindex++ * 12 - 2 + 11);
       }
     }
+
+    this.audioOnButton.Draw(this.ctx);
+    this.audioOffButton.Draw(this.ctx);
 
     //draw mouse over text
     if (this.focusedCardText != undefined && this.focusedCardText != "")
@@ -202,6 +210,11 @@ class Game
         this.destructionMode = true;
         this.audio.PlayActivate();
       }
+      else if (this.audioOffButton.IsInside(pointx, pointy) || this.audioOnButton.IsInside(pointx, pointy))
+      {
+        this.ToggleAudio();
+        this.Draw();
+      }
       else
       {
         let message = this.hand.ClickedOnCard(pointx, pointy, this.ctx);
@@ -229,6 +242,22 @@ class Game
           }
         }
       }
+    }
+  }
+
+  ToggleAudio()
+  {
+    if (this.audioOnButton.visible)
+    {
+      this.audioOffButton.visible = true;
+      this.audioOnButton.visible = false;
+      this.audio.Mute();
+    }
+    else
+    {
+      this.audioOffButton.visible = false;
+      this.audioOnButton.visible = true;
+      this.audio.UnMute();
     }
   }
 
