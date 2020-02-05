@@ -765,7 +765,7 @@ class Board
               if ((x != adjacentx || y != adjacenty) && 0 <= adjacentx && adjacentx < TILESX &&
                   0 <= adjacenty && adjacenty < TILESY && 
                   this.characterMap[adjacentx][adjacenty] != undefined && !this.characterMap[adjacentx][adjacenty].firstAppearance &&
-                  Math.random() < .1) //10% chance for a bar fight
+                  Math.random() < .08) //8% chance for a bar fight
               {
                 ctx.drawImage(EXTRASSPRITESHEET, FIGHTX, FIGHTY, TILEWIDTH, TILEHEIGHT, 
                   x * TILEWIDTH, y * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
