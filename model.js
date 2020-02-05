@@ -861,8 +861,8 @@ class Board
       return "Object already at location.";
     else if (!objectCard.passable && this.characterMap[tilex][tiley] != undefined)
       return "Cannot place impassable object where patron resides.";
-    else if (tilex < BOARDBORDER || tilex > TILESX - BOARDBORDER || 
-      tiley < BOARDBORDER || tiley > TILESX - BOARDBORDER)
+    else if (tilex < BOARDBORDER || tilex >= TILESX - BOARDBORDER || 
+      tiley < BOARDBORDER || tiley >= TILESY - BOARDBORDER)
       return "Cannot place outside of tavern.";
     else
     {
