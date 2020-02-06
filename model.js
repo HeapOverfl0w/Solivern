@@ -42,6 +42,10 @@ var TEXTCOLOR = "#FFFFFF";
 var BUTTONCOLOR = "#000000";
 var TEXTFONT = "10px MS Gothic";
 
+var NIGHTCOLOR = "#00000099";
+var LIGHTCOLOR = "#fbf7a300";
+const LIGHTEDGE = "#00000044";
+
 var RANDOMLEAVESATISFACTION = -99999;
 
 var SMALLCARDSPRITESHEET = document.getElementById("smallcard");
@@ -478,14 +482,14 @@ class ResourceCard extends Card
 class ObjectCard extends Card
 {
     constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-        satisfactionBuff, satisfactionRadius, passable, expiration, rscUpkeep, name)
+        satisfactionBuff, satisfactionRadius, passable, isLit, rscUpkeep, name)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_OBJECT;
         this.satisfactionBuff = satisfactionBuff;
         this.satisfactionRadius = satisfactionRadius;
         this.passable = passable;
-        this.expiration = expiration;
+        this.isLit = isLit;
         this.rscCost = rscUpkeep;
         this.name = name;
     }
@@ -555,7 +559,7 @@ class ObjectCard extends Card
     {
       return new ObjectCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
                             this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionBuff, this.satisfactionRadius, this.passable,
-                            this.expiration, this.rscCost, this.name);
+                            this.isLit, this.rscCost, this.name);
     }
 }
 
@@ -814,7 +818,7 @@ class Board
     return battleMessages;
   }
 
-  Draw(ctx, placingObject)
+  Draw(ctx, placingObject, turn)
   {
     ctx.drawImage(BACKGROUNDIMAGE, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
 
@@ -838,6 +842,36 @@ class Board
       }
     }
 
+    //Draw Night
+    if (Math.floor(turn / 3) % 2 == 0)
+    {
+      let lightingImageDatas = [];
+      for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+      {
+        for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+        {
+          if (this.objectMap[x][y] != undefined && this.objectMap[x][y].isLit)
+          {
+            let lightingData = {
+              x : (x * TILEWIDTH) - this.objectMap[x][y].satisfactionRadius * TILEWIDTH,
+              y : (y * TILEHEIGHT) - this.objectMap[x][y].satisfactionRadius * TILEHEIGHT,
+              radius : (this.objectMap[x][y].satisfactionRadius * 2 + 1) * TILEWIDTH
+            };
+            lightingData.imageData = ctx.getImageData(lightingData.x, lightingData.y, lightingData.radius, lightingData.radius);
+            lightingImageDatas.push(lightingData);            
+          }
+        }
+      }
+      ctx.fillStyle = NIGHTCOLOR;
+      ctx.fillRect(0,0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
+
+      for (let i = lightingImageDatas.length - 1; i > -1; i--)
+      {
+        ctx.putImageData(lightingImageDatas[i].imageData, lightingImageDatas[i].x, lightingImageDatas[i].y);
+      }
+    }
+
+    //Moused Over Card
     if (this.focusedVector != undefined)
     {
       let x = this.focusedVector.x;
