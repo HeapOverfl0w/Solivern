@@ -33,6 +33,9 @@ class Game
 
     this.focusedCardText = "";
 
+    this.drawSecondaryBackdrop = false;
+    this.drawSecondaryTimeout = undefined;
+
     this.turn = 0;
   }
 
@@ -40,6 +43,7 @@ class Game
   {
       this.LoadAllData();
       this.Update();
+      this.SecondaryDrawTimeout(this);
   }
 
   LoadAllData()
@@ -47,9 +51,22 @@ class Game
       this.db.LoadAllData();
   }
 
+  SecondaryDrawTimeout(game)
+  {
+    game.drawSecondaryBackdrop = !game.drawSecondaryBackdrop;
+    game.Draw();
+    game.drawSecondaryTimeout = setTimeout(game.SecondaryDrawTimeout, 1500, game);
+  }
+
+  StopSecondaryDrawTimeout()
+  {
+    clearTimeout(this.drawSecondaryTimeout);
+    this.drawSecondaryTimeout = undefined;
+  }
+
   Draw()
   {
-    this.board.Draw(this.ctx, this.hand.selectedCardIndex != -1, this.turn);
+    this.board.Draw(this.ctx, this.hand.selectedCardIndex != -1, this.drawSecondaryBackdrop);
 
     if (this.gameOver)
       return;
@@ -138,6 +155,7 @@ class Game
     game.Draw();
     game.endTurnTimeout = undefined;
     game.SetTimeoutBeginGameMessage();
+    game.SecondaryDrawTimeout(game);
   }
 
   HandleMouseOver(pointx, pointy)
@@ -172,6 +190,7 @@ class Game
         this.SetGameMessage(returnMessage);
         this.Draw();
         this.audio.PlayActivate();
+        this.SecondaryDrawTimeout(this);
       }
       else if (this.hand.selectedCardIndex != -1)
       {
@@ -187,6 +206,7 @@ class Game
 
         this.Draw();
         this.audio.PlayActivate();
+        this.SecondaryDrawTimeout(this);
       }
       else if (this.quests.selectedCardIndex != -1)
       {
@@ -197,14 +217,17 @@ class Game
         this.resourceCollection.Update(this.board);
         this.Draw();
         this.audio.PlayActivate();
+        this.SecondaryDrawTimeout(this);
       }
       else if (this.endTurnButton.IsInside(pointx, pointy))
       {
+          this.StopSecondaryDrawTimeout();
           this.Update();
           this.audio.PlayActivate();
       }
       else if (this.destroyButton.IsInside(pointx, pointy))
       {
+        this.StopSecondaryDrawTimeout();
         this.gameMessages = ["Sell mode started - hit ESC to cancel."];
         this.Draw();
         this.destructionMode = true;
@@ -227,6 +250,8 @@ class Game
             this.hand.RemoveSelectedCard();
             this.audio.PlayActivate();
           }
+          else
+            this.StopSecondaryDrawTimeout();
           this.SetGameMessage(message);
           this.Draw();
         }
@@ -236,6 +261,7 @@ class Game
 
           if (message != "")
           {
+            this.StopSecondaryDrawTimeout();
             this.SetGameMessage(message);
             this.Draw();
             this.audio.PlayActivate();
@@ -265,6 +291,9 @@ class Game
   {
     if (keyCode == 27 && this.endTurnTimeout == undefined)
     {
+      if (this.SecondaryDrawTimeout == undefined)
+        this.SecondaryDrawTimeout(this);
+
       this.destructionMode = false;
       this.hand.CancelCardPlacement();
       this.quests.CancelCardPlacement();

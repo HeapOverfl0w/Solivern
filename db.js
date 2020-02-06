@@ -315,44 +315,44 @@ class Database
     LoadobjectCardsCommon()
     {
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y,
-                                            OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y, 2, 1, false, false,
+                                            OBJECTSPRITES["counter"].x, OBJECTSPRITES["counter"].y, 2, 1, false, undefined,
                                             new ResourceUpkeep(this.gold, -3), "Counter"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y,
-                                            OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y, 3, 0, true, false,
+                                            OBJECTSPRITES["chair"].x, OBJECTSPRITES["chair"].y, 3, 0, true, undefined,
                                             new ResourceUpkeep(this.gold, -5), "Chair"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y,
-                                            OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y, 1, 3, false, true,
+                                            OBJECTSPRITES["candle"].x, OBJECTSPRITES["candle"].y, 1, 3, false, LIGHTCOLOR,
                                             new ResourceUpkeep(this.gold, -6), "Candle"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y,
-                                            OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y, 1, 2, false, false,
+                                            OBJECTSPRITES["flowerpot"].x, OBJECTSPRITES["flowerpot"].y, 1, 2, false, undefined,
                                             new ResourceUpkeep(this.gold, -4), "Flower Pot"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y,
-                                            OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y, 2, 3, false, false,
+                                            OBJECTSPRITES["weaponrack"].x, OBJECTSPRITES["weaponrack"].y, 2, 3, false, undefined,
                                             new ResourceUpkeep(this.gold, -10), "Weapon Rack"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y,
-                                            OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y, 1, 5, false, true,
+                                            OBJECTSPRITES["firepit"].x, OBJECTSPRITES["firepit"].y, 1, 5, false, LIGHTCOLOR,
                                             new ResourceUpkeep(this.gold, -10), "Fire Pit"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y,
-                                            OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y, 5, 0, true, false,
+                                            OBJECTSPRITES["lazboy"].x, OBJECTSPRITES["lazboy"].y, 5, 0, true, undefined,
                                             new ResourceUpkeep(this.gold, -8), "Relaxing Chair"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y,
-                                            OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y, 3, 1, true, false,
+                                            OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y, 3, 1, true, undefined,
                                             new ResourceUpkeep(this.beer, -15), "The Magic 8 Ball!!"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y,
-                                            OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y, 1, 0, true, false,
+                                            OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y, 1, 0, true, undefined,
                                             new ResourceUpkeep(this.gold, -1), "Stool"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["table"].x, OBJECTSPRITES["table"].y,
-                                            OBJECTSPRITES["table"].x, OBJECTSPRITES["table"].y, 2, 1, false, false,
+                                            OBJECTSPRITES["table"].x, OBJECTSPRITES["table"].y, 2, 1, false, undefined,
                                             new ResourceUpkeep(this.gold, -3), "Table"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y,
-                                            OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y, 1, 3, false, false,
+                                            OBJECTSPRITES["coatrack"].x, OBJECTSPRITES["coatrack"].y, 1, 3, false, undefined,
                                             new ResourceUpkeep(this.gold, -5), "Coat Rack"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y,
-                                            OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y, 1, 4, false, false,
+                                            OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y, 1, 4, false, undefined,
                                             new ResourceUpkeep(this.gold, -7), "Mounted Jackalope Head"));
 
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
-                                            OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, false,
+                                            OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, undefined,
                                             new ResourceUpkeep(this.gold, -15), "Bust of a Great Warrior"));
     }
 

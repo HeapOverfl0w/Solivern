@@ -482,14 +482,14 @@ class ResourceCard extends Card
 class ObjectCard extends Card
 {
     constructor(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY, 
-        satisfactionBuff, satisfactionRadius, passable, isLit, rscUpkeep, name)
+        satisfactionBuff, satisfactionRadius, passable, lightColor, rscUpkeep, name)
     {
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_OBJECT;
         this.satisfactionBuff = satisfactionBuff;
         this.satisfactionRadius = satisfactionRadius;
         this.passable = passable;
-        this.isLit = isLit;
+        this.lightColor = lightColor;
         this.rscCost = rscUpkeep;
         this.name = name;
     }
@@ -559,7 +559,7 @@ class ObjectCard extends Card
     {
       return new ObjectCard(this.smallCardSpriteLocX / TILEWIDTH, this.smallCardSpriteLocY / TILEHEIGHT, this.largeCardSpriteLocX / LARGECARDWIDTH,
                             this.largeCardSpriteLocY / LARGECARDHEIGHT, this.satisfactionBuff, this.satisfactionRadius, this.passable,
-                            this.isLit, this.rscCost, this.name);
+                            this.lightColor, this.rscCost, this.name);
     }
 }
 
@@ -659,6 +659,8 @@ class Board
       this.characterMap[x] = new Array();
     }
     this.focusedVector = undefined;
+    this.isNight = false;
+    this.precipitation = false;
   }
 
   Update(turnCount, db)
@@ -733,6 +735,9 @@ class Board
         }
       }
     }
+
+    this.isNight = Math.floor(turnCount / 3) % 2 == 1;
+    this.precipitation = Math.random() + ( this.precipitation ? 0.3 : 0) > 0.7;
 
     return returnMessages;
   }
@@ -818,9 +823,20 @@ class Board
     return battleMessages;
   }
 
-  Draw(ctx, placingObject, turn)
+  Draw(ctx, placingObject, drawSecondaryBackdrop)
   {
-    ctx.drawImage(BACKGROUNDIMAGE, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT, 0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
+    let backdropX = 0;
+    let backdropY = 0;
+    if (drawSecondaryBackdrop)
+    {
+      backdropX++;
+    }
+    if (this.precipitation)
+    {
+      backdropX+=2;
+    }
+    ctx.drawImage(BACKGROUNDIMAGE, backdropX * TILESX * TILEWIDTH, backdropY * TILESY * TILEHEIGHT, TILESX * TILEWIDTH, TILESY * TILEHEIGHT, 
+                  0, 0, TILESX * TILEWIDTH, TILESY * TILEHEIGHT);
 
     for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
@@ -843,19 +859,20 @@ class Board
     }
 
     //Draw Night
-    if (Math.floor(turn / 3) % 2 == 0)
+    if (this.isNight)
     {
       let lightingImageDatas = [];
       for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
       {
         for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
         {
-          if (this.objectMap[x][y] != undefined && this.objectMap[x][y].isLit)
+          if (this.objectMap[x][y] != undefined && this.objectMap[x][y].lightColor != undefined)
           {
             let lightingData = {
               x : (x * TILEWIDTH) - this.objectMap[x][y].satisfactionRadius * TILEWIDTH,
               y : (y * TILEHEIGHT) - this.objectMap[x][y].satisfactionRadius * TILEHEIGHT,
-              radius : (this.objectMap[x][y].satisfactionRadius * 2 + 1) * TILEWIDTH
+              radius : (this.objectMap[x][y].satisfactionRadius * 2 + 1) * TILEWIDTH,
+              lightColor : this.objectMap[x][y].lightColor
             };
             lightingData.imageData = ctx.getImageData(lightingData.x, lightingData.y, lightingData.radius, lightingData.radius);
             lightingImageDatas.push(lightingData);            
@@ -868,6 +885,12 @@ class Board
       for (let i = lightingImageDatas.length - 1; i > -1; i--)
       {
         ctx.putImageData(lightingImageDatas[i].imageData, lightingImageDatas[i].x, lightingImageDatas[i].y);
+      }
+
+      for (let i = lightingImageDatas.length - 1; i > -1; i--)
+      {
+        ctx.fillStyle = lightingImageDatas[i].lightColor;
+        ctx.fillRect(lightingImageDatas[i].x, lightingImageDatas[i].y, lightingImageDatas[i].radius, lightingImageDatas[i].radius);
       }
     }
 
