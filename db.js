@@ -58,6 +58,8 @@ var CHARCARDSPRITES = {
     "iceskeleton" : new Vector2D(10,5),
     "orcpleb" : new Vector2D(11,5),
     "lesserwillowisp" : new Vector2D(12,5),
+    "halflingvillager" : new Vector2D(13,5),
+    "halflingvillagerfemale" : new Vector2D(14,5),
     "skeletonwarrior" : new Vector2D(0,6),
     "skeletonmage" : new Vector2D(1,6),
     "humanwarrior" : new Vector2D(2,6),
@@ -473,6 +475,14 @@ class Database
                                               CHARCARDSPRITES["lesserwillowisp"].x, CHARCARDSPRITES["lesserwillowisp"].y, 5, 
                                               [ new ResourceUpkeep(this.beer, 1), new ResourceUpkeep(this.food, 1) ], "Lesser Will-O-Wisp",
                                               new CharacterStats(1,0,0))); 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["halflingvillager"].x, CHARCARDSPRITES["halflingvillager"].y,
+                                              CHARCARDSPRITES["halflingvillager"].x, CHARCARDSPRITES["halflingvillager"].y, 3, 
+                                              [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.beer, -1) ], "Halfling Villager",
+                                              new CharacterStats(1,1,3))); 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["halflingvillagerfemale"].x, CHARCARDSPRITES["halflingvillagerfemale"].y,
+                                              CHARCARDSPRITES["halflingvillagerfemale"].x, CHARCARDSPRITES["halflingvillagerfemale"].y, 3, 
+                                              [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.beer, -1) ], "Halfling Villager",
+                                              new CharacterStats(1,1,3))); 
                                               
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
                                               CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
