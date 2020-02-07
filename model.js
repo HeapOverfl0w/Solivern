@@ -663,7 +663,7 @@ class Board
     this.precipitation = false;
   }
 
-  Update(turnCount, db)
+  Update(turnCount, db, audio)
   {
     let returnMessages = [];
 
@@ -738,8 +738,17 @@ class Board
 
     this.isNight = Math.floor(turnCount / 3) % 2 == 1;
     this.precipitation = Math.random() + ( this.precipitation ? 0.3 : 0) > 0.7;
+    this.HandleAudio(audio);
 
     return returnMessages;
+  }
+
+  HandleAudio(audio)
+  {
+    if (this.precipitation)
+      audio.PlayRain();
+    else
+      audio.StopRain();
   }
 
   PatronsExist()

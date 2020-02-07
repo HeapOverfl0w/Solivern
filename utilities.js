@@ -4,6 +4,9 @@ class AudioHandler
     {
         this.activate = document.getElementById("activate");
         this.music = document.getElementById("music");
+        this.music.volume = 0.1;
+        this.rain = document.getElementById("rain");
+        this.rain.volume = 0.3;
         this.audioOn = false; //default audio to false for web version
     }
 
@@ -11,6 +14,7 @@ class AudioHandler
     {
         this.audioOn = false;
         this.music.pause();
+        this.StopRain();
         //this.music.currentTime = 0;
     }
 
@@ -28,11 +32,23 @@ class AudioHandler
         }
     }
 
+    PlayRain()
+    {
+        if (this.audioOn)
+        {
+            this.rain.play();
+        }
+    }
+
+    StopRain()
+    {
+        this.rain.pause();
+    }
+
     PlayMusic(audioHandler)
     {
         if (audioHandler.audioOn)
         {
-            audioHandler.music.volume = 0.1;
             audioHandler.music.currentTime = 0;
             audioHandler.music.play();
             setTimeout(audioHandler.PlayMusic, 120000, audioHandler);

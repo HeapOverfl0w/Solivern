@@ -118,7 +118,7 @@ class Game
     this.destroyButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
-    let boardMessages = this.board.Update(this.turn, this.db);
+    let boardMessages = this.board.Update(this.turn, this.db, this.audio);
     let questMessages = this.quests.Update(this.turn, this.db, this.board, this.ctx);
     if (this.turn == 0)
     {
@@ -284,6 +284,7 @@ class Game
       this.audioOffButton.visible = false;
       this.audioOnButton.visible = true;
       this.audio.UnMute();
+      this.board.HandleAudio(this.audio);
     }
   }
 
