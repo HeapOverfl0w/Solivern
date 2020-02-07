@@ -43,7 +43,7 @@ class Game
   {
       this.LoadAllData();
       this.Update();
-      this.SecondaryDrawTimeout(this);
+      this.SecondaryDrawTimeout(this, 0);
   }
 
   LoadAllData()
@@ -51,11 +51,17 @@ class Game
       this.db.LoadAllData();
   }
 
-  SecondaryDrawTimeout(game)
+  SecondaryDrawTimeout(game, count)
   {
-    game.drawSecondaryBackdrop = !game.drawSecondaryBackdrop;
+    count++;
+    if (count == 3)
+    {
+      game.drawSecondaryBackdrop = !game.drawSecondaryBackdrop;
+      count = 0;
+    }
+    game.board.RandomizeAnimations();
     game.Draw();
-    game.drawSecondaryTimeout = setTimeout(game.SecondaryDrawTimeout, 1500, game);
+    game.drawSecondaryTimeout = setTimeout(game.SecondaryDrawTimeout, 500, game, count);
   }
 
   StopSecondaryDrawTimeout()
@@ -155,7 +161,7 @@ class Game
     game.Draw();
     game.endTurnTimeout = undefined;
     game.SetTimeoutBeginGameMessage();
-    game.SecondaryDrawTimeout(game);
+    game.SecondaryDrawTimeout(game, 0);
   }
 
   HandleMouseOver(pointx, pointy)
@@ -190,7 +196,7 @@ class Game
         this.SetGameMessage(returnMessage);
         this.Draw();
         this.audio.PlayActivate();
-        this.SecondaryDrawTimeout(this);
+        this.SecondaryDrawTimeout(this, 0);
       }
       else if (this.hand.selectedCardIndex != -1)
       {
@@ -206,7 +212,7 @@ class Game
 
         this.Draw();
         this.audio.PlayActivate();
-        this.SecondaryDrawTimeout(this);
+        this.SecondaryDrawTimeout(this, 0);
       }
       else if (this.quests.selectedCardIndex != -1)
       {
@@ -217,7 +223,7 @@ class Game
         this.resourceCollection.Update(this.board);
         this.Draw();
         this.audio.PlayActivate();
-        this.SecondaryDrawTimeout(this);
+        this.SecondaryDrawTimeout(this, 0);
       }
       else if (this.endTurnButton.IsInside(pointx, pointy))
       {
@@ -293,7 +299,7 @@ class Game
     if (keyCode == 27 && this.endTurnTimeout == undefined)
     {
       if (this.SecondaryDrawTimeout == undefined)
-        this.SecondaryDrawTimeout(this);
+        this.SecondaryDrawTimeout(this, 0);
 
       this.destructionMode = false;
       this.hand.CancelCardPlacement();

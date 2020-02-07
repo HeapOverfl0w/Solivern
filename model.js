@@ -53,6 +53,7 @@ var LARGECARDSPRITESHEET = document.getElementById("largecard");
 var RESOURCESPRITESHEET = document.getElementById("resources");
 var BACKGROUNDIMAGE = document.getElementById("background");
 var EXTRASSPRITESHEET = document.getElementById("extras");
+var ALTSMALLCARDSPRITESHEET = document.getElementById("smallcardalt");
 
 class Resource
 {
@@ -242,10 +243,15 @@ class Card
         this.largeCardSpriteLocX = lgCardSpriteX * LARGECARDWIDTH;
         this.largeCardSpriteLocY = lgCardSpriteY * LARGECARDHEIGHT;
         this.cardType = CARDTYPE_NONE;
+        this.drawAlternate = false;
     }
 
     DrawSmallCard(locX, locY, ctx)
     {
+      if (this.drawAlternate)
+        ctx.drawImage(ALTSMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
+          TILEWIDTH, TILEHEIGHT, locX, locY, TILEWIDTH, TILEHEIGHT);
+      else
         ctx.drawImage(SMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
             TILEWIDTH, TILEHEIGHT, locX, locY, TILEWIDTH, TILEHEIGHT);
     }
@@ -632,8 +638,12 @@ class CharacterCard extends Card
 
     DrawShiftedSmallCard(locX, locY, ctx)
     {
-      ctx.drawImage(SMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
+      if (this.drawAlternate)
+      ctx.drawImage(ALTSMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
         TILEWIDTH, TILEHEIGHT - 2, locX, locY + 2, TILEWIDTH, TILEHEIGHT - 2);
+      else
+        ctx.drawImage(SMALLCARDSPRITESHEET, this.smallCardSpriteLocX, this.smallCardSpriteLocY, 
+          TILEWIDTH, TILEHEIGHT - 2, locX, locY + 2, TILEWIDTH, TILEHEIGHT - 2);
     }
 
     Clone()
@@ -741,6 +751,30 @@ class Board
     this.HandleAudio(audio);
 
     return returnMessages;
+  }
+
+  RandomizeAnimations()
+  {
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+    {
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+      {
+        if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].drawAlternate && Math.random() > 0.93)
+        {
+          this.characterMap[x][y].drawAlternate = true;
+          setTimeout(function(character) {
+            character.drawAlternate = false;
+          }, 1500, this.characterMap[x][y]);
+        }
+        if (this.objectMap[x][y] != undefined && !this.objectMap[x][y].drawAlternate && Math.random() > 0.93)
+        {
+          this.objectMap[x][y].drawAlternate = true;
+          setTimeout(function(object) {
+            object.drawAlternate = false;
+          }, 1500, this.objectMap[x][y]);
+        }
+      }
+    }
   }
 
   HandleAudio(audio)

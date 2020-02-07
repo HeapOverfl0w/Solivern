@@ -68,29 +68,32 @@ class AudioHandler
     {
         clearTimeout(audio.ambientTimer);
         audio.ambientTimer = undefined;
-        //Setup random audio timings
-        for(let i = 0; i < characters.length; i++)
+        if (this.audioOn)
         {
-            let charSound = CHAR_SOUNDS.find(element => element.name == characters[i]);
-            if (charSound != undefined && Math.random() > 0.7)
+            //Setup random audio timings
+            for(let i = 0; i < characters.length; i++)
             {
-                clearTimeout(charSound.timer);
-                charSound.timer = undefined;
-                charSound.timer = setTimeout(audio.AmbientTimer, Math.random() * 8000, charSound.audio);
+                let charSound = CHAR_SOUNDS.find(element => element.name == characters[i]);
+                if (charSound != undefined && Math.random() > 0.7)
+                {
+                    clearTimeout(charSound.timer);
+                    charSound.timer = undefined;
+                    charSound.timer = setTimeout(audio.AmbientTimer, Math.random() * 8000, charSound.audio);
+                }
             }
-        }
-        //glass clanks
-        audio.glass.volume = 0.5;
-        if (characters.length > 3 && Math.random() > 0.7)
-        {
-            let glassClankCount = Math.ceil(Math.random() * 3);
-            for (let i = 0; i < glassClankCount; i++)
+            //glass clanks
+            audio.glass.volume = 0.5;
+            if (characters.length > 3 && Math.random() > 0.7)
             {
-                setTimeout(audio.AmbientTimer, Math.random() * 8000, audio.glass);
+                let glassClankCount = Math.ceil(Math.random() * 3);
+                for (let i = 0; i < glassClankCount; i++)
+                {
+                    setTimeout(audio.AmbientTimer, Math.random() * 8000, audio.glass);
+                }
             }
-        }
 
-        audio.ambientTimer = setTimeout(audio.PlayAmbient, 8000, characters, audio);
+            audio.ambientTimer = setTimeout(audio.PlayAmbient, 8000, characters, audio);
+        }
     }
 
     StopAmbient()
