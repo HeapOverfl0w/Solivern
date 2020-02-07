@@ -749,6 +749,19 @@ class Board
       audio.PlayRain();
     else
       audio.StopRain();
+
+    let characters = []
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+    {
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+      {
+        if (this.characterMap[x][y] != undefined)
+        {
+          characters.push(this.characterMap[x][y].name);
+        }
+      }
+    }
+    audio.PlayAmbient(characters, audio);
   }
 
   PatronsExist()
