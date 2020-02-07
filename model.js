@@ -759,14 +759,14 @@ class Board
     {
       for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
       {
-        if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].drawAlternate && Math.random() > 0.93)
+        if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].drawAlternate && Math.random() > 0.9)
         {
           this.characterMap[x][y].drawAlternate = true;
           setTimeout(function(character) {
             character.drawAlternate = false;
           }, 1500, this.characterMap[x][y]);
         }
-        if (this.objectMap[x][y] != undefined && !this.objectMap[x][y].drawAlternate && Math.random() > 0.93)
+        if (this.objectMap[x][y] != undefined && !this.objectMap[x][y].drawAlternate && Math.random() > 0.9)
         {
           this.objectMap[x][y].drawAlternate = true;
           setTimeout(function(object) {
