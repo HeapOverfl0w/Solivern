@@ -60,6 +60,8 @@ var CHARCARDSPRITES = {
     "lesserwillowisp" : new Vector2D(12,5),
     "halflingvillager" : new Vector2D(13,5),
     "halflingvillagerfemale" : new Vector2D(14,5),
+    "dwarfminer" : new Vector2D(15, 5),
+    "dwarfbaker" : new Vector2D(16,5),
     "skeletonwarrior" : new Vector2D(0,6),
     "skeletonmage" : new Vector2D(1,6),
     "humanwarrior" : new Vector2D(2,6),
@@ -483,6 +485,14 @@ class Database
                                               CHARCARDSPRITES["halflingvillagerfemale"].x, CHARCARDSPRITES["halflingvillagerfemale"].y, 3, 
                                               [ new ResourceUpkeep(this.gold, 1), new ResourceUpkeep(this.beer, -1) ], "Halfling Villager",
                                               new CharacterStats(1,1,3))); 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["dwarfminer"].x, CHARCARDSPRITES["dwarfminer"].y,
+                                              CHARCARDSPRITES["dwarfminer"].x, CHARCARDSPRITES["dwarfminer"].y, 4, 
+                                              [ new ResourceUpkeep(this.food, 2), new ResourceUpkeep(this.beer, -2) ], "Dwarf Miner",
+                                              new CharacterStats(1,3,1))); 
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["dwarfbaker"].x, CHARCARDSPRITES["dwarfbaker"].y,
+                                              CHARCARDSPRITES["dwarfbaker"].x, CHARCARDSPRITES["dwarfbaker"].y, 4, 
+                                              [ new ResourceUpkeep(this.food, 2), new ResourceUpkeep(this.beer, -2) ], "Dwarf Baker",
+                                              new CharacterStats(1,3,1)));
                                               
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
                                               CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
