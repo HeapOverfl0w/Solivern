@@ -82,6 +82,8 @@ class Game
 
     if (this.hand.selectedCardIndex == -1)
       this.quests.Draw(this.ctx);
+    else
+      this.hand.DrawObjectPlacement(this.objectPlacementX, this.objectPlacementY, ctx);
 
     this.resourceCollection.Draw(this.ctx, this.turn);
     this.endTurnButton.Draw(this.ctx);
@@ -181,6 +183,8 @@ class Game
       if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || questMouseOverText != undefined || this.focusedCardText != originalFocusedCardText)
       {
         this.Draw();
+        this.objectPlacementX = tilex;
+        this.objectPlacementY = tiley;
         this.hand.DrawObjectPlacement(tilex, tiley, ctx);
       }
     }
@@ -298,7 +302,7 @@ class Game
   {
     if (keyCode == 27 && this.endTurnTimeout == undefined)
     {
-      if (this.SecondaryDrawTimeout == undefined)
+      if (this.drawSecondaryTimeout == undefined)
         this.SecondaryDrawTimeout(this, 0);
 
       this.destructionMode = false;
