@@ -12,7 +12,9 @@ var OBJECTSPRITES = {
     "coatrack" : new Vector2D(10,0),
     "jackalope" : new Vector2D(11,0),
     "bust" : new Vector2D(0,1),
-    "darkcandle" : new Vector2D(1,1)
+    "darkcandle" : new Vector2D(1,1),
+    "bonsaitree" : new Vector2D(2,1),
+    "mountedbear" : new Vector2D(3,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -70,7 +72,10 @@ var CHARCARDSPRITES = {
     "icebeast" : new Vector2D(4,6),
     "orcwarrior" : new Vector2D(5,6),
     "greaterwillowisp" : new Vector2D(6,6),
-    "trollberserker" : new Vector2D(7,6)
+    "trollberserker" : new Vector2D(7,6),
+    "blackbear" : new Vector2D(8,6),
+    "dwarfwarrior" : new Vector2D(9,6),
+    "elfarcher" : new Vector2D(10,6)
 }
 
 var QUESTCARDSPRITES = {
@@ -363,6 +368,12 @@ class Database
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["darkcandle"].x, OBJECTSPRITES["darkcandle"].y,
                                             OBJECTSPRITES["darkcandle"].x, OBJECTSPRITES["darkcandle"].y, 4, 3, false, "#b60c1e33",
                                             new ResourceUpkeep(this.gold, -20), "The Dark Candle!!"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bonsaitree"].x, OBJECTSPRITES["bonsaitree"].y,
+                                            OBJECTSPRITES["bonsaitree"].x, OBJECTSPRITES["bonsaitree"].y, 2, 2, false, undefined,
+                                            new ResourceUpkeep(this.gold, -10), "Mounted Bear"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["mountedbear"].x, OBJECTSPRITES["mountedbear"].y,
+                                            OBJECTSPRITES["mountedbear"].x, OBJECTSPRITES["mountedbear"].y, 2, 4, false, undefined,
+                                            new ResourceUpkeep(this.gold, -15), "Mounted Bear"));
     }
 
     LoadbuffCardsCommon()
@@ -531,6 +542,18 @@ class Database
                                               CHARCARDSPRITES["trollberserker"].x, CHARCARDSPRITES["trollberserker"].y, 9, 
                                               [ new ResourceUpkeep(this.beer, -9), new ResourceUpkeep(this.gold, 8) ], "Troll Berserker",
                                               new CharacterStats(1,3,5)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["blackbear"].x, CHARCARDSPRITES["blackbear"].y,
+                                              CHARCARDSPRITES["blackbear"].x, CHARCARDSPRITES["blackbear"].y, 7, 
+                                              [ new ResourceUpkeep(this.food, -10), new ResourceUpkeep(this.gold, 8) ], "Black Bear",
+                                              new CharacterStats(2,4,2)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["dwarfwarrior"].x, CHARCARDSPRITES["dwarfwarrior"].y,
+                                              CHARCARDSPRITES["dwarfwarrior"].x, CHARCARDSPRITES["dwarfwarrior"].y, 9, 
+                                              [ new ResourceUpkeep(this.beer, -9), new ResourceUpkeep(this.food, 7) ], "Dwarf Warrior",
+                                              new CharacterStats(1,4,2)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["elfarcher"].x, CHARCARDSPRITES["elfarcher"].y,
+                                              CHARCARDSPRITES["elfarcher"].x, CHARCARDSPRITES["elfarcher"].y, 15, 
+                                              [ new ResourceUpkeep(this.gold, -8), new ResourceUpkeep(this.beer, 9) ], "Elven Archer",
+                                              new CharacterStats(1,1,5)));
                                               
     }
 
