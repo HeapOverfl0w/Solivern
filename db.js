@@ -11,7 +11,8 @@ var OBJECTSPRITES = {
     "table" : new Vector2D(9,0),
     "coatrack" : new Vector2D(10,0),
     "jackalope" : new Vector2D(11,0),
-    "bust" : new Vector2D(0,1)
+    "bust" : new Vector2D(0,1),
+    "darkcandle" : new Vector2D(1,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -68,7 +69,8 @@ var CHARCARDSPRITES = {
     "spider" : new Vector2D(3,6),
     "icebeast" : new Vector2D(4,6),
     "orcwarrior" : new Vector2D(5,6),
-    "greaterwillowisp" : new Vector2D(6,6)
+    "greaterwillowisp" : new Vector2D(6,6),
+    "trollberserker" : new Vector2D(7,6)
 }
 
 var QUESTCARDSPRITES = {
@@ -358,6 +360,9 @@ class Database
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
                                             OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, undefined,
                                             new ResourceUpkeep(this.gold, -15), "Bust of a Great Warrior"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["darkcandle"].x, OBJECTSPRITES["darkcandle"].y,
+                                            OBJECTSPRITES["darkcandle"].x, OBJECTSPRITES["darkcandle"].y, 4, 3, false, "#b60c1e33",
+                                            new ResourceUpkeep(this.gold, -20), "The Dark Candle!!"));
     }
 
     LoadbuffCardsCommon()
@@ -521,7 +526,12 @@ class Database
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["greaterwillowisp"].x, CHARCARDSPRITES["greaterwillowisp"].y,
                                               CHARCARDSPRITES["greaterwillowisp"].x, CHARCARDSPRITES["greaterwillowisp"].y, 20, 
                                               [ new ResourceUpkeep(this.beer, 3), new ResourceUpkeep(this.food, 3) ], "Greater Will-O-Wisp",
-                                              new CharacterStats(2,0,0)));                                          
+                                              new CharacterStats(2,0,0)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["trollberserker"].x, CHARCARDSPRITES["trollberserker"].y,
+                                              CHARCARDSPRITES["trollberserker"].x, CHARCARDSPRITES["trollberserker"].y, 9, 
+                                              [ new ResourceUpkeep(this.beer, -9), new ResourceUpkeep(this.gold, 8) ], "Troll Berserker",
+                                              new CharacterStats(1,3,5)));
+                                              
     }
 
     LoadquestCardsCommon()
