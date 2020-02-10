@@ -645,9 +645,20 @@ class CharacterCard extends Card
     {
       ctx.fillStyle = BUTTONCOLOR;
       ctx.fillRect(tilex * TILEWIDTH + 2, tiley * TILEHEIGHT + 2, 12, 12);
-      ctx.fillStyle = this.IsSatisfied() ? "green" : "red";
-      ctx.fillText(this.objectSatisfaction < 0 ? 0 : this.objectSatisfaction, 
-        tilex * TILEWIDTH + 3 + ((this.objectSatisfaction + "").length == 1 ? 3 : 0), //center number if it's a single digit number
+      let sat = "";
+      if (this.firstAppearance)
+      {
+        ctx.fillStyle = TEXTCOLOR;
+        sat = "-";
+      }
+      else
+      {
+        ctx.fillStyle = this.IsSatisfied() ? "green" : "red";
+        sat = this.objectSatisfaction < 0 ? 0 : this.objectSatisfaction;
+      }
+        
+      ctx.fillText( sat, 
+        tilex * TILEWIDTH + 3 + ((sat + "").length == 1 ? 3 : 0), //center number if it's a single digit number
         tiley * TILEHEIGHT + 11);
     }
 
