@@ -14,7 +14,8 @@ var OBJECTSPRITES = {
     "bust" : new Vector2D(0,1),
     "darkcandle" : new Vector2D(1,1),
     "bonsaitree" : new Vector2D(2,1),
-    "mountedbear" : new Vector2D(3,1)
+    "mountedbear" : new Vector2D(3,1),
+    "portapotty" : new Vector2D(4,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -75,7 +76,8 @@ var CHARCARDSPRITES = {
     "trollberserker" : new Vector2D(7,6),
     "blackbear" : new Vector2D(8,6),
     "dwarfwarrior" : new Vector2D(9,6),
-    "elfarcher" : new Vector2D(10,6)
+    "elfarcher" : new Vector2D(10,6),
+    "dwarfpriest" : new Vector2D(11,6)
 }
 
 var QUESTCARDSPRITES = {
@@ -87,7 +89,11 @@ var QUESTCARDSPRITES = {
     "armwrestle" : new Vector2D(5,7),
     "dressage" : new Vector2D(6,7),
     "cook" : new Vector2D(7,7),
-    "brew" : new Vector2D(8,7)
+    "brew" : new Vector2D(8,7),
+    "tenderize" : new Vector2D(9,7),
+    "beerpong" : new Vector2D(10,7),
+    "learnspell" : new Vector2D(11,7),
+    "boatinabottle" : new Vector2D(0, 8)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -374,6 +380,9 @@ class Database
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["mountedbear"].x, OBJECTSPRITES["mountedbear"].y,
                                             OBJECTSPRITES["mountedbear"].x, OBJECTSPRITES["mountedbear"].y, 2, 4, false, undefined,
                                             new ResourceUpkeep(this.gold, -15), "Mounted Bear"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["portapotty"].x, OBJECTSPRITES["portapotty"].y,
+                                            OBJECTSPRITES["portapotty"].x, OBJECTSPRITES["portapotty"].y, 3, 5, false, undefined,
+                                            new ResourceUpkeep(this.gold, -20), "Porta-Potty"));
     }
 
     LoadbuffCardsCommon()
@@ -554,6 +563,10 @@ class Database
                                               CHARCARDSPRITES["elfarcher"].x, CHARCARDSPRITES["elfarcher"].y, 15, 
                                               [ new ResourceUpkeep(this.gold, -8), new ResourceUpkeep(this.beer, 9) ], "Elven Archer",
                                               new CharacterStats(1,1,5)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["dwarfpriest"].x, CHARCARDSPRITES["dwarfpriest"].y,
+                                              CHARCARDSPRITES["dwarfpriest"].x, CHARCARDSPRITES["dwarfpriest"].y, 9, 
+                                              [ new ResourceUpkeep(this.beer, -9), new ResourceUpkeep(this.food, 7) ], "Dwarf War Priest",
+                                              new CharacterStats(3,4,1)));
                                               
     }
 
@@ -561,7 +574,7 @@ class Database
     {
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
                                            QUESTCARDSPRITES["sweep"].x, QUESTCARDSPRITES["sweep"].y,
-                                           1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 10)], "Clean the Cellar"));
+                                           1, 2, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 5)], "Clean the Cellar"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
                                             QUESTCARDSPRITES["cave"].x, QUESTCARDSPRITES["cave"].y,
                                            3, 5, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 10)], "Delve in a Cave"));
@@ -585,6 +598,19 @@ class Database
                                        1, 2, STATTYPE_DEX, 3, [new ResourceUpkeep(this.food, 5)], "Cook Stew"));
         this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["brew"].x, QUESTCARDSPRITES["brew"].y,
                                        QUESTCARDSPRITES["brew"].x, QUESTCARDSPRITES["brew"].y,
-                                      1, 2, STATTYPE_INT, 3, [new ResourceUpkeep(this.beer, 5)], "Brew Beer"));           
+                                      1, 2, STATTYPE_INT, 3, [new ResourceUpkeep(this.beer, 5)], "Brew Beer"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["tenderize"].x, QUESTCARDSPRITES["tenderize"].y,
+                                       QUESTCARDSPRITES["tenderize"].x, QUESTCARDSPRITES["tenderize"].y,
+                                      2, 4, STATTYPE_STR, 4, [new ResourceUpkeep(this.food, 10)], "Tenderize Meat"));     
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["beerpong"].x, QUESTCARDSPRITES["beerpong"].y,
+                                       QUESTCARDSPRITES["beerpong"].x, QUESTCARDSPRITES["beerpong"].y,
+                                      2, 4, STATTYPE_DEX, 4, [new ResourceUpkeep(this.beer, 10)], "Play Beer Pong"));
+        this.questCardsCommon.push(new QuestCard(QUESTCARDSPRITES["learnspell"].x, QUESTCARDSPRITES["learnspell"].y,
+                                       QUESTCARDSPRITES["learnspell"].x, QUESTCARDSPRITES["learnspell"].y,
+                                      2, 4, STATTYPE_INT, 4, [new ResourceUpkeep(this.gold, 10)], "Learn a Spell"));
+                                        
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["boatinabottle"].x, QUESTCARDSPRITES["boatinabottle"].y,
+                                       QUESTCARDSPRITES["boatinabottle"].x, QUESTCARDSPRITES["boatinabottle"].y,
+                                      7, 10, STATTYPE_DEX, 4, [new ResourceUpkeep(this.gold, 17)], "Build a Boat in a Bottle")); 
     }
 }

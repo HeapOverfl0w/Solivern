@@ -9,10 +9,11 @@ class Game
     this.quests = new Quests();
     this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 0, 45, 16, 48, 32);
     this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 0, 16, 16, 48, 16);
+    this.satisfactionButton = new ImageButton(ctx.canvas.width / 2 + 30, 0, 16, 16, 64, 16);
 
     this.audioOnButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 48, 48);
     this.audioOnButton.visible = false;
-    this.audioOffButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 56, 48)
+    this.audioOffButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 56, 48);
 
     this.goldResource = new Resource(0,0,"Gold");
     this.goldResource.count = 10;
@@ -37,6 +38,8 @@ class Game
     this.drawSecondaryTimeout = undefined;
 
     this.turn = 0;
+    this.isMaxTurnMode = true;
+    this.maxTurns = 100;
   }
 
   Initialize()
@@ -74,20 +77,21 @@ class Game
   {
     this.board.Draw(this.ctx, this.hand.selectedCardIndex != -1, this.drawSecondaryBackdrop);
 
-    if (this.gameOver)
-      return;
-      
-    if (this.quests.selectedCardIndex == -1)
-      this.hand.Draw(this.ctx);
+    if (!this.gameOver)
+    {
+      if (this.quests.selectedCardIndex == -1)
+        this.hand.Draw(this.ctx);
 
-    if (this.hand.selectedCardIndex == -1)
-      this.quests.Draw(this.ctx);
-    else
-      this.hand.DrawObjectPlacement(this.objectPlacementX, this.objectPlacementY, ctx);
+      if (this.hand.selectedCardIndex == -1)
+        this.quests.Draw(this.ctx);
+      else
+        this.hand.DrawObjectPlacement(this.objectPlacementX, this.objectPlacementY, ctx);
 
-    this.resourceCollection.Draw(this.ctx, this.turn);
-    this.endTurnButton.Draw(this.ctx);
-    this.destroyButton.Draw(this.ctx);
+      this.resourceCollection.Draw(this.ctx, this.turn);
+      this.endTurnButton.Draw(this.ctx);
+      this.destroyButton.Draw(this.ctx);
+      this.satisfactionButton.Draw(this.ctx);
+    }
 
     //draw message
     this.ctx.fillStyle = TEXTCOLOR;
@@ -106,14 +110,17 @@ class Game
     this.audioOnButton.Draw(this.ctx);
     this.audioOffButton.Draw(this.ctx);
 
-    //draw mouse over text
-    if (this.focusedCardText != undefined && this.focusedCardText != "")
+    if (!this.gameOver)
     {
-      let textBoxLength = this.focusedCardText.length * 5;
-      this.ctx.fillStyle = BUTTONCOLOR;
-      this.ctx.fillRect(this.ctx.canvas.width/2 - textBoxLength/2, 22, textBoxLength, 14);
-      this.ctx.fillStyle = TEXTCOLOR;
-      this.ctx.fillText(this.focusedCardText, this.ctx.canvas.width/2 - textBoxLength/2, 32);
+      //draw mouse over text
+      if (this.focusedCardText != undefined && this.focusedCardText != "")
+      {
+        let textBoxLength = this.focusedCardText.length * 5;
+        this.ctx.fillStyle = BUTTONCOLOR;
+        this.ctx.fillRect(this.ctx.canvas.width/2 - textBoxLength/2, 22, textBoxLength, 14);
+        this.ctx.fillStyle = TEXTCOLOR;
+        this.ctx.fillText(this.focusedCardText, this.ctx.canvas.width/2 - textBoxLength/2, 32);
+      }
     }
   }
 
@@ -124,6 +131,7 @@ class Game
       clearTimeout(this.gameMessageTimeout);
     this.endTurnButton.visible = false;
     this.destroyButton.visible = false;
+    this.satisfactionButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
     let boardMessages = this.board.Update(this.turn, this.db, this.audio);
@@ -132,6 +140,7 @@ class Game
     {
       this.endTurnButton.visible = true;
       this.destroyButton.visible = true;
+      this.satisfactionButton.visible = true;
       this.resourceCollection.Update(this.board);
       this.Draw();
       this.turn++;
@@ -141,34 +150,59 @@ class Game
       this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 3000, this);
     }
 
-    if (this.turn > 10 && !this.board.PatronsExist())
-    {
-      //end game
-      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER.", "Lasted Turns : " + this.turn ];
-      this.gameOver = true;
-      this.Draw();
-      return;
-    }
-
     this.resourceCollection.Update(this.board);
     
     this.SetGameMessages(questMessages.concat(boardMessages));
+
+    this.CheckForEndGameConditions();
+  }
+
+  CheckForEndGameConditions()
+  {
+    if (!this.isMaxTurnMode && this.turn > 10 && !this.board.PatronsExist())
+    {
+      //end game
+      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER.", "Lasted Turns : " + this.turn ];
+      this.EndGame();
+      return;
+    }
+    else if (this.isMaxTurnMode && this.turn >= this.maxTurns)
+    {
+      let endGameStats = this.board.CalculatePower();
+      this.gameMessages = [ "You have reached turn " + this.maxTurns + " with the following stats and resources: ", 
+                            "INT " + endGameStats.int, "DEX " + endGameStats.dex, "STR " + endGameStats.str,
+                            "TOTAL STATS " + endGameStats.total, "GOLD " + this.goldResource.count, 
+                            "BEER " + this.beerResource.count, "FOOD " + this.foodResource.count, 
+                            "TOTAL SCORE " + (endGameStats.total + this.goldResource.count + this.beerResource.count + this.foodResource.count),"GAME OVER"];
+      this.EndGame();
+      return;
+    }
+  }
+
+  EndGame()
+  {
+    this.StopSecondaryDrawTimeout();
+    this.gameOver = true;
+    this.Draw(); 
+    this.audio.Mute();
   }
 
   EndTurnTimeout(game)
   {
     game.endTurnButton.visible = true;
     game.destroyButton.visible = true;
+    game.satisfactionButton.visible = true;
     game.turn++;
     game.Draw();
     game.endTurnTimeout = undefined;
     game.SetTimeoutBeginGameMessage();
-    game.SecondaryDrawTimeout(game, 0);
+    if (!game.gameOver)
+      game.SecondaryDrawTimeout(game, 0);
   }
 
   HandleMouseOver(pointx, pointy)
   {
-    if (this.endTurnTimeout == undefined)
+    if (this.endTurnTimeout == undefined && !this.gameOver)
     {
       let tilex = this.TranslatePointCoordinatesToTile(true, pointx);
       let tiley = this.TranslatePointCoordinatesToTile(false, pointy);
@@ -243,6 +277,11 @@ class Game
         this.destructionMode = true;
         this.audio.PlayActivate();
       }
+      else if (this.satisfactionButton.IsInside(pointx, pointy))
+      {
+        this.board.isSatisfactionMode = !this.board.isSatisfactionMode;
+        this.Draw();
+      }
       else if (this.audioOffButton.IsInside(pointx, pointy) || this.audioOnButton.IsInside(pointx, pointy))
       {
         this.ToggleAudio();
@@ -300,10 +339,16 @@ class Game
 
   HandleKeyboardInput(keyCode)
   {
-    if (keyCode == 27 && this.endTurnTimeout == undefined)
+    if (keyCode == 27 && this.endTurnTimeout == undefined && !this.gameOver)
     {
       if (this.drawSecondaryTimeout == undefined)
         this.SecondaryDrawTimeout(this, 0);
+
+      if (this.board.isSatisfactionMode)
+      {
+        this.board.isSatisfactionMode = false;
+        this.Draw();
+      }
 
       this.destructionMode = false;
       this.hand.CancelCardPlacement();
@@ -335,8 +380,11 @@ class Game
 
   ResetGameMessage(game)
   {
-    game.gameMessages = [];
-    game.Draw();
+    if (!game.gameOver)
+    {
+      game.gameMessages = [];
+      game.Draw();
+    }
   }
 
   TranslatePointCoordinatesToTile(isX, point)

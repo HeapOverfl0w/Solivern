@@ -577,6 +577,7 @@ class CharacterCard extends Card
         super(smCardSpriteX, smCardSpriteY, lgCardSpriteX, lgCardSpriteY);
         this.cardType = CARDTYPE_CHARACTER;
         this.satisfactionLevel = 0;
+        this.objectSatisfaction = 0;
         this.satisfactionThreshold = satisfactionThreshold;
         this.locX = 0;
         this.locY = 0;
@@ -591,6 +592,7 @@ class CharacterCard extends Card
         //pay upkeeps
         let canPayUpkeep = true;
         this.satisfactionLevel = 0;
+        this.objectSatisfaction = 0;
         for (let i = 0; i < this.resourceUpkeeps.length; i++)
         {
           if (this.resourceUpkeeps[i].amount < 0)
@@ -600,7 +602,7 @@ class CharacterCard extends Card
         }
 
         if (!canPayUpkeep)
-          this.satisfactionLevel -= 100;
+          this.satisfactionLevel -= 1000;
         else
         {
           for (let i = 0; i < this.resourceUpkeeps.length; i++)
@@ -616,12 +618,15 @@ class CharacterCard extends Card
             for (let y = 0; y < TILESY; y++)
             {
                 if (objectMap[x][y] != undefined && objectMap[x][y].IsCardInside(this))
-                  this.satisfactionLevel += objectMap[x][y].satisfactionBuff;                  
+                {
+                  this.satisfactionLevel += objectMap[x][y].satisfactionBuff;  
+                  this.objectSatisfaction += objectMap[x][y].satisfactionBuff;
+                }                
             }
         }
 
         //random chance to just leave
-        if (Math.random() > 0.95)
+        if (Math.random() > 0.95 && !this.firstAppearance)
           this.satisfactionLevel = RANDOMLEAVESATISFACTION;
     }
 
@@ -635,6 +640,16 @@ class CharacterCard extends Card
         super(locX, locY, ctx);
         //TODO: Add drawing logic for resource upkeeps and satisfaction bar.
     }*/
+
+    DrawLastCalculatedSatisfaction(ctx, tilex, tiley)
+    {
+      ctx.fillStyle = BUTTONCOLOR;
+      ctx.fillRect(tilex * TILEWIDTH + 2, tiley * TILEHEIGHT + 2, 12, 12);
+      ctx.fillStyle = this.IsSatisfied() ? "green" : "red";
+      ctx.fillText(this.objectSatisfaction < 0 ? 0 : this.objectSatisfaction, 
+        tilex * TILEWIDTH + 3 + ((this.objectSatisfaction + "").length == 1 ? 3 : 0), //center number if it's a single digit number
+        tiley * TILEHEIGHT + 11);
+    }
 
     DrawShiftedSmallCard(locX, locY, ctx)
     {
@@ -671,6 +686,7 @@ class Board
     this.focusedVector = undefined;
     this.isNight = false;
     this.precipitation = false;
+    this.isSatisfactionMode = false;
   }
 
   Update(turnCount, db, audio)
@@ -905,11 +921,21 @@ class Board
           else
             this.objectMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
           if (this.characterMap[x][y] != undefined)
+          {
             this.characterMap[x][y].DrawShiftedSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+            if (this.isSatisfactionMode)
+            {
+              this.characterMap[x][y].DrawLastCalculatedSatisfaction(ctx, x, y);
+            }
+          }
         }
         else if (this.characterMap[x][y] != undefined)
         {
           this.characterMap[x][y].DrawSmallCard(x * TILEWIDTH, y * TILEHEIGHT, ctx);
+          if (this.isSatisfactionMode)
+          {
+            this.characterMap[x][y].DrawLastCalculatedSatisfaction(ctx, x, y);
+          }
         }
       }
     }
@@ -1129,6 +1155,30 @@ class Board
     let newLocation = this.DetermineMostSatisfactoryLocation();
     character.firstAppearance = true;
     this.characterMap[newLocation.x][newLocation.y] = character;
+  }
+
+  CalculatePower()
+  {
+    let returnValue = {
+      int : 0,
+      str : 0,
+      dex : 0,
+      total : 0
+    };
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+    {
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+      { 
+        if (this.characterMap[x][y] != undefined)
+        {
+          returnValue.int += this.characterMap[x][y].stats.int;
+          returnValue.str += this.characterMap[x][y].stats.str;
+          returnValue.dex += this.characterMap[x][y].stats.dex;
+          returnValue.total += this.characterMap[x][y].stats.GetCombinedStats();
+        }
+      }
+    }
+    return returnValue;
   }
 }
 
