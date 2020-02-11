@@ -77,7 +77,11 @@ var CHARCARDSPRITES = {
     "blackbear" : new Vector2D(8,6),
     "dwarfwarrior" : new Vector2D(9,6),
     "elfarcher" : new Vector2D(10,6),
-    "dwarfpriest" : new Vector2D(11,6)
+    "dwarfpriest" : new Vector2D(11,6),
+    "halflingburgler" : new Vector2D(12,6),
+    "slimecube" : new Vector2D(13, 6),
+    "humanmage" : new Vector2D(14, 6),
+    "headlessman" : new Vector2D(15,6)
 }
 
 var QUESTCARDSPRITES = {
@@ -93,7 +97,9 @@ var QUESTCARDSPRITES = {
     "tenderize" : new Vector2D(9,7),
     "beerpong" : new Vector2D(10,7),
     "learnspell" : new Vector2D(11,7),
-    "boatinabottle" : new Vector2D(0, 8)
+    "boatinabottle" : new Vector2D(0, 8),
+    "graverob" : new Vector2D(1,8),
+    "brewpotion" : new Vector2D(2,8)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -541,7 +547,7 @@ class Database
                                               new CharacterStats(3,3,3))); 
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["orcwarrior"].x, CHARCARDSPRITES["orcwarrior"].y,
                                               CHARCARDSPRITES["orcwarrior"].x, CHARCARDSPRITES["orcwarrior"].y, 7, 
-                                              [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.beer, -9)], "Orc Warrior",
+                                              [ new ResourceUpkeep(this.gold, 7), new ResourceUpkeep(this.beer, -5), new ResourceUpkeep(this.food, -4)], "Orc Warrior",
                                               new CharacterStats(1,5,1)));   
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["greaterwillowisp"].x, CHARCARDSPRITES["greaterwillowisp"].y,
                                               CHARCARDSPRITES["greaterwillowisp"].x, CHARCARDSPRITES["greaterwillowisp"].y, 20, 
@@ -567,6 +573,23 @@ class Database
                                               CHARCARDSPRITES["dwarfpriest"].x, CHARCARDSPRITES["dwarfpriest"].y, 9, 
                                               [ new ResourceUpkeep(this.beer, -9), new ResourceUpkeep(this.food, 7) ], "Dwarf War Priest",
                                               new CharacterStats(3,4,1)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["halflingburgler"].x, CHARCARDSPRITES["halflingburgler"].y,
+                                              CHARCARDSPRITES["halflingburgler"].x, CHARCARDSPRITES["halflingburgler"].y, 10, 
+                                              [ new ResourceUpkeep(this.beer, 3), new ResourceUpkeep(this.food, 5), new ResourceUpkeep(this.gold, -10) ], "Halfling Burgler",
+                                              new CharacterStats(3,1,5)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["slimecube"].x, CHARCARDSPRITES["slimecube"].y,
+                                              CHARCARDSPRITES["slimecube"].x, CHARCARDSPRITES["slimecube"].y, 5, 
+                                              [ new ResourceUpkeep(this.beer, -3), new ResourceUpkeep(this.food, -3) ], "Giant Gelatinous Cube",
+                                              new CharacterStats(0,2,0)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["humanmage"].x, CHARCARDSPRITES["humanmage"].y,
+                                              CHARCARDSPRITES["humanmage"].x, CHARCARDSPRITES["humanmage"].y, 10, 
+                                              [ new ResourceUpkeep(this.gold, 8), new ResourceUpkeep(this.food, -6) ], "Human Mage",
+                                              new CharacterStats(4,2,2)));
+        this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["headlessman"].x, CHARCARDSPRITES["headlessman"].y,
+                                              CHARCARDSPRITES["headlessman"].x, CHARCARDSPRITES["headlessman"].y, 15, 
+                                              [ new ResourceUpkeep(this.beer, 3), new ResourceUpkeep(this.food, 3), new ResourceUpkeep(this.gold, -6) ], "Headless Spooky Man",
+                                              new CharacterStats(4,1,1)));
+                                              
                                               
     }
 
@@ -611,6 +634,12 @@ class Database
                                         
         this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["boatinabottle"].x, QUESTCARDSPRITES["boatinabottle"].y,
                                        QUESTCARDSPRITES["boatinabottle"].x, QUESTCARDSPRITES["boatinabottle"].y,
-                                      7, 10, STATTYPE_DEX, 4, [new ResourceUpkeep(this.gold, 17)], "Build a Boat in a Bottle")); 
+                                      7, 10, STATTYPE_DEX, 4, [new ResourceUpkeep(this.gold, 17)], "Build a Boat in a Bottle"));
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["graverob"].x, QUESTCARDSPRITES["graverob"].y,
+                                       QUESTCARDSPRITES["graverob"].x, QUESTCARDSPRITES["graverob"].y,
+                                      7, 10, STATTYPE_STR, 4, [new ResourceUpkeep(this.gold, 17)], "Grave Rob a Catacomb")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["brewpotion"].x, QUESTCARDSPRITES["brewpotion"].y,
+                                       QUESTCARDSPRITES["brewpotion"].x, QUESTCARDSPRITES["brewpotion"].y,
+                                      7, 10, STATTYPE_INT, 4, [new ResourceUpkeep(this.gold, 17)], "Brew a Potion")); 
     }
 }

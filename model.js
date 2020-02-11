@@ -653,7 +653,8 @@ class CharacterCard extends Card
       }
       else
       {
-        ctx.fillStyle = this.IsSatisfied() ? "green" : "red";
+        let fillStyle = this.IsSatisfied() ? "green" : "red";
+        ctx.fillStyle = !this.IsSatisfied() && this.objectSatisfaction >= this.satisfactionThreshold ? "yellow" : fillStyle;
         sat = this.objectSatisfaction < 0 ? 0 : this.objectSatisfaction;
       }
         
