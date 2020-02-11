@@ -1165,6 +1165,8 @@ class Board
   {
     let newLocation = this.DetermineMostSatisfactoryLocation();
     character.firstAppearance = true;
+    character.locX = newLocation.x;
+    character.locY = newLocation.y;
     this.characterMap[newLocation.x][newLocation.y] = character;
   }
 
