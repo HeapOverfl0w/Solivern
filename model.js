@@ -1177,7 +1177,8 @@ class Board
       int : 0,
       str : 0,
       dex : 0,
-      total : 0
+      total : 0,
+      objectWorth : 0
     };
     for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
@@ -1189,6 +1190,10 @@ class Board
           returnValue.str += this.characterMap[x][y].stats.str;
           returnValue.dex += this.characterMap[x][y].stats.dex;
           returnValue.total += this.characterMap[x][y].stats.GetCombinedStats();
+        }
+        if (this.objectMap[x][y] != undefined)
+        {
+          returnValue.objectWorth += Math.abs(this.objectMap[x][y].rscCost.amount);
         }
       }
     }
@@ -1536,6 +1541,29 @@ class Quests
   CancelCardPlacement()
   {
     this.selectedCardIndex = -1;
+  }
+
+  CalculateQuestCharacterPowers()
+  {
+    let returnValue = {
+      int : 0,
+      str : 0,
+      dex : 0,
+      total : 0
+    };
+
+    for (let q = 0; q < this.cards.length; q++)
+    {
+      if (this.cards[q].assignedPatron != undefined)
+      {
+        returnValue.int += this.cards[q].assignedPatron.stats.int;
+        returnValue.str += this.cards[q].assignedPatron.stats.str;
+        returnValue.dex += this.cards[q].assignedPatron.stats.dex;
+        returnValue.total += this.cards[q].assignedPatron.stats.GetCombinedStats();
+      }
+    }
+
+    return returnValue;
   }
 }
 

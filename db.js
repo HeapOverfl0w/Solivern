@@ -30,7 +30,13 @@ var BUFFCURSESPRITES = {
     "beerBuffUnc" : new Vector2D(5,2),
     "goldCurseUnc" : new Vector2D(3, 3),
     "foodCurseUnc" : new Vector2D(4, 3),
-    "beerCurseUnc" : new Vector2D(5, 3)
+    "beerCurseUnc" : new Vector2D(5, 3),
+    "goldBuffRare" : new Vector2D(6, 2),
+    "foodBuffRare" : new Vector2D(7, 2),
+    "beerBuffRare" : new Vector2D(8,2),
+    "goldCurseRare" : new Vector2D(6, 3),
+    "foodCurseRare" : new Vector2D(7, 3),
+    "beerCurseRare" : new Vector2D(8, 3)
 }
 
 var RSCCARDSPRITES = {
@@ -45,7 +51,13 @@ var RSCCARDSPRITES = {
     "chickenmedUnc" : new Vector2D(8,4),
     "kegmedUnc" : new Vector2D(9,4),
     "chickensmallUnc" : new Vector2D(10,4),
-    "kegsmallUnc" : new Vector2D(11,4)
+    "kegsmallUnc" : new Vector2D(11,4),
+    "chickenRare" : new Vector2D(12, 4),
+    "kegRare" : new Vector2D(13,4),
+    "chickenmedRare" : new Vector2D(14,4),
+    "kegmedRare" : new Vector2D(15,4),
+    "chickensmallRare" : new Vector2D(16,4),
+    "kegsmallRare" : new Vector2D(17,4)
 }
 
 var CHARCARDSPRITES = {
@@ -81,25 +93,26 @@ var CHARCARDSPRITES = {
     "halflingburgler" : new Vector2D(12,6),
     "slimecube" : new Vector2D(13, 6),
     "humanmage" : new Vector2D(14, 6),
-    "headlessman" : new Vector2D(15,6)
+    "headlessman" : new Vector2D(15,6),
+    "beholder" : new Vector2D(0,7)
 }
 
 var QUESTCARDSPRITES = {
-    "sweep" : new Vector2D(0, 7),
-    "cave" : new Vector2D(1,7),
-    "book" : new Vector2D(2,7),
-    "darts" : new Vector2D(3,7),
-    "trainingdummy" : new Vector2D(4,7),
-    "armwrestle" : new Vector2D(5,7),
-    "dressage" : new Vector2D(6,7),
-    "cook" : new Vector2D(7,7),
-    "brew" : new Vector2D(8,7),
-    "tenderize" : new Vector2D(9,7),
-    "beerpong" : new Vector2D(10,7),
-    "learnspell" : new Vector2D(11,7),
-    "boatinabottle" : new Vector2D(0, 8),
-    "graverob" : new Vector2D(1,8),
-    "brewpotion" : new Vector2D(2,8)
+    "sweep" : new Vector2D(0, 8),
+    "cave" : new Vector2D(1,8),
+    "book" : new Vector2D(2,8),
+    "darts" : new Vector2D(3,8),
+    "trainingdummy" : new Vector2D(4,8),
+    "armwrestle" : new Vector2D(5,8),
+    "dressage" : new Vector2D(6,8),
+    "cook" : new Vector2D(7,8),
+    "brew" : new Vector2D(8,8),
+    "tenderize" : new Vector2D(9,8),
+    "beerpong" : new Vector2D(10,8),
+    "learnspell" : new Vector2D(11,8),
+    "boatinabottle" : new Vector2D(0, 9),
+    "graverob" : new Vector2D(1,9),
+    "brewpotion" : new Vector2D(2,9)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -406,6 +419,13 @@ class Database
                                          BUFFCURSESPRITES["foodBuffUnc"].x, BUFFCURSESPRITES["foodBuffUnc"].y, this.food, 7));
         this.buffCardsUncommon.push(new BuffCard(BUFFCURSESPRITES["beerBuffUnc"].x, BUFFCURSESPRITES["beerBuffUnc"].y,
                                          BUFFCURSESPRITES["beerBuffUnc"].x, BUFFCURSESPRITES["beerBuffUnc"].y, this.beer, 7));
+
+        this.buffCardsRare.push(new BuffCard(BUFFCURSESPRITES["goldBuffRare"].x, BUFFCURSESPRITES["goldBuffRare"].y,
+                                         BUFFCURSESPRITES["goldBuffRare"].x, BUFFCURSESPRITES["goldBuffRare"].y, this.gold, 13));
+        this.buffCardsRare.push(new BuffCard(BUFFCURSESPRITES["foodBuffRare"].x, BUFFCURSESPRITES["foodBuffRare"].y,
+                                         BUFFCURSESPRITES["foodBuffRare"].x, BUFFCURSESPRITES["foodBuffRare"].y, this.food, 13));
+        this.buffCardsRare.push(new BuffCard(BUFFCURSESPRITES["beerBuffRare"].x, BUFFCURSESPRITES["beerBuffRare"].y,
+                                         BUFFCURSESPRITES["beerBuffRare"].x, BUFFCURSESPRITES["beerBuffRare"].y, this.beer, 13));
     }
 
     LoadcurseCardsCommon()
@@ -423,6 +443,13 @@ class Database
                                            BUFFCURSESPRITES["foodCurseUnc"].x, BUFFCURSESPRITES["foodCurseUnc"].y, this.food, 10));
         this.curseCardsUncommon.push(new CurseCard(BUFFCURSESPRITES["beerCurseUnc"].x, BUFFCURSESPRITES["beerCurseUnc"].y,
                                            BUFFCURSESPRITES["beerCurseUnc"].x, BUFFCURSESPRITES["beerCurseUnc"].y, this.beer, 10));
+
+        this.curseCardsRare.push(new CurseCard(BUFFCURSESPRITES["goldCurseRare"].x, BUFFCURSESPRITES["goldCurseRare"].y,
+                                           BUFFCURSESPRITES["goldCurseRare"].x, BUFFCURSESPRITES["goldCurseRare"].y, this.gold, 15));
+        this.curseCardsRare.push(new CurseCard(BUFFCURSESPRITES["foodCurseRare"].x, BUFFCURSESPRITES["foodCurseRare"].y,
+                                           BUFFCURSESPRITES["foodCurseRare"].x, BUFFCURSESPRITES["foodCurseRare"].y, this.food, 15));
+        this.curseCardsRare.push(new CurseCard(BUFFCURSESPRITES["beerCurseRare"].x, BUFFCURSESPRITES["beerCurseRare"].y,
+                                           BUFFCURSESPRITES["beerCurseRare"].x, BUFFCURSESPRITES["beerCurseRare"].y, this.beer, 15));
     }
 
     LoadResourceCards()
@@ -452,6 +479,19 @@ class Database
                                             RSCCARDSPRITES["chickensmallUnc"].x, RSCCARDSPRITES["chickensmallUnc"].y, this.food, this.gold, 10, 7));
         this.rscCardsUncommon.push(new ResourceCard(RSCCARDSPRITES["kegsmallUnc"].x, RSCCARDSPRITES["kegsmallUnc"].y,
                                             RSCCARDSPRITES["kegsmallUnc"].x, RSCCARDSPRITES["kegsmallUnc"].y, this.beer, this.gold, 10, 7));
+
+        this.rscCardsRare.push(new ResourceCard(RSCCARDSPRITES["chickenRare"].x, RSCCARDSPRITES["chickenRare"].y,
+                                            RSCCARDSPRITES["chickenRare"].x, RSCCARDSPRITES["chickenRare"].y, this.food, this.gold, 30, 21));
+        this.rscCardsRare.push(new ResourceCard(RSCCARDSPRITES["kegRare"].x, RSCCARDSPRITES["kegRare"].y,
+                                            RSCCARDSPRITES["kegRare"].x, RSCCARDSPRITES["kegRare"].y, this.beer, this.gold, 30, 21));
+        this.rscCardsRare.push(new ResourceCard(RSCCARDSPRITES["chickenmedRare"].x, RSCCARDSPRITES["chickenmedRare"].y,
+                                            RSCCARDSPRITES["chickenmedRare"].x, RSCCARDSPRITES["chickenmedRare"].y, this.food, this.gold, 22, 15));
+        this.rscCardsRare.push(new ResourceCard(RSCCARDSPRITES["kegmedRare"].x, RSCCARDSPRITES["kegmedRare"].y,
+                                            RSCCARDSPRITES["kegmedRare"].x, RSCCARDSPRITES["kegmedRare"].y, this.beer, this.gold, 22, 15));
+        this.rscCardsRare.push(new ResourceCard(RSCCARDSPRITES["chickensmallRare"].x, RSCCARDSPRITES["chickensmallRare"].y,
+                                            RSCCARDSPRITES["chickensmallRare"].x, RSCCARDSPRITES["chickensmallRare"].y, this.food, this.gold, 15, 10));
+        this.rscCardsRare.push(new ResourceCard(RSCCARDSPRITES["kegsmallRare"].x, RSCCARDSPRITES["kegsmallRare"].y,
+                                            RSCCARDSPRITES["kegsmallRare"].x, RSCCARDSPRITES["kegsmallRare"].y, this.beer, this.gold, 15, 10));
     }
 
     LoadCharacterCards()
@@ -589,6 +629,11 @@ class Database
                                               CHARCARDSPRITES["headlessman"].x, CHARCARDSPRITES["headlessman"].y, 15, 
                                               [ new ResourceUpkeep(this.beer, 3), new ResourceUpkeep(this.food, 3), new ResourceUpkeep(this.gold, -6) ], "Headless Spooky Man",
                                               new CharacterStats(4,1,1)));
+
+        this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["beholder"].x, CHARCARDSPRITES["beholder"].y,
+                                              CHARCARDSPRITES["beholder"].x, CHARCARDSPRITES["beholder"].y, 15, 
+                                              [ new ResourceUpkeep(this.food, -19), new ResourceUpkeep(this.gold, 15) ], "Beholder",
+                                              new CharacterStats(6,3,3)));
                                               
                                               
     }

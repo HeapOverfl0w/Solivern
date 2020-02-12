@@ -169,11 +169,13 @@ class Game
     else if (this.isMaxTurnMode && this.turn >= this.maxTurns)
     {
       let endGameStats = this.board.CalculatePower();
+      let questEndGameStats = this.quests.CalculateQuestCharacterPowers();
       this.gameMessages = [ "You have reached turn " + this.maxTurns + " with the following stats and resources: ", 
-                            "INT " + endGameStats.int, "DEX " + endGameStats.dex, "STR " + endGameStats.str,
-                            "TOTAL STATS " + endGameStats.total, "GOLD " + this.goldResource.count, 
+                            "INT " + (endGameStats.int + questEndGameStats.int), "DEX " + (endGameStats.dex + questEndGameStats.dex), "STR " + (endGameStats.str + questEndGameStats.str),
+                            "TOTAL STATS " + (endGameStats.total + questEndGameStats.total), "GOLD " + this.goldResource.count, 
                             "BEER " + this.beerResource.count, "FOOD " + this.foodResource.count, 
-                            "TOTAL SCORE " + (endGameStats.total + this.goldResource.count + this.beerResource.count + this.foodResource.count),"GAME OVER"];
+                            "OBJECT VALUE " + endGameStats.objectWorth,
+                            "TOTAL SCORE " + (endGameStats.total + questEndGameStats.total + this.goldResource.count + this.beerResource.count + this.foodResource.count + endGameStats.objectWorth),"GAME OVER"];
       this.EndGame();
       return;
     }
