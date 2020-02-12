@@ -16,7 +16,7 @@ class Game
     this.audioOffButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 56, 48);
 
     this.goldResource = new Resource(0,0,"Gold");
-    this.goldResource.count = 10;
+    this.goldResource.count = 20;
     this.beerResource = new Resource(RESOURCEWIDTH, 0, "Beer");
     this.foodResource = new Resource(RESOURCEWIDTH * 2, 0, "Food");
     this.resourceCollection = new ResourceCollection([this.goldResource, this.beerResource, this.foodResource]);
