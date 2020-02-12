@@ -558,7 +558,7 @@ class Database
                                               new CharacterStats(1,1,3))); 
         this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["dwarfminer"].x, CHARCARDSPRITES["dwarfminer"].y,
                                               CHARCARDSPRITES["dwarfminer"].x, CHARCARDSPRITES["dwarfminer"].y, 4, 
-                                              [ new ResourceUpkeep(this.food, 2), new ResourceUpkeep(this.beer, -2) ], "Dwarf Miner",
+                                              [ new ResourceUpkeep(this.food, -2), new ResourceUpkeep(this.gold, 2) ], "Dwarf Miner",
                                               new CharacterStats(1,3,1))); 
         this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["dwarfbaker"].x, CHARCARDSPRITES["dwarfbaker"].y,
                                               CHARCARDSPRITES["dwarfbaker"].x, CHARCARDSPRITES["dwarfbaker"].y, 4, 
@@ -631,7 +631,7 @@ class Database
                                               new CharacterStats(4,1,1)));
 
         this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["beholder"].x, CHARCARDSPRITES["beholder"].y,
-                                              CHARCARDSPRITES["beholder"].x, CHARCARDSPRITES["beholder"].y, 15, 
+                                              CHARCARDSPRITES["beholder"].x, CHARCARDSPRITES["beholder"].y, 25, 
                                               [ new ResourceUpkeep(this.food, -19), new ResourceUpkeep(this.gold, 15) ], "Beholder",
                                               new CharacterStats(6,3,3)));
                                               
