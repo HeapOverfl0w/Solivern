@@ -269,7 +269,11 @@ class Card
         LARGECARDWIDTH, LARGECARDHEIGHT);
 
       if (this.cardType == CARDTYPE_CHARACTER)
+      {
         this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
+        if (this.item != undefined)
+          this.item.DrawLargeCard(locX + Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), ctx);
+      }
     }
 
     DrawLargeCardWithOffset(locX, locY, ctx)
@@ -281,14 +285,26 @@ class Card
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
           LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
         if (this.cardType == CARDTYPE_CHARACTER)
-          this.stats.Draw(locX - LARGECARDWIDTH, locY, ctx);
+        {
+          if (this.item != undefined)
+          {
+            this.item.DrawLargeCard(locX - LARGECARDWIDTH, locY, ctx);
+            this.stats.Draw(locX - LARGECARDWIDTH*2, locY, ctx);
+          }
+          else
+            this.stats.Draw(locX - LARGECARDWIDTH, locY, ctx);
+        }
       }
       else
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
           LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH, locY, LARGECARDWIDTH, LARGECARDHEIGHT);
           if (this.cardType == CARDTYPE_CHARACTER)
+          {
             this.stats.Draw(locX, locY, ctx);
+            if (this.item != undefined)
+              this.item.DrawLargeCard(locX + LARGECARDWIDTH*2, locY, ctx)
+          }
       }
     }
 
@@ -301,14 +317,26 @@ class Card
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
           LARGECARDWIDTH, LARGECARDHEIGHT, locX - LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), LARGECARDWIDTH, LARGECARDHEIGHT);
         if (this.cardType == CARDTYPE_CHARACTER)
+        {
           this.stats.Draw(locX - LARGECARDWIDTH - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
+          if (this.item != undefined)
+          {
+            this.item.DrawLargeCard(locX + LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), ctx);
+          }
+        }
       }
       else
       {
         ctx.drawImage(LARGECARDSPRITESHEET, this.largeCardSpriteLocX, this.largeCardSpriteLocY, 
           LARGECARDWIDTH, LARGECARDHEIGHT, locX + LARGECARDWIDTH - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), LARGECARDWIDTH, LARGECARDHEIGHT);
           if (this.cardType == CARDTYPE_CHARACTER)
+          {
             this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
+            if (this.item != undefined)
+            {
+              this.item.DrawLargeCard(locX + LARGECARDWIDTH * 2 - Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), ctx);
+            }
+          }
       }
     }
 }
@@ -585,6 +613,7 @@ class CharacterCard extends Card
         this.firstAppearance = true;
         this.name = name;
         this.stats = stats;
+        this.item = undefined;
     }
 
     Update(objectMap)
@@ -595,7 +624,18 @@ class CharacterCard extends Card
         this.objectSatisfaction = 0;
         for (let i = 0; i < this.resourceUpkeeps.length; i++)
         {
-          if (this.resourceUpkeeps[i].amount < 0)
+          let rscAmount = this.resourceUpkeeps[i].amount;
+          if (this.item != undefined)
+          {
+            for (let o = 0; o < this.item.resourceUpkeeps.length; o++)
+            {
+              if (this.resourceUpkeeps[i].resource.name == this.item.resourceUpkeeps[o].resource.name)
+              {
+                rscAmount += this.item.resourceUpkeeps[o].amount;
+              }
+            }
+          }
+          if (rscAmount < 0)
             canPayUpkeep = this.resourceUpkeeps[i].HaveEnough();
           if (!canPayUpkeep)
             break;

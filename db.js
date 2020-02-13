@@ -11,11 +11,16 @@ var OBJECTSPRITES = {
     "table" : new Vector2D(9,0),
     "coatrack" : new Vector2D(10,0),
     "jackalope" : new Vector2D(11,0),
+    "cheese" : new Vector2D(12,0),
     "bust" : new Vector2D(0,1),
     "darkcandle" : new Vector2D(1,1),
     "bonsaitree" : new Vector2D(2,1),
     "mountedbear" : new Vector2D(3,1),
-    "portapotty" : new Vector2D(4,1)
+    "portapotty" : new Vector2D(4,1),
+    "stonetable" : new Vector2D(5,1),
+    "gametable" : new Vector2D(6,1),
+    "swordinstone" : new Vector2D(13,1),
+    "kingschair" : new Vector2D(14,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -373,7 +378,7 @@ class Database
                                             new ResourceUpkeep(this.gold, -8), "Relaxing Chair"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y,
                                             OBJECTSPRITES["8ball"].x, OBJECTSPRITES["8ball"].y, 3, 1, true, undefined,
-                                            new ResourceUpkeep(this.beer, -15), "The Magic 8 Ball!!"));
+                                            new ResourceUpkeep(this.beer, -15), "Magic 8 Ball"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y,
                                             OBJECTSPRITES["stool"].x, OBJECTSPRITES["stool"].y, 1, 0, true, undefined,
                                             new ResourceUpkeep(this.gold, -1), "Stool"));
@@ -386,6 +391,9 @@ class Database
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y,
                                             OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y, 1, 4, false, undefined,
                                             new ResourceUpkeep(this.gold, -7), "Mounted Jackalope Head"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y,
+                                            OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y, 3, 1, true, undefined,
+                                            new ResourceUpkeep(this.food, -15), "Gourmet Cheese Wheel"));
 
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
                                             OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, undefined,
@@ -402,6 +410,19 @@ class Database
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["portapotty"].x, OBJECTSPRITES["portapotty"].y,
                                             OBJECTSPRITES["portapotty"].x, OBJECTSPRITES["portapotty"].y, 3, 5, false, undefined,
                                             new ResourceUpkeep(this.gold, -20), "Porta-Potty"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["stonetable"].x, OBJECTSPRITES["stonetable"].y,
+                                            OBJECTSPRITES["stonetable"].x, OBJECTSPRITES["stonetable"].y, 4, 1, false, undefined,
+                                            new ResourceUpkeep(this.gold, -12), "Elegant Stone Table"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["gametable"].x, OBJECTSPRITES["gametable"].y,
+                                            OBJECTSPRITES["gametable"].x, OBJECTSPRITES["gametable"].y, 4, 1, false, undefined,
+                                            new ResourceUpkeep(this.gold, -12), "Board Game Table"));
+
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y,
+                                            OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y, 5, 5, false, undefined,
+                                            new ResourceUpkeep(this.gold, -30), "Sword in the Stone"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y,
+                                            OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y, 12, 0, false, undefined,
+                                            new ResourceUpkeep(this.gold, -22), "King's Chair"));
     }
 
     LoadbuffCardsCommon()
