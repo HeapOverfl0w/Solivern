@@ -120,6 +120,10 @@ var QUESTCARDSPRITES = {
     "brewpotion" : new Vector2D(2,9)
 }
 
+var ITEMCARDSPRITES = {
+    "uglystick" : new Vector2D(0,10)
+}
+
 var RSCTYPECHANCE = 0.5;
 var OBJECTTYPECHANCE = RSCTYPECHANCE + 0.3;
 var BUFFTYPECHANCE = OBJECTTYPECHANCE + 0.15;
@@ -175,6 +179,11 @@ class Database
         this.questCardsUncommon = [];
         this.questCardsRare = [];
         this.questCardsEpic = [];
+
+        this.itemCardsCommon = [];
+        this.itemCardsUncommon = [];
+        this.itemCardsRare = [];
+        this.itemCardsEpic = [];
     }
 
     GetRandomCharacterCards(turn)
@@ -199,9 +208,36 @@ class Database
         if (cardCount < NOQUESTCHANCE)
             return [];
         if (cardCount < ONEQUESTCHANCE)
-            return [this.GetRandomCard(this.ChooseRarityGroup(turn, CARDTYPE_QUEST))];
+            return [this.GetQuestWithItemBasedOffQuestGroup(this.ChooseRarityGroup(turn, CARDTYPE_QUEST))];
         else
-            return [this.GetRandomCard(this.ChooseRarityGroup(turn, CARDTYPE_QUEST)), this.GetRandomCard(this.ChooseRarityGroup(turn, CARDTYPE_QUEST))];
+            return [this.GetQuestWithItemBasedOffQuestGroup(this.ChooseRarityGroup(turn, CARDTYPE_QUEST)), 
+                    this.GetQuestWithItemBasedOffQuestGroup(this.ChooseRarityGroup(turn, CARDTYPE_QUEST))];
+    }
+
+    GetQuestWithItemBasedOffQuestGroup(questGroup)
+    {
+        //25% chance to get an item.
+        if (Math.random() < 0.25)
+        {
+            //Get a random item card that's within the same rarity
+            let itemGroup = []
+            if (questGroup == this.questCardsCommon)
+                itemGroup = this.itemCardsCommon;
+            else if (questGroup == this.questCardsUncommon)
+                itemGroup = this.itemCardsUncommon;
+            else if (questGroup == this.questCardsRare)
+                itemGroup = this.itemCardsRare;
+            else if (questGroup == this.questCardsEpic)
+                itemGroup = this.itemCardsEpic;
+            //fallback case
+            if (itemGroup.length == 0)
+                itemGroup = this.questCardsCommon;
+            let returnQuest = this.GetRandomCard(questGroup);
+            returnQuest.item = this.GetRandomCard(itemGroup);
+            return returnQuest;
+        }
+        else
+            return this.GetRandomCard(questGroup);
     }
 
     GetRandomHandCard(turn)
@@ -351,6 +387,7 @@ class Database
         this.LoadResourceCards();
         this.LoadCharacterCards();
         this.LoadquestCardsCommon();
+        this.LoadItemCards();
     }
 
     LoadobjectCardsCommon()
@@ -707,5 +744,12 @@ class Database
         this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["brewpotion"].x, QUESTCARDSPRITES["brewpotion"].y,
                                        QUESTCARDSPRITES["brewpotion"].x, QUESTCARDSPRITES["brewpotion"].y,
                                       7, 10, STATTYPE_INT, 4, [new ResourceUpkeep(this.gold, 17)], "Brew a Potion")); 
+    }
+
+    LoadItemCards()
+    {
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["uglystick"].x, ITEMCARDSPRITES["uglystick"].y,
+                                    ITEMCARDSPRITES["uglystick"].x, ITEMCARDSPRITES["uglystick"].y,
+                                    new CharacterStats(0,0,1), [new ResourceUpkeep(this.food, 1)],1,"Ugly Stick"));
     }
 }

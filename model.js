@@ -128,7 +128,33 @@ class ResourceCollection
               resourceType = this.FOODRESOURCEUPKEEP;
             }
             if (resourceType != -1)
+            {
               this.resourceUpkeepCounts[resourceType] += board.characterMap[x][y].resourceUpkeeps[u].amount;
+            }
+          }
+
+          if (board.characterMap[x][y].item != undefined)
+          {
+            for (let i = 0; i < board.characterMap[x][y].item.resourceUpkeeps.length; i++)
+            {
+              let resourceType = -1;
+              if (board.characterMap[x][y].item.resourceUpkeeps[i].resource.name.toUpperCase() == "GOLD")
+              {
+                resourceType = this.GOLDRESOURCEUPKEEP;
+              }
+              else if (board.characterMap[x][y].item.resourceUpkeeps[i].resource.name.toUpperCase() == "BEER")
+              {
+                resourceType = this.BEERRESOURCEUPKEEP;
+              }
+              else if (board.characterMap[x][y].item.resourceUpkeeps[i].resource.name.toUpperCase() == "FOOD")
+              {
+                resourceType = this.FOODRESOURCEUPKEEP;
+              }
+              if (resourceType != -1)
+              {
+                this.resourceUpkeepCounts[resourceType] += board.characterMap[x][y].item.resourceUpkeeps[i].amount;
+              }
+            }
           }
         }
       }
@@ -272,7 +298,7 @@ class Card
       {
         this.stats.Draw(locX - LARGECARDWIDTH / 4, locY - LARGECARDHEIGHT, ctx);
         if (this.item != undefined)
-          this.item.DrawLargeCard(locX + Math.floor(LARGECARDWIDTH/4), locY - Math.floor(LARGECARDHEIGHT), ctx);
+          this.item.DrawLargeCard(locX + Math.floor(LARGECARDWIDTH * 3/4), locY - Math.floor(LARGECARDHEIGHT), ctx);
       }
     }
 
@@ -288,7 +314,7 @@ class Card
         {
           if (this.item != undefined)
           {
-            this.item.DrawLargeCard(locX - LARGECARDWIDTH, locY, ctx);
+            this.item.DrawLargeCard(locX - LARGECARDWIDTH*2, locY, ctx);
             this.stats.Draw(locX - LARGECARDWIDTH*2, locY, ctx);
           }
           else
@@ -369,13 +395,22 @@ class QuestCard extends Card
         switch (this.statRequirement)
         {
           case STATTYPE_INT:
-            statPower = this.assignedPatron.stats.int;
+            let statInt = 0;
+            if (this.assignedPatron.item != undefined)
+              statInt = this.assignedPatron.item.stats.int;
+            statPower = this.assignedPatron.stats.int + statInt;
             break;
           case STATTYPE_STR:
-            statPower = this.assignedPatron.stats.str;
+            let statStr = 0;
+            if (this.assignedPatron.item != undefined)
+              statStr = this.assignedPatron.item.stats.str;
+            statPower = this.assignedPatron.stats.str + statStr;
             break;
           case STATTYPE_DEX:
-            statPower = this.assignedPatron.stats.dex;
+            let statDex = 0;
+            if (this.assignedPatron.item != undefined)
+              statDex = this.assignedPatron.item.stats.dex;
+            statPower = this.assignedPatron.stats.dex + statDex;
             break;
         }
 
@@ -392,6 +427,20 @@ class QuestCard extends Card
             this.rscUpkeeps[i].Update();
           }
           this.assignedPatron.stats.LevelUp();
+          //calculate item receive
+          if (this.item != undefined)
+          {
+            if (this.assignedPatron.item != undefined && 
+              this.item.itemLevel > this.assignedPatron.item.itemLevel)
+            {
+              this.assignedPatron.item = this.item;
+            }
+            else if (this.assignedPatron.item == undefined)
+            {
+              this.assignedPatron.item = this.item;
+            }
+            return this.assignedPatron.name + " completed " + this.name + " and found "+this.item.name+".";
+          }
           return this.assignedPatron.name + " completed " + this.name + " and grew stronger.";
         }
         else
@@ -613,7 +662,6 @@ class CharacterCard extends Card
         this.firstAppearance = true;
         this.name = name;
         this.stats = stats;
-        this.item = undefined;
     }
 
     Update(objectMap)
@@ -668,6 +716,14 @@ class CharacterCard extends Card
         //random chance to just leave
         if (Math.random() > 0.95 && !this.firstAppearance)
           this.satisfactionLevel = RANDOMLEAVESATISFACTION;
+    }
+
+    GetCombinedItemStats()
+    {
+      if (this.item == undefined)
+        return 0;
+      else
+        return this.item.stats.GetCombinedStats();
     }
 
     IsSatisfied()
@@ -919,8 +975,10 @@ class Board
                 }
                 else
                 {
-                  let adjacentFullStats = this.characterMap[adjacentx][adjacenty].stats.GetCombinedStats();
-                  let fullStats = this.characterMap[x][y].stats.GetCombinedStats();
+                  let adjacentFullStats = this.characterMap[adjacentx][adjacenty].stats.GetCombinedStats() + 
+                  this.characterMap[adjacentx][adjacenty].GetCombinedItemStats();
+                  let fullStats = this.characterMap[x][y].stats.GetCombinedStats() + 
+                  this.characterMap[x][y].GetCombinedItemStats();
                   if (adjacentFullStats > fullStats)
                   {
                     battleMessages.push(this.characterMap[adjacentx][adjacenty].name + " won a fight against " + this.characterMap[x][y].name);
@@ -1229,7 +1287,15 @@ class Board
           returnValue.int += this.characterMap[x][y].stats.int;
           returnValue.str += this.characterMap[x][y].stats.str;
           returnValue.dex += this.characterMap[x][y].stats.dex;
-          returnValue.total += this.characterMap[x][y].stats.GetCombinedStats();
+          let itemCombinedStats = 0;
+          if (this.characterMap[x][y].item != undefined)
+          {
+            returnValue.int += this.characterMap[x][y].item.stats.int;
+            returnValue.str += this.characterMap[x][y].item.stats.str;
+            returnValue.dex += this.characterMap[x][y].item.stats.dex;
+            itemCombinedStats = this.characterMap[x][y].item.stats.GetCombinedStats();
+          }
+          returnValue.total += this.characterMap[x][y].stats.GetCombinedStats() + itemCombinedStats;
         }
         if (this.objectMap[x][y] != undefined)
         {
@@ -1542,7 +1608,11 @@ class Quests
       if (this.selectedCardIndex == -1 || this.selectedCardIndex == i)
       {
         if (this.focusedCard == i)
+        {
           this.cards[i].DrawQuestAndPatron(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
+          if (this.cards[i].assignedPatron != undefined)
+            this.DrawTurnCount(i, ctx);
+        }
         else
           this.cards[i].DrawLargeCard(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
       }        
@@ -1559,15 +1629,24 @@ class Quests
     for (let i = 0; i < this.cards.length; i++)
     {
       this.cards[i].DrawQuestAndPatron(widthFromSide - this.EDGE_OFFSET, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP, ctx);
-      if (this.cards[i].assignedPatron != undefined)
+      this.DrawTurnCount(i, ctx);     
+    }
+  }
+
+  DrawTurnCount(questNumber, ctx)
+  {
+    let width = ctx.canvas.width;
+    let height = ctx.canvas.height;
+    let heightSeparation = height / this.cards.length;
+    let widthFromSide = width - LARGECARDWIDTH;
+    if (this.cards[questNumber].assignedPatron != undefined)
       {
         ctx.fillStyle = BUTTONCOLOR;
-        ctx.fillRect(widthFromSide - this.EDGE_OFFSET - 5, i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT, LARGECARDWIDTH + 6, 13);
+        ctx.fillRect(widthFromSide - this.EDGE_OFFSET - 5, questNumber * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT, LARGECARDWIDTH + 6, 12);
         ctx.fillStyle = TEXTCOLOR;
-        ctx.fillText("TURN" + (this.cards[i].currentTurn + 1), widthFromSide - this.EDGE_OFFSET, 
-        i * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT + 9);
-      }      
-    }
+        ctx.fillText("TURN" + (this.cards[questNumber].currentTurn + 1), widthFromSide - this.EDGE_OFFSET, 
+        questNumber * heightSeparation + this.EDGE_OFFSET + this.GAPFROMTOP + LARGECARDHEIGHT + 8);
+      } 
   }
 
   GetSelectedCard()
@@ -1599,7 +1678,15 @@ class Quests
         returnValue.int += this.cards[q].assignedPatron.stats.int;
         returnValue.str += this.cards[q].assignedPatron.stats.str;
         returnValue.dex += this.cards[q].assignedPatron.stats.dex;
-        returnValue.total += this.cards[q].assignedPatron.stats.GetCombinedStats();
+        let itemCombinedStats = 0;
+          if (this.cards[q].assignedPatron.item != undefined)
+          {
+            returnValue.int += this.cards[q].assignedPatron.item.stats.int;
+            returnValue.str += this.cards[q].assignedPatron.item.stats.str;
+            returnValue.dex += this.cards[q].assignedPatron.item.stats.dex;
+            itemCombinedStats = this.cards[q].assignedPatron.item.stats.GetCombinedStats();
+          }
+          returnValue.total += this.cards[q].assignedPatron.stats.GetCombinedStats() + itemCombinedStats;
       }
     }
 

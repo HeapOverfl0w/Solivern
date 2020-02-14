@@ -56,15 +56,18 @@ class Game
 
   SecondaryDrawTimeout(game, count)
   {
-    count++;
-    if (count == 3)
+    if (game.endTurnTimeout == undefined)
     {
-      game.drawSecondaryBackdrop = !game.drawSecondaryBackdrop;
-      count = 0;
+      count++;
+      if (count == 3)
+      {
+        game.drawSecondaryBackdrop = !game.drawSecondaryBackdrop;
+        count = 0;
+      }
+      game.board.RandomizeAnimations();
+      game.Draw();
+      game.drawSecondaryTimeout = setTimeout(game.SecondaryDrawTimeout, 500, game, count);
     }
-    game.board.RandomizeAnimations();
-    game.Draw();
-    game.drawSecondaryTimeout = setTimeout(game.SecondaryDrawTimeout, 500, game, count);
   }
 
   StopSecondaryDrawTimeout()
