@@ -120,9 +120,9 @@ class Game
       {
         let textBoxLength = this.focusedCardText.length * 5;
         this.ctx.fillStyle = BUTTONCOLOR;
-        this.ctx.fillRect(this.ctx.canvas.width/2 - textBoxLength/2, 22, textBoxLength, 14);
+        this.ctx.fillRect(this.ctx.canvas.width/2 - textBoxLength/2, 16, textBoxLength, 14);
         this.ctx.fillStyle = TEXTCOLOR;
-        this.ctx.fillText(this.focusedCardText, this.ctx.canvas.width/2 - textBoxLength/2, 32);
+        this.ctx.fillText(this.focusedCardText, this.ctx.canvas.width/2 - textBoxLength/2, 26);
       }
     }
   }

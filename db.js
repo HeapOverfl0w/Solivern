@@ -99,7 +99,8 @@ var CHARCARDSPRITES = {
     "slimecube" : new Vector2D(13, 6),
     "humanmage" : new Vector2D(14, 6),
     "headlessman" : new Vector2D(15,6),
-    "beholder" : new Vector2D(0,7)
+    "beholder" : new Vector2D(0,7),
+    "orcbehemoth" : new Vector2D(1,7)
 }
 
 var QUESTCARDSPRITES = {
@@ -121,7 +122,12 @@ var QUESTCARDSPRITES = {
 }
 
 var ITEMCARDSPRITES = {
-    "uglystick" : new Vector2D(0,10)
+    "uglystick" : new Vector2D(0,11),
+    "thiefdagger" : new Vector2D(1,11),
+    "scroll" : new Vector2D(2,11),
+    "shortsword" : new Vector2D(3,11), 
+    "huntersbow" : new Vector2D(4,11),
+    "apprenticewand" : new Vector2D(5,11)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -133,8 +139,8 @@ var NOCHARCHANCE = 0.1;
 var ONECHARCHANCE = NOCHARCHANCE + 0.5;
 var TWOCHARCHANCE = ONECHARCHANCE + 0.3;
 
-var NOQUESTCHANCE = 0.5;
-var ONEQUESTCHANCE = NOQUESTCHANCE + 0.4;
+var NOQUESTCHANCE = 0.55;
+var ONEQUESTCHANCE = NOQUESTCHANCE + 0.35;
 
 var UNCOMMONSTARTTURN = 10;
 var RARESTARTTURN = 30;
@@ -458,7 +464,7 @@ class Database
                                             OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y, 5, 5, false, undefined,
                                             new ResourceUpkeep(this.gold, -30), "Sword in the Stone"));
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y,
-                                            OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y, 12, 0, false, undefined,
+                                            OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y, 12, 0, true, undefined,
                                             new ResourceUpkeep(this.gold, -22), "King's Chair"));
     }
 
@@ -692,6 +698,10 @@ class Database
                                               CHARCARDSPRITES["beholder"].x, CHARCARDSPRITES["beholder"].y, 25, 
                                               [ new ResourceUpkeep(this.food, -19), new ResourceUpkeep(this.gold, 15) ], "Beholder",
                                               new CharacterStats(6,3,3)));
+        this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["orcbehemoth"].x, CHARCARDSPRITES["orcbehemoth"].y,
+                                              CHARCARDSPRITES["orcbehemoth"].x, CHARCARDSPRITES["orcbehemoth"].y, 25, 
+                                              [ new ResourceUpkeep(this.food, -10), new ResourceUpkeep(this.beer, -8), new ResourceUpkeep(this.gold, 15) ], "Orc Behemoth",
+                                              new CharacterStats(1,7,3)));
                                               
                                               
     }
@@ -750,6 +760,21 @@ class Database
     {
         this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["uglystick"].x, ITEMCARDSPRITES["uglystick"].y,
                                     ITEMCARDSPRITES["uglystick"].x, ITEMCARDSPRITES["uglystick"].y,
-                                    new CharacterStats(0,0,1), [new ResourceUpkeep(this.food, 1)],1,"Ugly Stick"));
+                                    new CharacterStats(0,1,0), [new ResourceUpkeep(this.food, 1)],1,"Ugly Stick"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["thiefdagger"].x, ITEMCARDSPRITES["thiefdagger"].y,
+                                    ITEMCARDSPRITES["thiefdagger"].x, ITEMCARDSPRITES["thiefdagger"].y,
+                                    new CharacterStats(0,0,1), [new ResourceUpkeep(this.gold, 1)],1,"Thief's Dagger"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["scroll"].x, ITEMCARDSPRITES["scroll"].y,
+                                    ITEMCARDSPRITES["scroll"].x, ITEMCARDSPRITES["scroll"].y,
+                                    new CharacterStats(1,0,0), [new ResourceUpkeep(this.beer, 1)],1,"Old Scroll"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["shortsword"].x, ITEMCARDSPRITES["shortsword"].y,
+                                    ITEMCARDSPRITES["shortsword"].x, ITEMCARDSPRITES["shortsword"].y,
+                                    new CharacterStats(0,2,0), [new ResourceUpkeep(this.gold, 2)],2,"Short Sword"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["huntersbow"].x, ITEMCARDSPRITES["huntersbow"].y,
+                                    ITEMCARDSPRITES["huntersbow"].x, ITEMCARDSPRITES["huntersbow"].y,
+                                    new CharacterStats(0,0,2), [new ResourceUpkeep(this.food, 2)],2,"Hunting Bow"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["apprenticewand"].x, ITEMCARDSPRITES["apprenticewand"].y,
+                                    ITEMCARDSPRITES["apprenticewand"].x, ITEMCARDSPRITES["apprenticewand"].y,
+                                    new CharacterStats(2,0,0), [new ResourceUpkeep(this.beer, 2)],2,"Apprentice Wand"));
     }
 }

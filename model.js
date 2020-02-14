@@ -670,6 +670,7 @@ class CharacterCard extends Card
         let canPayUpkeep = true;
         this.satisfactionLevel = 0;
         this.objectSatisfaction = 0;
+        //find minuses and make sure you can pay for
         for (let i = 0; i < this.resourceUpkeeps.length; i++)
         {
           let rscAmount = this.resourceUpkeeps[i].amount;
@@ -677,7 +678,8 @@ class CharacterCard extends Card
           {
             for (let o = 0; o < this.item.resourceUpkeeps.length; o++)
             {
-              if (this.resourceUpkeeps[i].resource.name == this.item.resourceUpkeeps[o].resource.name)
+              if (this.resourceUpkeeps[i].resource.name == this.item.resourceUpkeeps[o].resource.name && 
+                this.item.resourceUpkeeps[o].amount > 0)
               {
                 rscAmount += this.item.resourceUpkeeps[o].amount;
               }
@@ -689,6 +691,19 @@ class CharacterCard extends Card
             break;
         }
 
+        //find negatives on items and make sure you can pay for
+        if (canPayUpkeep && this.item != undefined)
+        {
+          for (let i = 0; i < this.item.resourceUpkeeps.length; i++)
+          {
+            let rscAmount = this.item.resourceUpkeeps[i].amount;
+            if (rscAmount < 0)
+              canPayUpkeep = this.item.resourceUpkeeps[i].HaveEnough();
+            if (!canPayUpkeep)
+              break;
+          }
+        }
+
         if (!canPayUpkeep)
           this.satisfactionLevel -= 1000;
         else
@@ -696,6 +711,13 @@ class CharacterCard extends Card
           for (let i = 0; i < this.resourceUpkeeps.length; i++)
           {
             this.resourceUpkeeps[i].Update();
+          }
+          if (this.item != undefined)
+          {
+            for (let i = 0; i < this.item.resourceUpkeeps.length; i++)
+            {
+              this.item.resourceUpkeeps[i].Update();
+            }
           }
         }        
 
@@ -714,7 +736,7 @@ class CharacterCard extends Card
         }
 
         //random chance to just leave
-        if (Math.random() > 0.95 && !this.firstAppearance)
+        if (Math.random() > 0.95 && !this.firstAppearance && this.item == undefined && this.stats.level < 5)
           this.satisfactionLevel = RANDOMLEAVESATISFACTION;
     }
 
@@ -965,12 +987,14 @@ class Board
                 {
                   battleMessages.push(this.characterMap[x][y].name + " won a fight against " + this.characterMap[adjacentx][adjacenty].name);
                   this.characterMap[x][y].stats.LevelUp();
+                  this.HandOverItem(this.characterMap[adjacentx][adjacenty], this.characterMap[x][y]);
                   this.characterMap[adjacentx][adjacenty] = undefined;
                 }
                 else if (battleDecision < 0.1)
                 {
                   battleMessages.push(this.characterMap[adjacentx][adjacenty].name + " won a fight against " + this.characterMap[x][y].name);
                   this.characterMap[adjacentx][adjacenty].stats.LevelUp();
+                  this.HandOverItem(this.characterMap[x][y], this.characterMap[adjacentx][adjacenty]);
                   this.characterMap[x][y] = undefined;
                 }
                 else
@@ -983,6 +1007,7 @@ class Board
                   {
                     battleMessages.push(this.characterMap[adjacentx][adjacenty].name + " won a fight against " + this.characterMap[x][y].name);
                     this.characterMap[adjacentx][adjacenty].stats.LevelUp();
+                    if (this.characterMap[adjacentx][adjacenty].item == undefined)
                     this.characterMap[x][y] = undefined;
                   }
                   else
@@ -1003,6 +1028,17 @@ class Board
       }
     }
     return battleMessages;
+  }
+
+  HandOverItem(fromChar, toChar)
+  {
+    if (fromChar.item == undefined)
+      return;
+    else if (toChar.item == undefined || toChar.item.itemLevel < fromChar.item.itemLevel)
+    {
+      toChar.item = fromChar.item;
+      fromChar.item = undefined;
+    }
   }
 
   Draw(ctx, placingObject, drawSecondaryBackdrop)
