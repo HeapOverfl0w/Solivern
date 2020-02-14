@@ -699,7 +699,7 @@ class Database
                                               [ new ResourceUpkeep(this.food, -19), new ResourceUpkeep(this.gold, 15) ], "Beholder",
                                               new CharacterStats(6,3,3)));
         this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["orcbehemoth"].x, CHARCARDSPRITES["orcbehemoth"].y,
-                                              CHARCARDSPRITES["orcbehemoth"].x, CHARCARDSPRITES["orcbehemoth"].y, 25, 
+                                              CHARCARDSPRITES["orcbehemoth"].x, CHARCARDSPRITES["orcbehemoth"].y, 23, 
                                               [ new ResourceUpkeep(this.food, -10), new ResourceUpkeep(this.beer, -8), new ResourceUpkeep(this.gold, 15) ], "Orc Behemoth",
                                               new CharacterStats(1,7,3)));
                                               
