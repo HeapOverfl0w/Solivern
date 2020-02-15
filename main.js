@@ -39,7 +39,7 @@ class Game
 
     this.turn = 0;
     this.isMaxTurnMode = true;
-    this.maxTurns = 100;
+    this.maxTurns = 50;
   }
 
   Initialize()
