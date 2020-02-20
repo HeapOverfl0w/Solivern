@@ -1223,14 +1223,17 @@ class Board
       {
         returnValue += this.objectMap[x][y].name;
       }
-      if (returnValue.length > 0)
-      {
-        returnValue += " - ";
-      }
+      
       if (this.characterMap[x][y] != undefined && this.characterMap[x][y].name != undefined)
       {
+        if (returnValue.length > 0)
+          returnValue += " with ";
         returnValue += this.characterMap[x][y].name;
+        if (this.characterMap[x][y].item != undefined)
+          returnValue += " holding " + this.characterMap[x][y].item.name;
       }
+
+      return returnValue;
     }
     else
       return "";

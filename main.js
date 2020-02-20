@@ -221,6 +221,8 @@ class Game
 
       if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || questMouseOverText != undefined || this.focusedCardText != originalFocusedCardText)
       {
+        if (this.focusedCardText == undefined || this.focusedCardText == "")
+          this.focusedCardText = this.board.GetFocusedCardText();
         this.Draw();
         this.objectPlacementX = tilex;
         this.objectPlacementY = tiley;
