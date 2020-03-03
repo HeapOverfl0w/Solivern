@@ -222,8 +222,8 @@ class Database
 
     GetQuestWithItemBasedOffQuestGroup(questGroup)
     {
-        //25% chance to get an item.
-        if (Math.random() < 0.25)
+        //30% chance to get an item.
+        if (Math.random() < 0.3)
         {
             //Get a random item card that's within the same rarity
             let itemGroup = []
