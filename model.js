@@ -54,6 +54,7 @@ var RESOURCESPRITESHEET = document.getElementById("resources");
 var BACKGROUNDIMAGE = document.getElementById("background");
 var EXTRASSPRITESHEET = document.getElementById("extras");
 var ALTSMALLCARDSPRITESHEET = document.getElementById("smallcardalt");
+var OVERLAY = document.getElementById("tutorialoverlay");
 
 class Resource
 {

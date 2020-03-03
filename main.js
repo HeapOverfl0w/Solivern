@@ -37,6 +37,8 @@ class Game
     this.drawSecondaryBackdrop = false;
     this.drawSecondaryTimeout = undefined;
 
+    this.showOverlay = true;
+
     this.turn = 0;
     this.isMaxTurnMode = true;
     this.maxTurns = 50;
@@ -125,6 +127,9 @@ class Game
         this.ctx.fillText(this.focusedCardText, this.ctx.canvas.width/2 - textBoxLength/2, 26);
       }
     }
+
+    if (this.showOverlay)
+      this.ctx.drawImage(OVERLAY, 0, 0);
   }
 
   Update()
@@ -357,9 +362,18 @@ class Game
         this.Draw();
       }
 
-      this.destructionMode = false;
-      this.hand.CancelCardPlacement();
-      this.quests.CancelCardPlacement();
+      if (this.destructionMode || this.hand.selectedCardIndex > -1 || this.quests.selectedCardIndex > -1 || this.showOverlay)
+      {
+        this.destructionMode = false;
+        this.hand.CancelCardPlacement();
+        this.quests.CancelCardPlacement();
+        this.showOverlay = false;
+      }
+      else
+      {
+        //TODO: Show game menu, for now just show tutorial overlay
+        this.showOverlay = true;
+      }
       this.audio.PlayActivate();
       this.ResetGameMessage(this);
     }
