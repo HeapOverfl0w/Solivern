@@ -118,7 +118,10 @@ var QUESTCARDSPRITES = {
     "learnspell" : new Vector2D(11,8),
     "boatinabottle" : new Vector2D(0, 9),
     "graverob" : new Vector2D(1,9),
-    "brewpotion" : new Vector2D(2,9)
+    "brewpotion" : new Vector2D(2,9),
+    "wrestlebear" : new Vector2D(3,9),
+
+    "slaydragon" : new Vector2D(0,10)
 }
 
 var ITEMCARDSPRITES = {
@@ -127,7 +130,13 @@ var ITEMCARDSPRITES = {
     "scroll" : new Vector2D(2,11),
     "shortsword" : new Vector2D(3,11), 
     "huntersbow" : new Vector2D(4,11),
-    "apprenticewand" : new Vector2D(5,11)
+    "apprenticewand" : new Vector2D(5,11),
+    "shortsword1" : new Vector2D(6,11), 
+    "huntersbow1" : new Vector2D(7,11),
+    "apprenticewand1" : new Vector2D(8,11),
+    "longsword" : new Vector2D(0,12),
+    "dualdaggers" : new Vector2D(1,12),
+    "spellbook" : new Vector2D(2,12)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -206,6 +215,20 @@ class Database
             return [this.GetRandomCard(this.ChooseRarityGroup(turn, CARDTYPE_CHARACTER)), 
                 this.GetRandomCard(this.ChooseRarityGroup(turn, CARDTYPE_CHARACTER)), 
                 this.GetRandomCard(this.ChooseRarityGroup(turn, CARDTYPE_CHARACTER))];
+    }
+
+    GetRandomLevel(group)
+    {
+        if (group == this.charCardsCommon)
+            return 1;
+        else if (group == this.charCardsUncommon)
+            return Math.ceil(Math.random() * 3);
+        else if (group == this.charCardsRare)
+            return Math.ceil(Math.random() * 5);
+        else if (group == this.charCardsEpic)
+            return Math.ceil(Math.random() * 7);
+
+        return 0;
     }
 
     GetRandomQuestCards(turn)
@@ -382,6 +405,17 @@ class Database
             i--;
 
         let clone = cardArray[i].Clone();
+
+        //Random level ups for cards uncommon and above
+        let level = this.GetRandomLevel(cardArray);
+        if (level != 0)
+        {
+            for (let i = 1; i < level; i++)
+            {
+                clone.stats.LevelUp();
+            }
+        }
+
         return clone;
     }
 
@@ -754,6 +788,13 @@ class Database
         this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["brewpotion"].x, QUESTCARDSPRITES["brewpotion"].y,
                                        QUESTCARDSPRITES["brewpotion"].x, QUESTCARDSPRITES["brewpotion"].y,
                                       7, 10, STATTYPE_INT, 4, [new ResourceUpkeep(this.gold, 17)], "Brew a Potion")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["wrestlebear"].x, QUESTCARDSPRITES["wrestlebear"].y,
+                                       QUESTCARDSPRITES["wrestlebear"].x, QUESTCARDSPRITES["wrestlebear"].y,
+                                      9, 12, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 16)], "Wrestle a Bear")); 
+                                      
+        this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
+                                       QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
+                                      20, 30, STATTYPE_STR, 5, [new ResourceUpkeep(this.gold, 40)], "Slay a Dragon")); 
     }
 
     LoadItemCards()
@@ -776,5 +817,24 @@ class Database
         this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["apprenticewand"].x, ITEMCARDSPRITES["apprenticewand"].y,
                                     ITEMCARDSPRITES["apprenticewand"].x, ITEMCARDSPRITES["apprenticewand"].y,
                                     new CharacterStats(2,0,0), [new ResourceUpkeep(this.beer, 2)],2,"Apprentice Wand"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["shortsword1"].x, ITEMCARDSPRITES["shortsword1"].y,
+                                    ITEMCARDSPRITES["shortsword1"].x, ITEMCARDSPRITES["shortsword1"].y,
+                                    new CharacterStats(0,3,0), [new ResourceUpkeep(this.gold, 2)],3,"Short Sword +1"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["huntersbow1"].x, ITEMCARDSPRITES["huntersbow1"].y,
+                                    ITEMCARDSPRITES["huntersbow1"].x, ITEMCARDSPRITES["huntersbow1"].y,
+                                    new CharacterStats(0,0,3), [new ResourceUpkeep(this.food, 2)],3,"Hunting Bow +1"));
+        this.itemCardsCommon.push(new ItemCard(ITEMCARDSPRITES["apprenticewand1"].x, ITEMCARDSPRITES["apprenticewand1"].y,
+                                    ITEMCARDSPRITES["apprenticewand1"].x, ITEMCARDSPRITES["apprenticewand1"].y,
+                                    new CharacterStats(3,0,0), [new ResourceUpkeep(this.beer, 2)],3,"Apprentice Wand +1"));
+
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["longsword"].x, ITEMCARDSPRITES["longsword"].y,
+                                    ITEMCARDSPRITES["longsword"].x, ITEMCARDSPRITES["longsword"].y,
+                                    new CharacterStats(0,3,0), [new ResourceUpkeep(this.food, 3)],4,"Long Sword"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["dualdaggers"].x, ITEMCARDSPRITES["dualdaggers"].y,
+                                    ITEMCARDSPRITES["dualdaggers"].x, ITEMCARDSPRITES["dualdaggers"].y,
+                                    new CharacterStats(0,0,3), [new ResourceUpkeep(this.beer, 3)],4,"Dual Daggers"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["spellbook"].x, ITEMCARDSPRITES["spellbook"].y,
+                                    ITEMCARDSPRITES["spellbook"].x, ITEMCARDSPRITES["spellbook"].y,
+                                    new CharacterStats(3,0,0), [new ResourceUpkeep(this.gold, 3)],4,"Spell Book"));
     }
 }
