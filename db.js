@@ -121,7 +121,9 @@ var QUESTCARDSPRITES = {
     "brewpotion" : new Vector2D(2,9),
     "wrestlebear" : new Vector2D(3,9),
 
-    "slaydragon" : new Vector2D(0,10)
+    "slaydragon" : new Vector2D(0,10),
+    "compiler" : new Vector2D(1,10),
+    "needle" : new Vector2D(2,10)
 }
 
 var ITEMCARDSPRITES = {
@@ -136,7 +138,10 @@ var ITEMCARDSPRITES = {
     "apprenticewand1" : new Vector2D(8,11),
     "longsword" : new Vector2D(0,12),
     "dualdaggers" : new Vector2D(1,12),
-    "spellbook" : new Vector2D(2,12)
+    "spellbook" : new Vector2D(2,12),
+    "battleaxe" : new Vector2D(3,12),
+    "katana" : new Vector2D(4,12),
+    "scepter" : new Vector2D(5,12)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -795,6 +800,12 @@ class Database
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
                                        QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
                                       20, 30, STATTYPE_STR, 5, [new ResourceUpkeep(this.gold, 40)], "Slay a Dragon")); 
+        this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["compiler"].x, QUESTCARDSPRITES["compiler"].y,
+                                       QUESTCARDSPRITES["compiler"].x, QUESTCARDSPRITES["compiler"].y,
+                                      20, 30, STATTYPE_INT, 5, [new ResourceUpkeep(this.gold, 40)], "Write a 486 Assembler Compiler"));
+        this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["needle"].x, QUESTCARDSPRITES["needle"].y,
+                                       QUESTCARDSPRITES["needle"].x, QUESTCARDSPRITES["needle"].y,
+                                      20, 30, STATTYPE_DEX, 5, [new ResourceUpkeep(this.gold, 40)], "Find the Needle in the Haystack")); 
     }
 
     LoadItemCards()
@@ -836,5 +847,14 @@ class Database
         this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["spellbook"].x, ITEMCARDSPRITES["spellbook"].y,
                                     ITEMCARDSPRITES["spellbook"].x, ITEMCARDSPRITES["spellbook"].y,
                                     new CharacterStats(3,0,0), [new ResourceUpkeep(this.gold, 3)],4,"Spell Book"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["battleaxe"].x, ITEMCARDSPRITES["battleaxe"].y,
+                                    ITEMCARDSPRITES["battleaxe"].x, ITEMCARDSPRITES["battleaxe"].y,
+                                    new CharacterStats(0,3,0), [new ResourceUpkeep(this.beer, 3)],4,"Battle Axe"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["katana"].x, ITEMCARDSPRITES["katana"].y,
+                                    ITEMCARDSPRITES["katana"].x, ITEMCARDSPRITES["katana"].y,
+                                    new CharacterStats(0,0,3), [new ResourceUpkeep(this.food, 3)],4,"Katana"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["scepter"].x, ITEMCARDSPRITES["scepter"].y,
+                                    ITEMCARDSPRITES["scepter"].x, ITEMCARDSPRITES["scepter"].y,
+                                    new CharacterStats(3,0,0), [new ResourceUpkeep(this.gold, 3)],4,"Scepter"));
     }
 }
