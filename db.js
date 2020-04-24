@@ -100,7 +100,10 @@ var CHARCARDSPRITES = {
     "humanmage" : new Vector2D(14, 6),
     "headlessman" : new Vector2D(15,6),
     "beholder" : new Vector2D(0,7),
-    "orcbehemoth" : new Vector2D(1,7)
+    "orcbehemoth" : new Vector2D(1,7),
+    "skeletonking" : new Vector2D(2,7),
+    "drake" : new Vector2D(3,7),
+    "dwarfchampion" : new Vector2D(4,7)
 }
 
 var QUESTCARDSPRITES = {
@@ -741,6 +744,18 @@ class Database
                                               CHARCARDSPRITES["orcbehemoth"].x, CHARCARDSPRITES["orcbehemoth"].y, 23, 
                                               [ new ResourceUpkeep(this.food, -10), new ResourceUpkeep(this.beer, -8), new ResourceUpkeep(this.gold, 15) ], "Orc Behemoth",
                                               new CharacterStats(1,7,3)));
+        this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["skeletonking"].x, CHARCARDSPRITES["skeletonking"].y,
+                                              CHARCARDSPRITES["skeletonking"].x, CHARCARDSPRITES["skeletonking"].y, 22, 
+                                              [ new ResourceUpkeep(this.food, 12), new ResourceUpkeep(this.gold, -15) ], "Skeleton King",
+                                              new CharacterStats(5,3,5)));
+        this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["drake"].x, CHARCARDSPRITES["drake"].y,
+                                              CHARCARDSPRITES["drake"].x, CHARCARDSPRITES["drake"].y, 25, 
+                                              [ new ResourceUpkeep(this.food, -5), new ResourceUpkeep(this.beer, 13), new ResourceUpkeep(this.gold, -10) ], "Drake",
+                                              new CharacterStats(4,4,4)));
+        this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["dwarfchampion"].x, CHARCARDSPRITES["dwarfchampion"].y,
+                                              CHARCARDSPRITES["dwarfchampion"].x, CHARCARDSPRITES["dwarfchampion"].y, 25, 
+                                              [ new ResourceUpkeep(this.food, 3), new ResourceUpkeep(this.beer, -17), new ResourceUpkeep(this.gold, 10) ], "Dwarf Champion",
+                                              new CharacterStats(2,6,4)));
                                               
                                               
     }
