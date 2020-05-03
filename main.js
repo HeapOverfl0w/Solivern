@@ -1,12 +1,13 @@
 class Game
 {
-  constructor(ctx)
+  constructor(ctx, turnCount, endGameExitCallback)
   {
     this.audio = new AudioHandler();
     this.audio.Mute();
     this.hand = new Hand();
     this.board = new Board();
     this.quests = new Quests();
+    this.endGameButton = new ImageButton(10, 20, 45, 16, 96, 0);
     this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 0, 45, 16, 48, 32);
     this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 0, 16, 16, 48, 16);
     this.satisfactionButton = new ImageButton(ctx.canvas.width / 2 + 30, 0, 16, 16, 64, 16);
@@ -41,7 +42,9 @@ class Game
 
     this.turn = 0;
     this.isMaxTurnMode = true;
-    this.maxTurns = 50;
+    this.maxTurns = turnCount;
+
+    this.endGameExitCallback = endGameExitCallback;
   }
 
   Initialize()
@@ -129,7 +132,10 @@ class Game
     }
 
     if (this.showOverlay)
+    {
       this.ctx.drawImage(OVERLAY, 0, 0);
+      this.endGameButton.Draw(this.ctx);
+    }
   }
 
   Update()
@@ -183,7 +189,7 @@ class Game
                             "TOTAL STATS " + (endGameStats.total + questEndGameStats.total), "GOLD " + this.goldResource.count, 
                             "BEER " + this.beerResource.count, "FOOD " + this.foodResource.count, 
                             "OBJECT VALUE " + endGameStats.objectWorth,
-                            "TOTAL SCORE " + (endGameStats.total + questEndGameStats.total + this.goldResource.count + this.beerResource.count + this.foodResource.count + endGameStats.objectWorth),"GAME OVER"];
+                            "TOTAL SCORE " + (endGameStats.total + questEndGameStats.total + this.goldResource.count + this.beerResource.count + this.foodResource.count + endGameStats.objectWorth),"GAME OVER", "Press ESC to return to Menu."];
       this.EndGame();
       return;
     }
@@ -299,6 +305,11 @@ class Game
         this.ToggleAudio();
         this.Draw();
       }
+      else if (this.endGameButton.IsInside(pointx, pointy))
+      {
+        this.EndGame();
+        this.endGameExitCallback();
+      }
       else
       {
         let message = this.hand.ClickedOnCard(pointx, pointy, this.ctx);
@@ -368,14 +379,19 @@ class Game
         this.hand.CancelCardPlacement();
         this.quests.CancelCardPlacement();
         this.showOverlay = false;
+        this.endGameButton.visible = false;
       }
       else
       {
-        //TODO: Show game menu, for now just show tutorial overlay
         this.showOverlay = true;
+        this.endGameButton.visible = true;
       }
       this.audio.PlayActivate();
       this.ResetGameMessage(this);
+    }
+    else if (keyCode == 27 && this.gameOver)
+    {
+      this.endGameExitCallback();
     }
   }
 
