@@ -60,6 +60,7 @@ class Menu
 
     HandleMouseClick(pointx, pointy)
     {
+        this.twentyFiveTurnCheckbox.IsInsideAndCheck(pointx, pointy);
         this.fiftyTurnCheckbox.IsInsideAndCheck(pointx, pointy);
         this.hundredTurnCheckbox.IsInsideAndCheck(pointx, pointy);
         this.hundredFiftyTurnCheckbox.IsInsideAndCheck(pointx, pointy);
