@@ -148,7 +148,7 @@ class Game
     this.satisfactionButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
-    let boardMessages = this.board.Update(this.turn, this.db, this.audio);
+    let boardMessages = this.board.Update(this.turn, this.db, this.audio, this.resourceCollection);
     let questMessages = this.quests.Update(this.turn, this.db, this.board, this.ctx);
     if (this.turn == 0)
     {
@@ -176,7 +176,12 @@ class Game
     if (!this.isMaxTurnMode && this.turn > 10 && !this.board.PatronsExist())
     {
       //end game
-      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons. GAME OVER.", "Lasted Turns : " + this.turn ];
+      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons.", "Lasted Turns : " + this.turn,
+                            "INT " + (endGameStats.int + questEndGameStats.int), "DEX " + (endGameStats.dex + questEndGameStats.dex), "STR " + (endGameStats.str + questEndGameStats.str),
+                            "TOTAL STATS " + (endGameStats.total + questEndGameStats.total), "GOLD " + this.goldResource.count, 
+                            "BEER " + this.beerResource.count, "FOOD " + this.foodResource.count, 
+                            "OBJECT VALUE " + endGameStats.objectWorth,
+                            "TOTAL SCORE " + (endGameStats.total + questEndGameStats.total + this.goldResource.count + this.beerResource.count + this.foodResource.count + endGameStats.objectWorth),"GAME OVER", "Press ESC to return to Menu." ];
       this.EndGame();
       return;
     }

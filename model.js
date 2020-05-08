@@ -104,6 +104,13 @@ class ResourceCollection
     return undefined;
   }
 
+  UpkeepsAreLessThanResources()
+  {
+    return this.resources[this.GOLDRESOURCEUPKEEP].count + this.resourceUpkeepCounts[this.GOLDRESOURCEUPKEEP] > -1 &&
+           this.resources[this.BEERRESOURCEUPKEEP].count + this.resourceUpkeepCounts[this.BEERRESOURCEUPKEEP] > -1 &&
+           this.resources[this.FOODRESOURCEUPKEEP].count + this.resourceUpkeepCounts[this.FOODRESOURCEUPKEEP] > -1
+  }
+
   Update(board)
   {
     this.resourceUpkeepCounts = [0,0,0];
@@ -665,43 +672,46 @@ class CharacterCard extends Card
         this.stats = stats;
     }
 
-    Update(objectMap)
+    Update(objectMap, skipResourceValidation)
     {
         //pay upkeeps
         let canPayUpkeep = true;
         this.satisfactionLevel = 0;
         this.objectSatisfaction = 0;
-        //find minuses and make sure you can pay for
-        for (let i = 0; i < this.resourceUpkeeps.length; i++)
+        if (!skipResourceValidation)
         {
-          let rscAmount = this.resourceUpkeeps[i].amount;
-          if (this.item != undefined)
+          //find minuses and make sure you can pay for
+          for (let i = 0; i < this.resourceUpkeeps.length; i++)
           {
-            for (let o = 0; o < this.item.resourceUpkeeps.length; o++)
+            let rscAmount = this.resourceUpkeeps[i].amount;
+            if (this.item != undefined)
             {
-              if (this.resourceUpkeeps[i].resource.name == this.item.resourceUpkeeps[o].resource.name && 
-                this.item.resourceUpkeeps[o].amount > 0)
+              for (let o = 0; o < this.item.resourceUpkeeps.length; o++)
               {
-                rscAmount += this.item.resourceUpkeeps[o].amount;
+                if (this.resourceUpkeeps[i].resource.name == this.item.resourceUpkeeps[o].resource.name && 
+                  this.item.resourceUpkeeps[o].amount > 0)
+                {
+                  rscAmount += this.item.resourceUpkeeps[o].amount;
+                }
               }
             }
-          }
-          if (rscAmount < 0)
-            canPayUpkeep = this.resourceUpkeeps[i].HaveEnough();
-          if (!canPayUpkeep)
-            break;
-        }
-
-        //find negatives on items and make sure you can pay for
-        if (canPayUpkeep && this.item != undefined)
-        {
-          for (let i = 0; i < this.item.resourceUpkeeps.length; i++)
-          {
-            let rscAmount = this.item.resourceUpkeeps[i].amount;
             if (rscAmount < 0)
-              canPayUpkeep = this.item.resourceUpkeeps[i].HaveEnough();
+              canPayUpkeep = this.resourceUpkeeps[i].HaveEnough();
             if (!canPayUpkeep)
               break;
+          }
+
+          //find negatives on items and make sure you can pay for
+          if (canPayUpkeep && this.item != undefined)
+          {
+            for (let i = 0; i < this.item.resourceUpkeeps.length; i++)
+            {
+              let rscAmount = this.item.resourceUpkeeps[i].amount;
+              if (rscAmount < 0)
+                canPayUpkeep = this.item.resourceUpkeeps[i].HaveEnough();
+              if (!canPayUpkeep)
+                break;
+            }
           }
         }
 
@@ -818,12 +828,19 @@ class Board
     this.isNight = false;
     this.precipitation = false;
     this.isSatisfactionMode = false;
+
+    this.lastLeaveCount = 0;
   }
 
-  Update(turnCount, db, audio)
+  Update(turnCount, db, audio, resourceCollection)
   {
     let returnMessages = [];
 
+    //first determine if our resource projections are above our amount
+    //and if so assign the skip requirement check on our characters
+    let skipResourceValidation = resourceCollection.UpkeepsAreLessThanResources();
+
+    let leaveCount = 0;
     for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
     {
       for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
@@ -831,7 +848,7 @@ class Board
         //if (this.objectMap[x][y] != undefined)
           //this.objectMap[x][y].Update();
         if (this.characterMap[x][y] != undefined)
-          this.characterMap[x][y].Update(this.objectMap);
+          this.characterMap[x][y].Update(this.objectMap, skipResourceValidation);
 
         //Determine if characters need to be removed
         if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].IsSatisfied() && !this.characterMap[x][y].firstAppearance)
@@ -839,7 +856,10 @@ class Board
           if (this.characterMap[x][y].satisfactionLevel == RANDOMLEAVESATISFACTION)
             returnMessages.push(this.characterMap[x][y].name + " had other things to do and left.");
           else
+          {
+            leaveCount++;
             returnMessages.push(this.characterMap[x][y].name + " was unsatisfied and left.");
+          }
           this.characterMap[x][y] = undefined;
         }
         else if (this.characterMap[x][y] != undefined && this.characterMap[x][y].firstAppearance)
@@ -854,7 +874,7 @@ class Board
     //let the user get their bearings and buy some objects on turn 1
     //this will allow them to have two different hands of cards before
     //patrons arrive
-    if ((turnCount > 10 && this.PatronsExist()) || (turnCount > 1 && turnCount < 10))
+    if ((turnCount > 10 && this.PatronsExist() && (leaveCount < 2 && !(leaveCount == 1 && this.lastLeaveCount > 0))) || (turnCount > 1 && turnCount < 10))
     {
       let newCharCards = db.GetRandomCharacterCards(turnCount);
 
@@ -892,6 +912,8 @@ class Board
         }
       }
     }
+
+    this.lastLeaveCount = leaveCount;
 
     this.isNight = Math.floor(turnCount / 3) % 2 == 1;
     this.precipitation = Math.random() + ( this.precipitation ? 0.3 : 0) > 0.7;

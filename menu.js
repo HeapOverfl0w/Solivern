@@ -22,7 +22,7 @@ class Menu
         this.db = new Database(resourceCollection);
         this.db.LoadAllData();
 
-        this.checkboxText = ["25 Turn Game", "50 Turn Game", "100 Turn Game", "150 Turn Game", "Unlimited Game"];
+        this.checkboxText = ["25 Turn Game", "50 Turn Game", "100 Turn Game", "150 Turn Game *", "Unlimited Game *"];
 
         this.selection = 0;
 
@@ -32,6 +32,8 @@ class Menu
         this.ctx = ctx;
         this.ctx.font = TEXTFONT;
         this.ctx.imageSmoothingEnabled = false;
+
+        this.betaText = "* Solivern is in BETA - these game modes are not properly balanced yet."
     }
 
     Initialize()
@@ -125,6 +127,11 @@ class Menu
                 this.ctx.fillStyle = TEXTCOLOR;
                 this.ctx.fillText(this.checkboxText[i], 28, i * 15 + 20);
             }
+
+            this.ctx.fillStyle = BUTTONCOLOR;
+            this.ctx.fillRect(5, TILESY * TILEHEIGHT - 15, this.betaText.length * 5, 12);
+            this.ctx.fillStyle = TEXTCOLOR;
+            this.ctx.fillText(this.betaText, 5, TILESY * TILEHEIGHT - 5);
         }
     }
 
