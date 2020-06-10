@@ -123,6 +123,8 @@ var QUESTCARDSPRITES = {
     "graverob" : new Vector2D(1,9),
     "brewpotion" : new Vector2D(2,9),
     "wrestlebear" : new Vector2D(3,9),
+    "breakdance" : new Vector2D(3,9),
+    "sextant" : new Vector2D(4,9),
 
     "slaydragon" : new Vector2D(0,10),
     "compiler" : new Vector2D(1,10),
@@ -811,16 +813,22 @@ class Database
         this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["wrestlebear"].x, QUESTCARDSPRITES["wrestlebear"].y,
                                        QUESTCARDSPRITES["wrestlebear"].x, QUESTCARDSPRITES["wrestlebear"].y,
                                       9, 12, STATTYPE_STR, 2, [new ResourceUpkeep(this.gold, 16)], "Wrestle a Bear")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["breakdance"].x, QUESTCARDSPRITES["breakdance"].y,
+                                       QUESTCARDSPRITES["breakdance"].x, QUESTCARDSPRITES["breakdance"].y,
+                                      9, 12, STATTYPE_DEX, 2, [new ResourceUpkeep(this.gold, 16)], "Win a Break Dance Battle")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["sextant"].x, QUESTCARDSPRITES["sextant"].y,
+                                       QUESTCARDSPRITES["sextant"].x, QUESTCARDSPRITES["sextant"].y,
+                                      9, 12, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 16)], "Invent the Sextant")); 
                                       
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
                                        QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
-                                      20, 30, STATTYPE_STR, 5, [new ResourceUpkeep(this.gold, 40)], "Slay a Dragon")); 
+                                      15, 20, STATTYPE_STR, 5, [new ResourceUpkeep(this.gold, 40)], "Slay a Dragon")); 
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["compiler"].x, QUESTCARDSPRITES["compiler"].y,
                                        QUESTCARDSPRITES["compiler"].x, QUESTCARDSPRITES["compiler"].y,
-                                      20, 30, STATTYPE_INT, 5, [new ResourceUpkeep(this.gold, 40)], "Write a 486 Assembler Compiler"));
+                                      15, 20, STATTYPE_INT, 5, [new ResourceUpkeep(this.gold, 40)], "Write a 486 Assembler Compiler"));
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["needle"].x, QUESTCARDSPRITES["needle"].y,
                                        QUESTCARDSPRITES["needle"].x, QUESTCARDSPRITES["needle"].y,
-                                      20, 30, STATTYPE_DEX, 5, [new ResourceUpkeep(this.gold, 40)], "Find the Needle in the Haystack")); 
+                                      15, 20, STATTYPE_DEX, 5, [new ResourceUpkeep(this.gold, 40)], "Find the Needle in the Haystack")); 
     }
 
     LoadItemCards()
