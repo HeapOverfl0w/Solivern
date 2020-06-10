@@ -123,8 +123,8 @@ var QUESTCARDSPRITES = {
     "graverob" : new Vector2D(1,9),
     "brewpotion" : new Vector2D(2,9),
     "wrestlebear" : new Vector2D(3,9),
-    "breakdance" : new Vector2D(3,9),
-    "sextant" : new Vector2D(4,9),
+    "breakdance" : new Vector2D(4,9),
+    "sextant" : new Vector2D(5,9),
 
     "slaydragon" : new Vector2D(0,10),
     "compiler" : new Vector2D(1,10),
