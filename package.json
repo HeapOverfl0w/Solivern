@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "elec.js",
     "dependencies": {
-        "electron": "^1.7.6"
+        "electron": "^9.1.0"
     },
     "scripts": {
         "start": "electron ."
