@@ -20,7 +20,9 @@ var OBJECTSPRITES = {
     "stonetable" : new Vector2D(5,1),
     "gametable" : new Vector2D(6,1),
     "swordinstone" : new Vector2D(13,1),
-    "kingschair" : new Vector2D(14,1)
+    "kingschair" : new Vector2D(14,1),
+    "darkskull" : new Vector2D(15,1),
+    "discoball" : new Vector2D(16,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -128,7 +130,8 @@ var QUESTCARDSPRITES = {
 
     "slaydragon" : new Vector2D(0,10),
     "compiler" : new Vector2D(1,10),
-    "needle" : new Vector2D(2,10)
+    "needle" : new Vector2D(2,10),
+    "buckhunterquest" : new Vector2D(3,10)
 }
 
 var ITEMCARDSPRITES = {
@@ -146,7 +149,10 @@ var ITEMCARDSPRITES = {
     "spellbook" : new Vector2D(2,12),
     "battleaxe" : new Vector2D(3,12),
     "katana" : new Vector2D(4,12),
-    "scepter" : new Vector2D(5,12)
+    "scepter" : new Vector2D(5,12),
+    "justicebringer" : new Vector2D(0,13),
+    "trueaim" : new Vector2D(1,13),
+    "monsterbook" : new Vector2D(2,13)
 }
 
 var RSCTYPECHANCE = 0.5;
@@ -510,6 +516,15 @@ class Database
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y,
                                             OBJECTSPRITES["kingschair"].x, OBJECTSPRITES["kingschair"].y, 12, 0, true, undefined,
                                             new ResourceUpkeep(this.gold, -22), "King's Chair"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["darkskull"].x, OBJECTSPRITES["darkskull"].y,
+                                            OBJECTSPRITES["darkskull"].x, OBJECTSPRITES["darkskull"].y, 5, 4, false, "#b60c1e33",
+                                            new ResourceUpkeep(this.gold, -25), "The Dark Skull"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["discoball"].x, OBJECTSPRITES["discoball"].y,
+                                            OBJECTSPRITES["discoball"].x, OBJECTSPRITES["discoball"].y, 3, 6, true, "#b67348ac",
+                                            new ResourceUpkeep(this.gold, -23), "Disco Ball"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["chocolatefountain"].x, OBJECTSPRITES["chocolatefountain"].y,
+                                            OBJECTSPRITES["chocolatefountain"].x, OBJECTSPRITES["chocolatefountain"].y, 5, 2, false, undefined,
+                                            new ResourceUpkeep(this.food, -20), "Chocolate Fountain"));
     }
 
     LoadbuffCardsCommon()
@@ -829,6 +844,9 @@ class Database
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["needle"].x, QUESTCARDSPRITES["needle"].y,
                                        QUESTCARDSPRITES["needle"].x, QUESTCARDSPRITES["needle"].y,
                                       15, 20, STATTYPE_DEX, 5, [new ResourceUpkeep(this.gold, 40)], "Find the Needle in the Haystack")); 
+        this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["buckhunterquest"].x, QUESTCARDSPRITES["buckhunterquest"].y,
+                                      QUESTCARDSPRITES["buckhunterquest"].x, QUESTCARDSPRITES["buckhunterquest"].y,
+                                     16, 21, STATTYPE_DEX, 1, [new ResourceUpkeep(this.gold, 16)], "Buck Hunter Cabinet High Score")); 
     }
 
     LoadItemCards()
@@ -879,5 +897,15 @@ class Database
         this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["scepter"].x, ITEMCARDSPRITES["scepter"].y,
                                     ITEMCARDSPRITES["scepter"].x, ITEMCARDSPRITES["scepter"].y,
                                     new CharacterStats(3,0,0), [new ResourceUpkeep(this.gold, 3)],4,"Scepter"));
+
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["justicebringer"].x, ITEMCARDSPRITES["justicebringer"].y,
+                                    ITEMCARDSPRITES["justicebringer"].x, ITEMCARDSPRITES["justicebringer"].y,
+                                    new CharacterStats(0,6,0), [new ResourceUpkeep(this.food, 6)],8,"Justice Bringer"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["trueaim"].x, ITEMCARDSPRITES["trueaim"].y,
+                                    ITEMCARDSPRITES["trueaim"].x, ITEMCARDSPRITES["trueaim"].y,
+                                    new CharacterStats(0,0,6), [new ResourceUpkeep(this.gold, 6)],8,"True Aim"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["monsterbook"].x, ITEMCARDSPRITES["monsterbook"].y,
+                                    ITEMCARDSPRITES["monsterbook"].x, ITEMCARDSPRITES["monsterbook"].y,
+                                    new CharacterStats(6,0,0), [new ResourceUpkeep(this.gold, 6)],8,"Book of Monsters"));
     }
 }
