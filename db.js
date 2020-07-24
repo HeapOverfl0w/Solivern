@@ -131,7 +131,9 @@ var QUESTCARDSPRITES = {
     "slaydragon" : new Vector2D(0,10),
     "compiler" : new Vector2D(1,10),
     "needle" : new Vector2D(2,10),
-    "buckhunterquest" : new Vector2D(3,10)
+    "buckhunterquest" : new Vector2D(3,10),
+    "moveturtle" : new Vector2D(4,10),
+    "irontogold" : new Vector2D(5,10)
 }
 
 var ITEMCARDSPRITES = {
@@ -846,7 +848,13 @@ class Database
                                       15, 20, STATTYPE_DEX, 5, [new ResourceUpkeep(this.gold, 40)], "Find the Needle in the Haystack")); 
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["buckhunterquest"].x, QUESTCARDSPRITES["buckhunterquest"].y,
                                       QUESTCARDSPRITES["buckhunterquest"].x, QUESTCARDSPRITES["buckhunterquest"].y,
-                                     16, 21, STATTYPE_DEX, 1, [new ResourceUpkeep(this.gold, 16)], "Buck Hunter Cabinet High Score")); 
+                                     16, 21, STATTYPE_DEX, 1, [new ResourceUpkeep(this.beer, 16)], "Buck Hunter Cabinet High Score")); 
+        this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["moveturtle"].x, QUESTCARDSPRITES["moveturtle"].y,
+                                      QUESTCARDSPRITES["moveturtle"].x, QUESTCARDSPRITES["moveturtle"].y,
+                                     16, 21, STATTYPE_STR, 1, [new ResourceUpkeep(this.food, 16)], "Move Giant Turtle out of the Road")); 
+        this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["irontogold"].x, QUESTCARDSPRITES["irontogold"].y,
+                                      QUESTCARDSPRITES["irontogold"].x, QUESTCARDSPRITES["irontogold"].y,
+                                     16, 21, STATTYPE_INT, 1, [new ResourceUpkeep(this.gold, 16)], "Turn Iron to Gold")); 
     }
 
     LoadItemCards()
