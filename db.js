@@ -22,7 +22,9 @@ var OBJECTSPRITES = {
     "swordinstone" : new Vector2D(13,1),
     "kingschair" : new Vector2D(14,1),
     "darkskull" : new Vector2D(15,1),
-    "discoball" : new Vector2D(16,1)
+    "discoball" : new Vector2D(16,1),
+    "chocolatefountain" : new Vector2D(17,1),
+    "magicflower" : new Vector2D(18,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -529,6 +531,9 @@ class Database
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["chocolatefountain"].x, OBJECTSPRITES["chocolatefountain"].y,
                                             OBJECTSPRITES["chocolatefountain"].x, OBJECTSPRITES["chocolatefountain"].y, 5, 2, false, undefined,
                                             new ResourceUpkeep(this.food, -20), "Chocolate Fountain"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["magicflower"].x, OBJECTSPRITES["magicflower"].y,
+                                            OBJECTSPRITES["magicflower"].x, OBJECTSPRITES["magicflower"].y, 6, 2, false, undefined,
+                                            new ResourceUpkeep(this.gold, -24), "Magic Flower"));
     }
 
     LoadbuffCardsCommon()
