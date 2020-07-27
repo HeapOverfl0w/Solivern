@@ -783,7 +783,7 @@ class Database
                                               new CharacterStats(3,4,4)));
         this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["windelemental"].x, CHARCARDSPRITES["windelemental"].y,
                                               CHARCARDSPRITES["windelemental"].x, CHARCARDSPRITES["windelemental"].y, 25, 
-                                              [ new ResourceUpkeep(this.food, 6), new ResourceUpkeep(this.food, -16), new ResourceUpkeep(this.gold, 7) ], "Wind Elemental",
+                                              [ new ResourceUpkeep(this.food, 6), new ResourceUpkeep(this.beer, -16), new ResourceUpkeep(this.gold, 7) ], "Wind Elemental",
                                               new CharacterStats(4,4,3)));
                                               
                                               
