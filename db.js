@@ -105,7 +105,8 @@ var CHARCARDSPRITES = {
     "orcbehemoth" : new Vector2D(1,7),
     "skeletonking" : new Vector2D(2,7),
     "drake" : new Vector2D(3,7),
-    "dwarfchampion" : new Vector2D(4,7)
+    "dwarfchampion" : new Vector2D(4,7),
+    "fireelemental" : new Vector2D(5,7)
 }
 
 var QUESTCARDSPRITES = {
@@ -775,6 +776,10 @@ class Database
                                               CHARCARDSPRITES["dwarfchampion"].x, CHARCARDSPRITES["dwarfchampion"].y, 25, 
                                               [ new ResourceUpkeep(this.food, 3), new ResourceUpkeep(this.beer, -17), new ResourceUpkeep(this.gold, 10) ], "Dwarf Champion",
                                               new CharacterStats(2,6,4)));
+        this.charCardsRare.push(new CharacterCard(CHARCARDSPRITES["fireelemental"].x, CHARCARDSPRITES["fireelemental"].y,
+                                              CHARCARDSPRITES["fireelemental"].x, CHARCARDSPRITES["fireelemental"].y, 25, 
+                                              [ new ResourceUpkeep(this.beer, 3), new ResourceUpkeep(this.food, -16), new ResourceUpkeep(this.gold, 10) ], "Fire Elemental",
+                                              new CharacterStats(3,4,4)));
                                               
                                               
     }
