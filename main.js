@@ -148,7 +148,7 @@ class Game
     this.satisfactionButton.visible = false;
     this.Draw();
     this.hand.Update(this.turn, this.db, this.ctx);
-    let boardMessages = this.board.Update(this.turn, this.db, this.audio, this.resourceCollection);
+    let boardMessages = this.board.Update(this.turn, this.db, this.audio, this.resourceCollection, this.ctx);
     let questMessages = this.quests.Update(this.turn, this.db, this.board, this.ctx);
     if (this.turn == 0)
     {
@@ -161,7 +161,8 @@ class Game
     }
     else
     {
-      this.endTurnTimeout = setTimeout(this.EndTurnTimeout, 3000, this);
+      let messageCount = boardMessages.length + questMessages.length;
+      this.endTurnTimeout = setTimeout(this.EndTurnTimeout, messageCount > 5 ? 6000 : 3000, this);
     }
 
     this.resourceCollection.Update(this.board);
@@ -176,7 +177,7 @@ class Game
     if (!this.isMaxTurnMode && this.turn > 10 && !this.board.PatronsExist())
     {
       //end game
-      this.gameMessages = [ "You have reached pass turn 10 and no longer have patrons.", "Lasted Turns : " + this.turn,
+      this.gameMessages = [ "You have reached past turn 10 and no longer have patrons.", "Lasted Turns : " + this.turn,
                             "INT " + (endGameStats.int + questEndGameStats.int), "DEX " + (endGameStats.dex + questEndGameStats.dex), "STR " + (endGameStats.str + questEndGameStats.str),
                             "TOTAL STATS x5" + ((endGameStats.total + questEndGameStats.total) * 5), "GOLD " + this.goldResource.count, 
                             "BEER " + this.beerResource.count, "FOOD " + this.foodResource.count, 

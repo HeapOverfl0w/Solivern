@@ -13,6 +13,10 @@ var CARDUSEWIDTH = 37;
 var CARDUSEHEIGHT = 43;
 var FIGHTX = 48;
 var FIGHTY = 0;
+var LEAVEX = 64;
+var LEAVEY = 0;
+var ENTERX = 80;
+var ENTERY = 0;
 
 var TILEWIDTH = 16;
 var TILEHEIGHT = 16;
@@ -832,7 +836,7 @@ class Board
     this.lastLeaveCount = 0;
   }
 
-  Update(turnCount, db, audio, resourceCollection)
+  Update(turnCount, db, audio, resourceCollection, ctx)
   {
     let returnMessages = [];
 
@@ -853,12 +857,18 @@ class Board
         //Determine if characters need to be removed
         if (this.characterMap[x][y] != undefined && !this.characterMap[x][y].IsSatisfied() && !this.characterMap[x][y].firstAppearance)
         {
-          if (this.characterMap[x][y].satisfactionLevel == RANDOMLEAVESATISFACTION)
+          if (this.characterMap[x][y].satisfactionLevel == RANDOMLEAVESATISFACTION) 
+          {
             returnMessages.push(this.characterMap[x][y].name + " had other things to do and left.");
+            ctx.drawImage(EXTRASSPRITESHEET, LEAVEX, LEAVEY, TILEWIDTH, TILEHEIGHT, 
+              x * TILEWIDTH, y * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
+          }
           else
           {
             leaveCount++;
             returnMessages.push(this.characterMap[x][y].name + " was unsatisfied and left.");
+            ctx.drawImage(EXTRASSPRITESHEET, LEAVEX, LEAVEY, TILEWIDTH, TILEHEIGHT, 
+              x * TILEWIDTH, y * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
           }
           this.characterMap[x][y] = undefined;
         }
@@ -908,6 +918,10 @@ class Board
           newCharCards[c].locX = bestLocation.x;
           newCharCards[c].locY = bestLocation.y;
           this.characterMap[bestLocation.x][bestLocation.y] = newCharCards[c];
+
+          ctx.drawImage(EXTRASSPRITESHEET, ENTERX, ENTERY, TILEWIDTH, TILEHEIGHT, 
+            newCharCards[c].locX * TILEWIDTH, newCharCards[c].locY * TILEHEIGHT, TILEWIDTH, TILEHEIGHT);
+
           returnMessages.push(newCharCards[c].name + " has joined the merriment.\n");
         }
       }

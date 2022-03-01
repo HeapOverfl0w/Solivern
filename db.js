@@ -131,6 +131,9 @@ var QUESTCARDSPRITES = {
     "wrestlebear" : new Vector2D(3,9),
     "breakdance" : new Vector2D(4,9),
     "sextant" : new Vector2D(5,9),
+    "rubiks" : new Vector2D(6,9),
+    "aligator" : new Vector2D(7,9),
+    "goblinhorde" : new Vector2D(8,9),
 
     "slaydragon" : new Vector2D(0,10),
     "compiler" : new Vector2D(1,10),
@@ -851,6 +854,15 @@ class Database
         this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["sextant"].x, QUESTCARDSPRITES["sextant"].y,
                                        QUESTCARDSPRITES["sextant"].x, QUESTCARDSPRITES["sextant"].y,
                                       9, 12, STATTYPE_INT, 2, [new ResourceUpkeep(this.gold, 16)], "Invent the Sextant")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["rubiks"].x, QUESTCARDSPRITES["rubiks"].y,
+                                      QUESTCARDSPRITES["rubiks"].x, QUESTCARDSPRITES["rubiks"].y,
+                                     6, 8, STATTYPE_INT, 3, [new ResourceUpkeep(this.gold, 14)], "Solve a Rubik's Cube")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["aligator"].x, QUESTCARDSPRITES["aligator"].y,
+                                     QUESTCARDSPRITES["aligator"].x, QUESTCARDSPRITES["aligator"].y,
+                                    6, 8, STATTYPE_DEX, 3, [new ResourceUpkeep(this.gold, 14)], "Perform in an Aligator Show")); 
+        this.questCardsUncommon.push(new QuestCard(QUESTCARDSPRITES["goblinhorde"].x, QUESTCARDSPRITES["goblinhorde"].y,
+                                    QUESTCARDSPRITES["goblinhorde"].x, QUESTCARDSPRITES["goblinhorde"].y,
+                                   6, 8, STATTYPE_STR, 3, [new ResourceUpkeep(this.gold, 14)], "Fight a Horde of Goblins")); 
                                       
         this.questCardsRare.push(new QuestCard(QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
                                        QUESTCARDSPRITES["slaydragon"].x, QUESTCARDSPRITES["slaydragon"].y,
