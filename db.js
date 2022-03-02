@@ -19,12 +19,17 @@ var OBJECTSPRITES = {
     "portapotty" : new Vector2D(4,1),
     "stonetable" : new Vector2D(5,1),
     "gametable" : new Vector2D(6,1),
+    "fancystool" : new Vector2D(7,1),
+    "foosballtable" : new Vector2D(8,1),
+    "onionringtower" : new Vector2D(9,1),
+    "candles" : new Vector2D(10,1),
     "swordinstone" : new Vector2D(13,1),
     "kingschair" : new Vector2D(14,1),
     "darkskull" : new Vector2D(15,1),
     "discoball" : new Vector2D(16,1),
     "chocolatefountain" : new Vector2D(17,1),
-    "magicflower" : new Vector2D(18,1)
+    "magicflower" : new Vector2D(18,1),
+    "buckhunter" : new Vector2D(19,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -159,6 +164,9 @@ var ITEMCARDSPRITES = {
     "battleaxe" : new Vector2D(3,12),
     "katana" : new Vector2D(4,12),
     "scepter" : new Vector2D(5,12),
+    "shield" : new Vector2D(6,12),
+    "visor" : new Vector2D(7,12),
+    "cuirass" : new Vector2D(8,12),
     "justicebringer" : new Vector2D(0,13),
     "trueaim" : new Vector2D(1,13),
     "monsterbook" : new Vector2D(2,13)
@@ -494,7 +502,7 @@ class Database
                                             OBJECTSPRITES["jackalope"].x, OBJECTSPRITES["jackalope"].y, 1, 4, false, undefined,
                                             new ResourceUpkeep(this.gold, -7), "Mounted Jackalope Head"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y,
-                                            OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y, 3, 1, true, undefined,
+                                            OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y, 3, 1, false, undefined,
                                             new ResourceUpkeep(this.food, -15), "Gourmet Cheese Wheel"));
 
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
@@ -518,6 +526,18 @@ class Database
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["gametable"].x, OBJECTSPRITES["gametable"].y,
                                             OBJECTSPRITES["gametable"].x, OBJECTSPRITES["gametable"].y, 4, 1, false, undefined,
                                             new ResourceUpkeep(this.gold, -12), "Board Game Table"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["fancystool"].x, OBJECTSPRITES["fancystool"].y,
+                                            OBJECTSPRITES["fancystool"].x, OBJECTSPRITES["fancystool"].y, 4, 0, true, undefined,
+                                            new ResourceUpkeep(this.gold, -6), "Fancy Stool"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["foosballtable"].x, OBJECTSPRITES["foosballtable"].y,
+                                            OBJECTSPRITES["foosballtable"].x, OBJECTSPRITES["foosballtable"].y, 6, 1, false, undefined,
+                                            new ResourceUpkeep(this.gold, -17), "Foosball Table"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["onionringtower"].x, OBJECTSPRITES["onionringtower"].y,
+                                            OBJECTSPRITES["onionringtower"].x, OBJECTSPRITES["onionringtower"].y, 6, 1, false, undefined,
+                                            new ResourceUpkeep(this.food, -22), "Onion Ring Tower"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["candles"].x, OBJECTSPRITES["candles"].y,
+                                            OBJECTSPRITES["candles"].x, OBJECTSPRITES["candles"].y, 2, 4, false, LIGHTCOLOR,
+                                            new ResourceUpkeep(this.gold, -12), "Raised Candles"));
 
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y,
                                             OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y, 5, 5, false, undefined,
@@ -537,6 +557,9 @@ class Database
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["magicflower"].x, OBJECTSPRITES["magicflower"].y,
                                             OBJECTSPRITES["magicflower"].x, OBJECTSPRITES["magicflower"].y, 6, 2, false, undefined,
                                             new ResourceUpkeep(this.gold, -24), "Magic Flower"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["buckhunter"].x, OBJECTSPRITES["buckhunter"].y,
+                                            OBJECTSPRITES["buckhunter"].x, OBJECTSPRITES["buckhunter"].y, 8, 2, false, "#f2f2d098",
+                                            new ResourceUpkeep(this.gold, -30), "Buck Hunter Game Cabinet"));
     }
 
     LoadbuffCardsCommon()
@@ -932,6 +955,15 @@ class Database
         this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["scepter"].x, ITEMCARDSPRITES["scepter"].y,
                                     ITEMCARDSPRITES["scepter"].x, ITEMCARDSPRITES["scepter"].y,
                                     new CharacterStats(3,0,0), [new ResourceUpkeep(this.gold, 3)],4,"Scepter"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["shield"].x, ITEMCARDSPRITES["shield"].y,
+                                    ITEMCARDSPRITES["shield"].x, ITEMCARDSPRITES["shield"].y,
+                                    new CharacterStats(0,3,3), [],4,"Centurion's Shield"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["visor"].x, ITEMCARDSPRITES["visor"].y,
+                                    ITEMCARDSPRITES["visor"].x, ITEMCARDSPRITES["visor"].y,
+                                    new CharacterStats(3,0,3), [],4,"Centurion's Visor"));
+        this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["cuirass"].x, ITEMCARDSPRITES["cuirass"].y,
+                                    ITEMCARDSPRITES["cuirass"].x, ITEMCARDSPRITES["cuirass"].y,
+                                    new CharacterStats(3,3,0), [],4,"Centurion's Cuirass"));
 
         this.itemCardsUncommon.push(new ItemCard(ITEMCARDSPRITES["justicebringer"].x, ITEMCARDSPRITES["justicebringer"].y,
                                     ITEMCARDSPRITES["justicebringer"].x, ITEMCARDSPRITES["justicebringer"].y,
