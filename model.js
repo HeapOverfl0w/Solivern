@@ -737,10 +737,20 @@ class CharacterCard extends Card
         }        
 
         //determine satisfaction buffs from objects
-        //TODO: Determine most efficient way to calculate radius buffs.
-        for (let x = 0; x < TILESX; x++)
+        this.SetSatisfactionLevel(objectMap);
+
+        //random chance to just leave
+        if (Math.random() > 0.95 && !this.firstAppearance && this.item == undefined && this.stats.level < 5)
+          this.satisfactionLevel = RANDOMLEAVESATISFACTION;
+    }
+
+    SetSatisfactionLevel(objectMap)
+    {
+      this.satisfactionLevel = 0;
+      this.objectSatisfaction = 0;
+      for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
         {
-            for (let y = 0; y < TILESY; y++)
+            for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
             {
                 if (objectMap[x][y] != undefined && objectMap[x][y].IsCardInside(this))
                 {
@@ -749,10 +759,6 @@ class CharacterCard extends Card
                 }                
             }
         }
-
-        //random chance to just leave
-        if (Math.random() > 0.95 && !this.firstAppearance && this.item == undefined && this.stats.level < 5)
-          this.satisfactionLevel = RANDOMLEAVESATISFACTION;
     }
 
     GetCombinedItemStats()
@@ -779,17 +785,10 @@ class CharacterCard extends Card
       ctx.fillStyle = BUTTONCOLOR;
       ctx.fillRect(tilex * TILEWIDTH + 2, tiley * TILEHEIGHT + 2, 12, 12);
       let sat = "";
-      if (this.firstAppearance)
-      {
-        ctx.fillStyle = TEXTCOLOR;
-        sat = "-";
-      }
-      else
-      {
-        let fillStyle = this.IsSatisfied() ? "green" : "red";
-        ctx.fillStyle = !this.IsSatisfied() && this.objectSatisfaction >= this.satisfactionThreshold ? "yellow" : fillStyle;
-        sat = this.objectSatisfaction < 0 ? 0 : this.objectSatisfaction;
-      }
+     
+      let fillStyle = this.IsSatisfied() ? "green" : "red";
+      ctx.fillStyle = !this.IsSatisfied() && this.objectSatisfaction >= this.satisfactionThreshold ? "yellow" : fillStyle;
+      sat = this.objectSatisfaction < 0 ? 0 : this.objectSatisfaction;
         
       ctx.fillText( sat, 
         tilex * TILEWIDTH + 3 + ((sat + "").length == 1 ? 3 : 0), //center number if it's a single digit number
@@ -934,6 +933,18 @@ class Board
     this.HandleAudio(audio);
 
     return returnMessages;
+  }
+
+  DetermineSatisfactionLevels() 
+  {
+    for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+    {
+      for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+      {
+        if (this.characterMap[x][y] !== undefined)
+          this.characterMap[x][y].SetSatisfactionLevel(this.objectMap);
+      }
+    }
   }
 
   RandomizeAnimations()

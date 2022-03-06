@@ -310,6 +310,8 @@ class Game
       else if (this.satisfactionButton.IsInside(pointx, pointy))
       {
         this.board.isSatisfactionMode = !this.board.isSatisfactionMode;
+        if (this.board.isSatisfactionMode)
+          this.board.DetermineSatisfactionLevels();
         this.Draw();
       }
       else if (this.audioOffButton.IsInside(pointx, pointy) || this.audioOnButton.IsInside(pointx, pointy))
