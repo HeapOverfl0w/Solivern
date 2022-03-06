@@ -516,7 +516,7 @@ class Database
                                             new ResourceUpkeep(this.gold, -1), "Folding Chair"));
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["trainingdummy"].x, OBJECTSPRITES["trainingdummy"].y,
                                             OBJECTSPRITES["trainingdummy"].x, OBJECTSPRITES["trainingdummy"].y, 3, 1, false, undefined,
-                                            new ResourceUpkeep(this.gold, -6), "Training Dummy"));
+                                            new ResourceUpkeep(this.gold, -7), "Training Dummy"));
 
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
                                             OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, undefined,
