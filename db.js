@@ -12,6 +12,9 @@ var OBJECTSPRITES = {
     "coatrack" : new Vector2D(10,0),
     "jackalope" : new Vector2D(11,0),
     "cheese" : new Vector2D(12,0),
+    "foldingchair" : new Vector2D(13,0),
+    "trainingdummy" : new Vector2D(14,0),
+
     "bust" : new Vector2D(0,1),
     "darkcandle" : new Vector2D(1,1),
     "bonsaitree" : new Vector2D(2,1),
@@ -23,6 +26,8 @@ var OBJECTSPRITES = {
     "foosballtable" : new Vector2D(8,1),
     "onionringtower" : new Vector2D(9,1),
     "candles" : new Vector2D(10,1),
+    "keg" : new Vector2D(11,1),
+
     "swordinstone" : new Vector2D(13,1),
     "kingschair" : new Vector2D(14,1),
     "darkskull" : new Vector2D(15,1),
@@ -92,6 +97,7 @@ var CHARCARDSPRITES = {
     "halflingvillagerfemale" : new Vector2D(14,5),
     "dwarfminer" : new Vector2D(15, 5),
     "dwarfbaker" : new Vector2D(16,5),
+    "snake" : new Vector2D(17,5),
     "skeletonwarrior" : new Vector2D(0,6),
     "skeletonmage" : new Vector2D(1,6),
     "humanwarrior" : new Vector2D(2,6),
@@ -504,6 +510,12 @@ class Database
         this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y,
                                             OBJECTSPRITES["cheese"].x, OBJECTSPRITES["cheese"].y, 3, 1, false, undefined,
                                             new ResourceUpkeep(this.food, -15), "Gourmet Cheese Wheel"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["foldingchair"].x, OBJECTSPRITES["foldingchair"].y,
+                                            OBJECTSPRITES["foldingchair"].x, OBJECTSPRITES["foldingchair"].y, 1, 0, true, undefined,
+                                            new ResourceUpkeep(this.gold, -1), "Folding Chair"));
+        this.objectCardsCommon.push(new ObjectCard(OBJECTSPRITES["trainingdummy"].x, OBJECTSPRITES["trainingdummy"].y,
+                                            OBJECTSPRITES["trainingdummy"].x, OBJECTSPRITES["trainingdummy"].y, 3, 1, false, undefined,
+                                            new ResourceUpkeep(this.gold, -6), "Training Dummy"));
 
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y,
                                             OBJECTSPRITES["bust"].x, OBJECTSPRITES["bust"].y, 3, 3, false, undefined,
@@ -538,6 +550,9 @@ class Database
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["candles"].x, OBJECTSPRITES["candles"].y,
                                             OBJECTSPRITES["candles"].x, OBJECTSPRITES["candles"].y, 2, 4, false, LIGHTCOLOR,
                                             new ResourceUpkeep(this.gold, -12), "Raised Candles"));
+        this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["keg"].x, OBJECTSPRITES["keg"].y,
+                                            OBJECTSPRITES["keg"].x, OBJECTSPRITES["keg"].y, 5, 2, false, LIGHTCOLOR,
+                                            new ResourceUpkeep(this.beer, -22), "Keg"));
 
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y,
                                             OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y, 5, 5, false, undefined,
@@ -722,6 +737,10 @@ class Database
                                               CHARCARDSPRITES["dwarfbaker"].x, CHARCARDSPRITES["dwarfbaker"].y, 4, 
                                               [ new ResourceUpkeep(this.food, 2), new ResourceUpkeep(this.beer, -2) ], "Dwarf Baker",
                                               new CharacterStats(1,3,1)));
+        this.charCardsCommon.push(new CharacterCard(CHARCARDSPRITES["snake"].x, CHARCARDSPRITES["snake"].y,
+                                              CHARCARDSPRITES["snake"].x, CHARCARDSPRITES["snake"].y, 1, 
+                                              [ new ResourceUpkeep(this.beer, 1), new ResourceUpkeep(this.food, -1) ], "Snake",
+                                              new CharacterStats(1,1,1)));
                                               
         this.charCardsUncommon.push(new CharacterCard(CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y,
                                               CHARCARDSPRITES["skeletonwarrior"].x, CHARCARDSPRITES["skeletonwarrior"].y, 9, 
