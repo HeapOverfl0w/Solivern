@@ -1817,7 +1817,7 @@ class Button
 
 class ImageButton
 {
-  constructor(x, y, width, height, spritesheetx, spritesheety)
+  constructor(x, y, width, height, spritesheetx, spritesheety, tooltiptext = '')
   {
     this.x = x;
     this.y = y;
@@ -1826,6 +1826,7 @@ class ImageButton
     this.spritesheetx = spritesheetx;
     this.spritesheety = spritesheety;
     this.visible = true;
+    this.tooltiptext = tooltiptext;
   }
 
   Draw(ctx)

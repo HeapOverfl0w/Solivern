@@ -9,8 +9,8 @@ class Game
     this.quests = new Quests();
     this.endGameButton = new ImageButton(10, 20, 45, 16, 96, 0);
     this.endTurnButton = new ImageButton(ctx.canvas.width / 2 - 25, 0, 45, 16, 48, 32);
-    this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 0, 16, 16, 48, 16);
-    this.satisfactionButton = new ImageButton(ctx.canvas.width / 2 + 30, 0, 16, 16, 64, 16);
+    this.destroyButton = new ImageButton(ctx.canvas.width / 2 - 50, 0, 16, 16, 48, 16, "Sell Tool - Click to Activate/ESC to Close");
+    this.satisfactionButton = new ImageButton(ctx.canvas.width / 2 + 30, 0, 16, 16, 64, 16, "Satisfaction  Tool - Click to Activate and Deactivate");
 
     this.audioOnButton = new ImageButton(ctx.canvas.width - 10, ctx.canvas.height - 10, 8, 8, 48, 48);
     this.audioOnButton.visible = false;
@@ -235,6 +235,12 @@ class Game
       this.focusedCardText = questMouseOverText == undefined ? "" : questMouseOverText;
       if (this.focusedCardText == "")
         this.focusedCardText = this.hand.GetMouseOverText(pointx, pointy, this.ctx);
+
+      //Check for button focus.
+      if (this.destroyButton.IsInside(pointx, pointy))
+        this.focusedCardText = this.destroyButton.tooltiptext;
+      else if (this.satisfactionButton.IsInside(pointx, pointy))
+        this.focusedCardText = this.satisfactionButton.tooltiptext;
 
       if (this.hand.selectedCardIndex != -1 || this.board.HandleMouseOver(tilex, tiley) || questMouseOverText != undefined || this.focusedCardText != originalFocusedCardText)
       {
