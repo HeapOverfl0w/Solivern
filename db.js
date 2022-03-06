@@ -35,7 +35,8 @@ var OBJECTSPRITES = {
     "chocolatefountain" : new Vector2D(17,1),
     "magicflower" : new Vector2D(18,1),
     "buckhunter" : new Vector2D(19,1),
-    "barbequepit" : new Vector2D(20,1)
+    "barbequepit" : new Vector2D(20,1),
+    "chandelier" : new Vector2D(21,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -579,6 +580,9 @@ class Database
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["barbequepit"].x, OBJECTSPRITES["barbequepit"].y,
                                             OBJECTSPRITES["barbequepit"].x, OBJECTSPRITES["barbequepit"].y, 7, 2, false, LIGHTCOLOR,
                                             new ResourceUpkeep(this.food, -25), "Barbeque Pit"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["chandelier"].x, OBJECTSPRITES["chandelier"].y,
+                                            OBJECTSPRITES["chandelier"].x, OBJECTSPRITES["chandelier"].y, 4, 5, true, LIGHTCOLOR,
+                                            new ResourceUpkeep(this.gold, -22), "Chandelier"));
     }
 
     LoadbuffCardsCommon()
