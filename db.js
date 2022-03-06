@@ -34,7 +34,8 @@ var OBJECTSPRITES = {
     "discoball" : new Vector2D(16,1),
     "chocolatefountain" : new Vector2D(17,1),
     "magicflower" : new Vector2D(18,1),
-    "buckhunter" : new Vector2D(19,1)
+    "buckhunter" : new Vector2D(19,1),
+    "barbequepit" : new Vector2D(20,1)
 }
 
 var BUFFCURSESPRITES = {
@@ -546,13 +547,13 @@ class Database
                                             new ResourceUpkeep(this.gold, -17), "Foosball Table"));
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["onionringtower"].x, OBJECTSPRITES["onionringtower"].y,
                                             OBJECTSPRITES["onionringtower"].x, OBJECTSPRITES["onionringtower"].y, 6, 1, false, undefined,
-                                            new ResourceUpkeep(this.food, -22), "Onion Ring Tower"));
+                                            new ResourceUpkeep(this.food, -20), "Onion Ring Tower"));
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["candles"].x, OBJECTSPRITES["candles"].y,
                                             OBJECTSPRITES["candles"].x, OBJECTSPRITES["candles"].y, 2, 4, false, LIGHTCOLOR,
                                             new ResourceUpkeep(this.gold, -12), "Raised Candles"));
         this.objectCardsUncommon.push(new ObjectCard(OBJECTSPRITES["keg"].x, OBJECTSPRITES["keg"].y,
-                                            OBJECTSPRITES["keg"].x, OBJECTSPRITES["keg"].y, 5, 2, false, LIGHTCOLOR,
-                                            new ResourceUpkeep(this.beer, -22), "Keg"));
+                                            OBJECTSPRITES["keg"].x, OBJECTSPRITES["keg"].y, 5, 2, false, undefined,
+                                            new ResourceUpkeep(this.beer, -20), "Keg"));
 
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y,
                                             OBJECTSPRITES["swordinstone"].x, OBJECTSPRITES["swordinstone"].y, 5, 5, false, undefined,
@@ -575,6 +576,9 @@ class Database
         this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["buckhunter"].x, OBJECTSPRITES["buckhunter"].y,
                                             OBJECTSPRITES["buckhunter"].x, OBJECTSPRITES["buckhunter"].y, 8, 2, false, "#f2f2d098",
                                             new ResourceUpkeep(this.gold, -30), "Buck Hunter Game Cabinet"));
+        this.objectCardsRare.push(new ObjectCard(OBJECTSPRITES["barbequepit"].x, OBJECTSPRITES["barbequepit"].y,
+                                            OBJECTSPRITES["barbequepit"].x, OBJECTSPRITES["barbequepit"].y, 7, 2, false, LIGHTCOLOR,
+                                            new ResourceUpkeep(this.food, -25), "Barbeque Pit"));
     }
 
     LoadbuffCardsCommon()
