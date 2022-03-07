@@ -737,7 +737,17 @@ class CharacterCard extends Card
         }        
 
         //determine satisfaction buffs from objects
-        this.SetSatisfactionLevel(objectMap);
+        for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
+        {
+          for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+          {
+            if (objectMap[x][y] != undefined && objectMap[x][y].IsCardInside(this))
+            {
+              this.satisfactionLevel += objectMap[x][y].satisfactionBuff;  
+              this.objectSatisfaction += objectMap[x][y].satisfactionBuff;
+            }                
+          }
+        }
 
         //random chance to just leave
         if (Math.random() > 0.95 && !this.firstAppearance && this.item == undefined && this.stats.level < 5)
@@ -749,16 +759,16 @@ class CharacterCard extends Card
       this.satisfactionLevel = 0;
       this.objectSatisfaction = 0;
       for (let x = BOARDBORDER; x < TILESX - BOARDBORDER; x++)
-        {
-            for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
-            {
-                if (objectMap[x][y] != undefined && objectMap[x][y].IsCardInside(this))
-                {
-                  this.satisfactionLevel += objectMap[x][y].satisfactionBuff;  
-                  this.objectSatisfaction += objectMap[x][y].satisfactionBuff;
-                }                
-            }
-        }
+      {
+          for (let y = BOARDBORDER; y < TILESY - BOARDBORDER; y++)
+          {
+              if (objectMap[x][y] != undefined && objectMap[x][y].IsCardInside(this))
+              {
+                this.satisfactionLevel += objectMap[x][y].satisfactionBuff;  
+                this.objectSatisfaction += objectMap[x][y].satisfactionBuff;
+              }                
+          }
+      }
     }
 
     GetCombinedItemStats()
